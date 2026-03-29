@@ -14,9 +14,6 @@ export function toggleTheme() {
 
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
-  const btn = document.getElementById('btn-theme-toggle');
-  if (btn) {
-    btn.textContent = theme === 'dark' ? '☀' : '☾';
-    btn.title = theme === 'dark' ? 'Tema claro' : 'Tema escuro';
-  }
+  const icon = document.getElementById('theme-icon');
+  if (icon) icon.textContent = theme === 'dark' ? '☀' : '🌙';
 }

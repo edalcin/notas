@@ -1,112 +1,151 @@
 import { loadAttachments, renderAttachments, uploadAttachment } from './attachments.js';
 
-let easyMDE = null;
 let currentNoteId = null;
-let saveTimer = null;
-let isDirty = false;
 
-export async function initEditor(noteId) {
-  currentNoteId = noteId;
+export function initEditor() {
+  const ta = document.getElementById('editor-textarea');
+  if (!ta) return;
 
-  const res = await fetch(`/api/notes/${noteId}`);
-  if (!res.ok) {
-    alert('Nota não encontrada.');
-    window.location.hash = '#list';
-    return;
-  }
-  const note = await res.json();
-
-  // Destroy previous editor instance
-  if (easyMDE) {
-    easyMDE.toTextArea();
-    easyMDE = null;
-  }
-
-  const textarea = document.getElementById('editor-textarea');
-  textarea.value = note.content || '';
-
-  easyMDE = new EasyMDE({
-    element: textarea,
-    autofocus: true,
-    spellChecker: false,
-    status: false,
-    toolbar: ['bold', 'italic', 'heading', '|', 'unordered-list', 'ordered-list', '|', 'link', '|', 'preview', 'side-by-side', 'fullscreen'],
-    placeholder: 'Escreva sua nota em Markdown...',
+  ta.addEventListener('input', () => { autoResize(ta); updateTagsPreview(ta.value); });
+  ta.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'b') { e.preventDefault(); insertMarkdown('bold'); }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'i') { e.preventDefault(); insertMarkdown('italic'); }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); saveNote(); }
+    if (e.key === 'Tab') { e.preventDefault(); insertAtCursor(ta, '  '); }
   });
 
-  easyMDE.codemirror.on('change', onEditorChange);
+  document.getElementById('editor-toolbar')?.addEventListener('click', e => {
+    const btn = e.target.closest('[data-action]');
+    if (btn) insertMarkdown(btn.dataset.action);
+  });
 
-  // Update pin button
-  const pinBtn = document.getElementById('btn-toggle-pin');
-  if (pinBtn) {
-    pinBtn.dataset.pinned = note.pinned ? 'true' : 'false';
-    pinBtn.title = note.pinned ? 'Desafixar nota' : 'Fixar nota';
-  }
+  document.getElementById('btn-save')?.addEventListener('click', saveNote);
+  document.getElementById('btn-cancel-edit')?.addEventListener('click', resetEditor);
 
-  setSaveStatus('');
+  document.getElementById('file-input')?.addEventListener('change', async e => {
+    if (!currentNoteId) return;
+    for (const file of e.target.files) {
+      try { await uploadAttachment(currentNoteId, file); }
+      catch (err) { alert(err.message); }
+    }
+    await loadAttachments(currentNoteId);
+    e.target.value = '';
+  });
+}
+
+export async function loadNoteForEdit(noteId) {
+  const res = await fetch(`/api/notes/${noteId}`);
+  if (!res.ok) { alert('Nota não encontrada.'); return; }
+  const note = await res.json();
+
+  currentNoteId = noteId;
+  const ta = document.getElementById('editor-textarea');
+  ta.value = note.content || '';
+  autoResize(ta);
+  updateTagsPreview(ta.value);
+  ta.focus();
+
+  const bar = document.getElementById('editor-mode-bar');
+  if (bar) bar.hidden = false;
+  const label = document.getElementById('editor-mode-label');
+  if (label) label.textContent = `Editando nota #${noteId}`;
+
+  const attachSection = document.getElementById('attachments-section');
+  if (attachSection) attachSection.hidden = false;
   renderAttachments(noteId, note.attachments || []);
 
-  // File upload handler
-  const fileInput = document.getElementById('file-input');
-  if (fileInput) {
-    const newInput = fileInput.cloneNode(true);
-    fileInput.parentNode.replaceChild(newInput, fileInput);
-    newInput.addEventListener('change', async () => {
-      if (!newInput.files.length) return;
-      for (const file of newInput.files) {
-        try {
-          await uploadAttachment(noteId, file);
-        } catch (err) {
-          alert(err.message);
-        }
-      }
-      await loadAttachments(noteId);
-      newInput.value = '';
-    });
+  document.getElementById('editor-box')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+export function resetEditor() {
+  currentNoteId = null;
+  const ta = document.getElementById('editor-textarea');
+  if (ta) { ta.value = ''; autoResize(ta); }
+  updateTagsPreview('');
+  const bar = document.getElementById('editor-mode-bar');
+  if (bar) bar.hidden = true;
+  const attachSection = document.getElementById('attachments-section');
+  if (attachSection) {
+    attachSection.hidden = true;
+    const list = document.getElementById('attachments-list');
+    if (list) list.innerHTML = '';
   }
 }
 
-function onEditorChange() {
-  isDirty = true;
-  setSaveStatus('Editando...');
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(saveNote, 2000);
-}
-
-export async function saveNote() {
-  if (!currentNoteId || !easyMDE) return;
-  clearTimeout(saveTimer);
-
-  const content = easyMDE.value();
-  setSaveStatus('Salvando...');
+async function saveNote() {
+  const ta = document.getElementById('editor-textarea');
+  if (!ta) return;
+  const content = ta.value;
+  if (!currentNoteId && !content.trim()) return;
 
   try {
-    const res = await fetch(`/api/notes/${currentNoteId}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ content }),
-    });
-    if (!res.ok) throw new Error('Save failed');
-    isDirty = false;
-    setSaveStatus('Salvo ✓');
+    if (currentNoteId) {
+      const res = await fetch(`/api/notes/${currentNoteId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content }),
+      });
+      if (!res.ok) throw new Error('Save failed');
+    } else {
+      const res = await fetch('/api/notes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: content.trim() }),
+      });
+      if (!res.ok) throw new Error('Create failed');
+    }
+    resetEditor();
+    document.dispatchEvent(new CustomEvent('note:saved'));
   } catch (err) {
     console.error('saveNote error:', err);
-    setSaveStatus('Erro ao salvar');
+    alert('Erro ao salvar nota.');
   }
 }
 
-function setSaveStatus(msg) {
-  const el = document.getElementById('save-status');
-  if (el) el.textContent = msg;
+function autoResize(ta) {
+  ta.style.height = 'auto';
+  ta.style.height = ta.scrollHeight + 'px';
 }
 
-export function destroyEditor() {
-  if (saveTimer) clearTimeout(saveTimer);
-  if (isDirty && easyMDE) saveNote();
-  if (easyMDE) {
-    easyMDE.toTextArea();
-    easyMDE = null;
-  }
-  currentNoteId = null;
-  isDirty = false;
+function updateTagsPreview(content) {
+  const container = document.getElementById('editor-tags-preview');
+  if (!container) return;
+  const tags = [...new Set((content.match(/#([a-zA-Z0-9_\u00C0-\u024F]+)/g) || []))].map(t => t.slice(1));
+  container.innerHTML = tags.map(t => `<span class="editor-tag-pill">#${escapeHtml(t)}</span>`).join('');
+}
+
+function insertMarkdown(type) {
+  const ta = document.getElementById('editor-textarea');
+  if (!ta) return;
+  const s = ta.selectionStart, e = ta.selectionEnd;
+  const sel = ta.value.slice(s, e);
+  const map = {
+    bold:    ['**', '**', 'negrito'],
+    italic:  ['_', '_', 'itálico'],
+    heading: ['## ', '', 'Título'],
+    ul:      ['- ', '', 'item'],
+    ol:      ['1. ', '', 'item'],
+    code:    ['`', '`', 'código'],
+    link:    ['[', '](url)', 'texto'],
+  };
+  const [before, after, ph] = map[type] || ['', '', ''];
+  const text = sel || ph;
+  const insert = before + text + after;
+  ta.value = ta.value.slice(0, s) + insert + ta.value.slice(e);
+  const ns = sel ? s + insert.length : s + before.length;
+  const ne = sel ? s + insert.length : s + before.length + ph.length;
+  ta.setSelectionRange(ns, ne);
+  ta.focus();
+  autoResize(ta);
+  updateTagsPreview(ta.value);
+}
+
+function insertAtCursor(ta, text) {
+  const s = ta.selectionStart;
+  ta.value = ta.value.slice(0, s) + text + ta.value.slice(ta.selectionEnd);
+  ta.setSelectionRange(s + text.length, s + text.length);
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }

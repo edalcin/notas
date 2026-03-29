@@ -16,39 +16,34 @@ function renderHashtagList(hashtags) {
   const list = document.getElementById('hashtag-list');
   if (!list) return;
 
-  const allActive = activeHashtag === '' ? 'active' : '';
-  let html = `<li><button class="hashtag-item ${allActive}" data-hashtag="">Todas as notas</button></li>`;
-
-  for (const ht of hashtags) {
-    const active = ht.name === activeHashtag ? 'active' : '';
-    html += `<li><button class="hashtag-item ${active}" data-hashtag="${escapeHtml(ht.name)}">
-      #${escapeHtml(ht.name)}
-      <span class="hashtag-count">${ht.count}</span>
-    </button></li>`;
+  if (!hashtags.length) {
+    list.innerHTML = '<li class="hashtag-empty">Nenhuma tag ainda</li>';
+    return;
   }
 
-  list.innerHTML = html;
+  list.innerHTML = hashtags.map(ht => {
+    const active = ht.name === activeHashtag ? 'active' : '';
+    return `<li><button class="hashtag-item ${active}" data-hashtag="${esc(ht.name)}">
+      #${esc(ht.name)}<span class="hashtag-count">${ht.count}</span>
+    </button></li>`;
+  }).join('');
 
-  list.querySelectorAll('.hashtag-item').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const tag = btn.dataset.hashtag;
-      if (tag === '') {
-        clearFilter();
-      } else {
-        setActiveHashtag(tag);
-      }
-    });
-  });
+  list.querySelectorAll('.hashtag-item').forEach(btn =>
+    btn.addEventListener('click', () => setActiveHashtag(btn.dataset.hashtag))
+  );
 }
 
 export function setActiveHashtag(name) {
   activeHashtag = name;
-  loadHashtags();
+  // Clear the "All notes" nav active state
+  document.querySelectorAll('#sidebar-nav .nav-item').forEach(n => n.classList.remove('active'));
+  loadHashtags(); // re-renders with updated active state
   loadNotes({ hashtag: name });
 }
 
 export function clearFilter() {
   activeHashtag = '';
+  document.getElementById('btn-all-notes')?.classList.add('active');
   loadHashtags();
   loadNotes({});
 }
@@ -68,7 +63,6 @@ export function closeHashtagManager() {
 async function renderHashtagManagerContent() {
   const container = document.getElementById('modal-hashtags-list');
   if (!container) return;
-
   try {
     const res = await fetch('/api/hashtags');
     const data = await res.json();
@@ -80,21 +74,20 @@ async function renderHashtagManagerContent() {
     }
 
     container.innerHTML = hashtags.map(ht => `
-      <div class="modal-hashtag-row" data-name="${escapeHtml(ht.name)}">
-        <span class="modal-hashtag-name">#${escapeHtml(ht.name)}</span>
+      <div class="modal-hashtag-row" data-name="${esc(ht.name)}">
+        <span class="modal-hashtag-name">#${esc(ht.name)}</span>
         <span class="modal-hashtag-count">${ht.count} nota${ht.count !== 1 ? 's' : ''}</span>
-        <button class="btn-link btn-rename-hashtag" data-name="${escapeHtml(ht.name)}">Renomear</button>
-        <button class="btn-icon btn-delete-hashtag" data-name="${escapeHtml(ht.name)}" title="Excluir">&times;</button>
+        <button class="btn-link btn-rename-hashtag" data-name="${esc(ht.name)}">Renomear</button>
+        <button class="btn-icon btn-delete-hashtag" data-name="${esc(ht.name)}" title="Excluir">&times;</button>
       </div>
     `).join('');
 
-    container.querySelectorAll('.btn-rename-hashtag').forEach(btn => {
-      btn.addEventListener('click', () => startRenameHashtag(btn.dataset.name));
-    });
-
-    container.querySelectorAll('.btn-delete-hashtag').forEach(btn => {
-      btn.addEventListener('click', () => deleteHashtag(btn.dataset.name));
-    });
+    container.querySelectorAll('.btn-rename-hashtag').forEach(btn =>
+      btn.addEventListener('click', () => startRenameHashtag(btn.dataset.name))
+    );
+    container.querySelectorAll('.btn-delete-hashtag').forEach(btn =>
+      btn.addEventListener('click', () => deleteHashtag(btn.dataset.name))
+    );
   } catch (err) {
     console.error('renderHashtagManagerContent error:', err);
   }
@@ -104,19 +97,15 @@ function startRenameHashtag(name) {
   const container = document.getElementById('modal-hashtags-list');
   const row = container.querySelector(`[data-name="${CSS.escape(name)}"]`);
   if (!row) return;
-
   row.innerHTML = `
-    <input class="modal-hashtag-input" type="text" value="${escapeHtml(name)}" aria-label="Novo nome">
+    <input class="modal-hashtag-input" type="text" value="${esc(name)}" aria-label="Novo nome">
     <button class="btn-primary btn-confirm-rename" style="padding:5px 10px">OK</button>
     <button class="btn-icon btn-cancel-rename">Cancelar</button>
   `;
-
   const input = row.querySelector('.modal-hashtag-input');
-  input.focus();
-  input.select();
-
+  input.focus(); input.select();
   row.querySelector('.btn-confirm-rename').addEventListener('click', () => renameHashtag(name, input.value.trim()));
-  row.querySelector('.btn-cancel-rename').addEventListener('click', () => renderHashtagManagerContent());
+  row.querySelector('.btn-cancel-rename').addEventListener('click', renderHashtagManagerContent);
   input.addEventListener('keydown', e => {
     if (e.key === 'Enter') renameHashtag(name, input.value.trim());
     if (e.key === 'Escape') renderHashtagManagerContent();
@@ -124,11 +113,7 @@ function startRenameHashtag(name) {
 }
 
 async function renameHashtag(oldName, newName) {
-  if (!newName || newName === oldName) {
-    renderHashtagManagerContent();
-    return;
-  }
-
+  if (!newName || newName === oldName) { renderHashtagManagerContent(); return; }
   try {
     const res = await fetch(`/api/hashtags/${encodeURIComponent(oldName)}`, {
       method: 'PUT',
@@ -138,7 +123,6 @@ async function renameHashtag(oldName, newName) {
     if (res.status === 409) { alert('Já existe uma hashtag com esse nome.'); return; }
     if (res.status === 404) { alert('Hashtag não encontrada.'); return; }
     if (!res.ok) throw new Error('Rename failed');
-
     if (activeHashtag === oldName) activeHashtag = newName;
     await loadHashtags();
     await loadNotes(activeHashtag ? { hashtag: activeHashtag } : {});
@@ -151,12 +135,10 @@ async function renameHashtag(oldName, newName) {
 
 async function deleteHashtag(name) {
   if (!confirm(`Excluir #${name} de todas as notas?`)) return;
-
   try {
     const res = await fetch(`/api/hashtags/${encodeURIComponent(name)}`, { method: 'DELETE' });
     if (res.status === 404) { alert('Hashtag não encontrada.'); return; }
     if (!res.ok) throw new Error('Delete failed');
-
     if (activeHashtag === name) activeHashtag = '';
     await loadHashtags();
     await loadNotes(activeHashtag ? { hashtag: activeHashtag } : {});
@@ -167,6 +149,6 @@ async function deleteHashtag(name) {
   }
 }
 
-function escapeHtml(str) {
-  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+function esc(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
