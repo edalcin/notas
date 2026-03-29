@@ -11,5 +11,4 @@ RUN apk add --no-cache ca-certificates tzdata
 WORKDIR /app
 COPY --from=builder /build/server .
 EXPOSE 8080
-USER nobody
 ENTRYPOINT ["/app/server"]
