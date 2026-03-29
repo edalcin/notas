@@ -3,6 +3,7 @@ package handlers
 import (
 	"io/fs"
 	"net/http"
+	"strings"
 )
 
 // SPAHandler serves the embedded frontend SPA. Any path not matching a real file
@@ -11,8 +12,13 @@ func SPAHandler(frontendFS fs.FS) http.HandlerFunc {
 	fileServer := http.FileServer(http.FS(frontendFS))
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		// Try to serve the exact file requested
-		f, err := frontendFS.Open(r.URL.Path)
+		// Try to serve the exact file requested.
+		// fs.FS paths must not have a leading slash.
+		p := strings.TrimPrefix(r.URL.Path, "/")
+		if p == "" {
+			p = "."
+		}
+		f, err := frontendFS.Open(p)
 		if err == nil {
 			f.Close()
 			fileServer.ServeHTTP(w, r)
