@@ -26,7 +26,7 @@ func Open(dbPath string) (*DB, error) {
 		return nil, fmt.Errorf("create db directory: %w", err)
 	}
 
-	dsn := fmt.Sprintf("%s?_foreign_keys=on&_journal_mode=WAL&_busy_timeout=5000", dbPath)
+	dsn := fmt.Sprintf("file:%s?_foreign_keys=on&_journal_mode=WAL&_busy_timeout=5000", dbPath)
 	sqlDB, err := sql.Open("sqlite", dsn)
 	if err != nil {
 		return nil, fmt.Errorf("open sqlite: %w", err)
@@ -80,7 +80,10 @@ func (d *DB) runMigrations() error {
 			return fmt.Errorf("read migration %s: %w", entry.Name(), err)
 		}
 
-		for _, stmt := range strings.Split(string(content), ";") {
+		// Split on ";\n\n" (blank line between statements) so that
+		// semicolons inside CREATE TRIGGER BEGIN...END blocks are not
+		// treated as statement boundaries.
+		for _, stmt := range strings.Split(strings.TrimSpace(string(content))+"\n\n", ";\n\n") {
 			stmt = strings.TrimSpace(stmt)
 			if stmt == "" {
 				continue
