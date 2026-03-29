@@ -1,0 +1,11 @@
+.git/
+.github/
+specs/
+*.md
+.env*
+*.db
+*.db-shm
+*.db-wal
+server
+.DS_Store
+Thumbs.db

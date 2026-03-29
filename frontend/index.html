@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#4a90e2">
+  <meta name="description" content="Sistema de anotações pessoais com Markdown">
+  <title>Notas</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+  <link rel="stylesheet" href="/assets/css/app.css">
+</head>
+<body>
+  <div id="app">
+    <header id="app-header">
+      <div class="header-left">
+        <button id="btn-sidebar-toggle" class="btn-icon" aria-label="Alternar menu lateral" title="Menu">&#9776;</button>
+        <span class="app-title">Notas</span>
+      </div>
+      <div class="header-right">
+        <div id="search-wrapper">
+          <input type="search" id="search-input" placeholder="Buscar notas..." aria-label="Buscar notas">
+        </div>
+        <button id="btn-new-note" class="btn-primary">+ Nova Nota</button>
+        <button id="btn-theme-toggle" class="btn-icon" aria-label="Alternar tema" title="Tema">&#9788;</button>
+      </div>
+    </header>
+
+    <div id="layout">
+      <aside id="sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-heading">
+            <span>Hashtags</span>
+            <button id="btn-manage-hashtags" class="btn-link" title="Gerenciar hashtags">Gerenciar</button>
+          </div>
+          <ul id="hashtag-list" role="list">
+            <li><button class="hashtag-item active" data-hashtag="">Todas as notas</button></li>
+          </ul>
+        </div>
+      </aside>
+
+      <main id="main">
+        <div id="view-list">
+          <div id="notes-list-header">
+            <span id="notes-count" class="text-muted"></span>
+          </div>
+          <div id="notes-list" role="list"></div>
+          <div id="notes-empty" class="empty-state" hidden>
+            <p>Nenhuma nota encontrada.</p>
+            <button class="btn-primary" id="btn-empty-new">Criar primeira nota</button>
+          </div>
+        </div>
+
+        <div id="view-editor" hidden>
+          <div id="editor-toolbar">
+            <button id="btn-back" class="btn-icon" aria-label="Voltar">&#8592; Voltar</button>
+            <span id="save-status" class="text-muted"></span>
+            <button id="btn-save" class="btn-primary">Salvar</button>
+            <button id="btn-toggle-pin" class="btn-icon" aria-label="Fixar nota" title="Fixar">&#128204;</button>
+            <button id="btn-delete-note" class="btn-danger" aria-label="Excluir nota">Excluir</button>
+          </div>
+          <textarea id="editor-textarea"></textarea>
+          <div id="attachments-section">
+            <div class="attachments-header">
+              <span>Anexos</span>
+              <label class="btn-link" for="file-input">+ Adicionar arquivo</label>
+              <input type="file" id="file-input" accept="image/*,application/pdf,.doc,.docx,.xls,.xlsx" hidden>
+            </div>
+            <div id="attachments-list"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="modal-hashtags" class="modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 id="modal-title">Gerenciar Hashtags</h2>
+        <button id="btn-close-modal" class="btn-icon" aria-label="Fechar">&times;</button>
+      </div>
+      <div id="modal-hashtags-list"></div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script type="module" src="/assets/js/app.js"></script>
+</body>
+</html>

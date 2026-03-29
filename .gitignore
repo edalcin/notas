@@ -1,0 +1,29 @@
+# Go binaries
+*.exe
+*.test
+*.out
+server
+notes-server
+
+# Go vendor (not used)
+vendor/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# SQLite database files (data is external)
+*.db
+*.db-shm
+*.db-wal
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.tmp
+
+# IDE
+.vscode/
+.idea/
