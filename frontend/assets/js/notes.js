@@ -63,7 +63,7 @@ function noteCardHTML(note) {
     return `<span class="note-tag" data-tag="${esc(t)}" ${style}>#${esc(t)}</span>`;
   }).join('');
   const time = relativeTime(note.updated_at || note.created_at);
-  const rendered = typeof marked !== 'undefined' ? marked.parse(note.content || '') : `<p>${esc(note.content || '')}</p>`;
+  const rendered = typeof marked !== 'undefined' ? marked.parse(note.content || '', { breaks: true }) : `<p>${esc(note.content || '')}</p>`;
   const long = (note.content || '').length > 400;
   const attachCount = (note.attachments || []).length;
   const attachBadge = attachCount > 0
