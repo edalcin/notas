@@ -1,4 +1,4 @@
-const CACHE_NAME = 'notas-v3';
+const CACHE_NAME = 'notas-v4';
 
 const APP_SHELL = [
   '/',
@@ -12,6 +12,10 @@ const APP_SHELL = [
   '/assets/js/attachments.js',
   '/assets/js/attachments-view.js',
   '/manifest.json',
+  '/assets/favicon.ico',
+  '/assets/apple-touch-icon.png',
+  '/assets/icon-192.png',
+  '/assets/icon-512.png',
 ];
 
 self.addEventListener('install', event => {
