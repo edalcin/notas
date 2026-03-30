@@ -32,24 +32,21 @@ function renderFeed(notes) {
 
   list.innerHTML = notes.map(noteCardHTML).join('');
 
-  list.querySelectorAll('.btn-edit-card').forEach(btn =>
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      document.dispatchEvent(new CustomEvent('note:edit', { detail: { id: Number(btn.dataset.id) } }));
+  // Double-click on card body → edit (ignore clicks on buttons/tags)
+  list.querySelectorAll('.note-card').forEach(card =>
+    card.addEventListener('dblclick', e => {
+      if (e.target.closest('button, .note-tag')) return;
+      document.dispatchEvent(new CustomEvent('note:edit', { detail: { id: Number(card.dataset.id) } }));
     })
   );
+
   list.querySelectorAll('.btn-pin').forEach(btn =>
     btn.addEventListener('click', async e => {
       e.stopPropagation();
       await togglePin(Number(btn.dataset.id), btn.dataset.pinned !== 'true');
     })
   );
-  list.querySelectorAll('.btn-delete-card').forEach(btn =>
-    btn.addEventListener('click', async e => {
-      e.stopPropagation();
-      await deleteNote(Number(btn.dataset.id));
-    })
-  );
+
   list.querySelectorAll('.note-tag[data-tag]').forEach(tag =>
     tag.addEventListener('click', e => {
       e.stopPropagation();
@@ -73,9 +70,7 @@ function noteCardHTML(note) {
     <div class="note-card-header">
       <span class="note-card-time">${note.pinned ? '<span class="pin-badge">📌</span>' : ''}${time}</span>
       <div class="note-card-actions">
-        <button class="tb-btn btn-edit-card" data-id="${note.id}" title="Editar">✏️</button>
         <button class="tb-btn btn-pin" data-id="${note.id}" data-pinned="${note.pinned}" title="${note.pinned ? 'Desafixar' : 'Fixar'}">${note.pinned ? '📌' : '📍'}</button>
-        <button class="tb-btn btn-danger-sm btn-delete-card" data-id="${note.id}" title="Excluir">🗑</button>
       </div>
     </div>
     <div class="note-content">${rendered}${long ? '<div class="note-content-fade"></div>' : ''}</div>
@@ -83,15 +78,17 @@ function noteCardHTML(note) {
   </div>`;
 }
 
-async function deleteNote(id) {
-  if (!confirm('Excluir esta nota? Esta ação não pode ser desfeita.')) return;
+export async function deleteNote(id) {
+  if (!confirm('Excluir esta nota? Esta ação não pode ser desfeita.')) return false;
   try {
     const res = await fetch(`/api/notes/${id}`, { method: 'DELETE' });
     if (!res.ok && res.status !== 404) throw new Error('Delete failed');
     document.dispatchEvent(new CustomEvent('note:deleted'));
+    return true;
   } catch (err) {
     console.error('deleteNote error:', err);
     alert('Erro ao excluir nota.');
+    return false;
   }
 }
 

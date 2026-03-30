@@ -323,6 +323,12 @@ input, textarea { font-family: inherit; }
   font-weight: 500;
 }
 
+.editor-mode-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 #editor-toolbar {
   display: flex;
   align-items: center;
@@ -483,6 +489,7 @@ input, textarea { font-family: inherit; }
 .note-card:hover {
   box-shadow: var(--shadow-md);
   border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+  cursor: pointer;
 }
 
 .note-card.pinned {
