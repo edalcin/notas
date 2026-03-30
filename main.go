@@ -81,6 +81,7 @@ func main() {
 			r.Get("/", hashtagHandler.List)
 			r.Put("/{name}", hashtagHandler.Rename)
 			r.Delete("/{name}", hashtagHandler.Delete)
+			r.Patch("/{name}/color", hashtagHandler.UpdateColor)
 		})
 	})
 

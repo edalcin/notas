@@ -84,3 +84,45 @@ func (h *HashtagHandler) Delete(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusNoContent)
 }
+
+func (h *HashtagHandler) UpdateColor(w http.ResponseWriter, r *http.Request) {
+	name := chi.URLParam(r, "name")
+
+	var body struct {
+		Color string `json:"color"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		jsonError(w, "invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	color := strings.TrimSpace(body.Color)
+	if color != "" && !isValidHexColor(color) {
+		jsonError(w, "invalid color: must be empty or #rrggbb", http.StatusBadRequest)
+		return
+	}
+
+	if err := h.db.UpdateHashtagColor(name, color); err != nil {
+		msg := err.Error()
+		if strings.Contains(msg, "not found") {
+			jsonError(w, "hashtag not found", http.StatusNotFound)
+			return
+		}
+		jsonError(w, "database error", http.StatusInternalServerError)
+		return
+	}
+
+	jsonResponse(w, http.StatusOK, models.Hashtag{Name: name, Color: color})
+}
+
+func isValidHexColor(s string) bool {
+	if len(s) != 7 || s[0] != '#' {
+		return false
+	}
+	for _, c := range s[1:] {
+		if !((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')) {
+			return false
+		}
+	}
+	return true
+}

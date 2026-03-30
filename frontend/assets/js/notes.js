@@ -1,3 +1,5 @@
+import { getTagColor } from './tagStore.js';
+
 let currentFilter = {};
 
 export async function loadNotes(params = {}) {
@@ -58,9 +60,11 @@ function renderFeed(notes) {
 
 function noteCardHTML(note) {
   const pinClass = note.pinned ? 'pinned' : '';
-  const tags = (note.hashtags || []).map(t =>
-    `<span class="note-tag" data-tag="${esc(t)}">#${esc(t)}</span>`
-  ).join('');
+  const tags = (note.hashtags || []).map(t => {
+    const color = getTagColor(t);
+    const style = color ? `style="color:${color};background:${color}1a"` : '';
+    return `<span class="note-tag" data-tag="${esc(t)}" ${style}>#${esc(t)}</span>`;
+  }).join('');
   const time = relativeTime(note.updated_at || note.created_at);
   const rendered = typeof marked !== 'undefined' ? marked.parse(note.content || '') : `<p>${esc(note.content || '')}</p>`;
   const long = (note.content || '').length > 400;

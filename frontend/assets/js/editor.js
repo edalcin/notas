@@ -1,13 +1,30 @@
 import { loadAttachments, renderAttachments, uploadAttachment } from './attachments.js';
+import { getTags } from './tagStore.js';
 
 let currentNoteId = null;
+let acSelectedIndex = -1;
 
 export function initEditor() {
   const ta = document.getElementById('editor-textarea');
   if (!ta) return;
 
-  ta.addEventListener('input', () => { autoResize(ta); updateTagsPreview(ta.value); });
+  ta.addEventListener('input', () => {
+    autoResize(ta);
+    updateTagsPreview(ta.value);
+    handleAutocomplete(ta);
+  });
+
   ta.addEventListener('keydown', e => {
+    // Autocomplete keyboard navigation (takes priority over list shortcuts)
+    const ac = document.getElementById('tag-autocomplete');
+    if (ac && !ac.hidden) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); acMove(1); return; }
+      if (e.key === 'ArrowUp')   { e.preventDefault(); acMove(-1); return; }
+      if (e.key === 'Enter' && acSelectedIndex >= 0) { e.preventDefault(); acConfirm(ta); return; }
+      if (e.key === 'Escape') { e.preventDefault(); hideAutocomplete(); return; }
+      if (e.key === 'Tab') { e.preventDefault(); if (acSelectedIndex >= 0) acConfirm(ta); else hideAutocomplete(); return; }
+    }
+
     if ((e.ctrlKey || e.metaKey) && e.key === 'b') { e.preventDefault(); insertMarkdown('bold'); }
     if ((e.ctrlKey || e.metaKey) && e.key === 'i') { e.preventDefault(); insertMarkdown('italic'); }
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); saveNote(); }
@@ -16,6 +33,9 @@ export function initEditor() {
       if (handleSmartList(ta)) e.preventDefault();
     }
   });
+
+  // Hide autocomplete when textarea loses focus (with delay for click events)
+  ta.addEventListener('blur', () => setTimeout(hideAutocomplete, 150));
 
   document.getElementById('editor-toolbar')?.addEventListener('click', e => {
     const btn = e.target.closest('[data-action]');
@@ -65,6 +85,7 @@ export function resetEditor() {
   const ta = document.getElementById('editor-textarea');
   if (ta) { ta.value = ''; autoResize(ta); }
   updateTagsPreview('');
+  hideAutocomplete();
   const bar = document.getElementById('editor-mode-bar');
   if (bar) bar.hidden = true;
   const attachSection = document.getElementById('attachments-section');
@@ -105,65 +126,153 @@ async function saveNote() {
   }
 }
 
-// Smart list: when Enter is pressed inside a list item, continue or exit the list.
-// Returns true if the Enter was handled (caller should preventDefault).
+// ─── Smart list continuation ─────────────────────────────────────────────────
 function handleSmartList(ta) {
   const pos = ta.selectionStart;
-  // Only act when cursor is at the end of a selection (no multi-line selection)
   if (ta.selectionEnd !== pos) return false;
 
   const text = ta.value;
   const lineStart = text.lastIndexOf('\n', pos - 1) + 1;
-  // currentLine = content from start of line up to cursor
   const currentLine = text.slice(lineStart, pos);
 
-  // Bullet list: "- " or "* " with optional leading spaces
   const bulletMatch = currentLine.match(/^(\s*)([-*]) (.*)/);
   if (bulletMatch) {
     const [, indent, bullet, content] = bulletMatch;
     if (!content.trim()) {
-      // Empty list item — exit list by removing the prefix
       ta.value = text.slice(0, lineStart) + text.slice(pos);
       ta.setSelectionRange(lineStart, lineStart);
-      autoResize(ta);
-      updateTagsPreview(ta.value);
-      return true;
+      autoResize(ta); updateTagsPreview(ta.value); return true;
     }
-    // Continue list
     const insert = '\n' + indent + bullet + ' ';
     ta.value = text.slice(0, pos) + insert + text.slice(ta.selectionEnd);
-    const newPos = pos + insert.length;
-    ta.setSelectionRange(newPos, newPos);
-    autoResize(ta);
-    updateTagsPreview(ta.value);
-    return true;
+    const np = pos + insert.length;
+    ta.setSelectionRange(np, np);
+    autoResize(ta); updateTagsPreview(ta.value); return true;
   }
 
-  // Ordered list: "1. " with optional leading spaces
   const orderedMatch = currentLine.match(/^(\s*)(\d+)\. (.*)/);
   if (orderedMatch) {
     const [, indent, numStr, content] = orderedMatch;
     if (!content.trim()) {
-      // Empty list item — exit list
       ta.value = text.slice(0, lineStart) + text.slice(pos);
       ta.setSelectionRange(lineStart, lineStart);
-      autoResize(ta);
-      updateTagsPreview(ta.value);
-      return true;
+      autoResize(ta); updateTagsPreview(ta.value); return true;
     }
-    const nextNum = parseInt(numStr, 10) + 1;
-    const insert = '\n' + indent + nextNum + '. ';
+    const insert = '\n' + indent + (parseInt(numStr, 10) + 1) + '. ';
     ta.value = text.slice(0, pos) + insert + text.slice(ta.selectionEnd);
-    const newPos = pos + insert.length;
-    ta.setSelectionRange(newPos, newPos);
-    autoResize(ta);
-    updateTagsPreview(ta.value);
-    return true;
+    const np = pos + insert.length;
+    ta.setSelectionRange(np, np);
+    autoResize(ta); updateTagsPreview(ta.value); return true;
   }
 
   return false;
 }
 
+// ─── Tag autocomplete ────────────────────────────────────────────────────────
+function handleAutocomplete(ta) {
+  const pos = ta.selectionStart;
+  const before = ta.value.slice(0, pos);
+  const match = before.match(/#([a-zA-Z0-9_\u00C0-\u024F]*)$/);
+
+  if (!match) { hideAutocomplete(); return; }
+
+  const partial = match[1].toLowerCase();
+  const allTags = getTags();
+  const candidates = allTags.filter(t =>
+    t.name.startsWith(partial) && t.name !== partial
+  );
+
+  if (!candidates.length) { hideAutocomplete(); return; }
+
+  const tagStart = pos - match[0].length;
+  showAutocomplete(candidates, ta, tagStart);
+}
+
+function showAutocomplete(candidates, ta, tagStart) {
+  const ac = document.getElementById('tag-autocomplete');
+  if (!ac) return;
+
+  acSelectedIndex = -1;
+
+  ac.innerHTML = candidates.slice(0, 8).map((t, i) => {
+    const dotStyle = t.color ? `background:${t.color}` : '';
+    return `<div class="tag-ac-item" data-name="${escHtml(t.name)}" data-index="${i}">
+      <span class="tag-ac-dot" style="${dotStyle}"></span>
+      <span>#${escHtml(t.name)}</span>
+      <span class="tag-ac-count">${t.count}</span>
+    </div>`;
+  }).join('');
+
+  // Position below the editor box (relative to #content-col which is position:relative)
+  const box = document.getElementById('editor-box');
+  if (box) {
+    ac.style.top = (box.offsetTop + box.offsetHeight) + 'px';
+    ac.style.left = '0';
+    ac.style.right = '0';
+    ac.style.width = '';
+  }
+  ac.hidden = false;
+
+  ac.querySelectorAll('.tag-ac-item').forEach((item, i) => {
+    item.addEventListener('mousedown', e => {
+      e.preventDefault(); // don't blur textarea
+      acSelectedIndex = i;
+      acConfirm(ta);
+    });
+    item.addEventListener('mouseover', () => {
+      acSelectedIndex = i;
+      acUpdateSelection();
+    });
+  });
+
+  // Store tagStart for confirmation
+  ac.dataset.tagStart = tagStart;
+}
+
+function acMove(dir) {
+  const ac = document.getElementById('tag-autocomplete');
+  if (!ac) return;
+  const items = ac.querySelectorAll('.tag-ac-item');
+  acSelectedIndex = Math.max(-1, Math.min(items.length - 1, acSelectedIndex + dir));
+  acUpdateSelection();
+}
+
+function acUpdateSelection() {
+  const ac = document.getElementById('tag-autocomplete');
+  if (!ac) return;
+  ac.querySelectorAll('.tag-ac-item').forEach((item, i) => {
+    item.classList.toggle('ac-active', i === acSelectedIndex);
+  });
+}
+
+function acConfirm(ta) {
+  const ac = document.getElementById('tag-autocomplete');
+  if (!ac || ac.hidden || acSelectedIndex < 0) return;
+
+  const item = ac.querySelectorAll('.tag-ac-item')[acSelectedIndex];
+  if (!item) return;
+
+  const tagName = item.dataset.name;
+  const tagStart = parseInt(ac.dataset.tagStart, 10);
+  const pos = ta.selectionStart;
+
+  ta.value = ta.value.slice(0, tagStart) + '#' + tagName + ta.value.slice(pos);
+  const newPos = tagStart + 1 + tagName.length;
+  ta.setSelectionRange(newPos, newPos);
+
+  hideAutocomplete();
+  autoResize(ta);
+  updateTagsPreview(ta.value);
+  ta.focus();
+}
+
+function hideAutocomplete() {
+  const ac = document.getElementById('tag-autocomplete');
+  if (ac) { ac.hidden = true; ac.innerHTML = ''; }
+  acSelectedIndex = -1;
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
 function autoResize(ta) {
   ta.style.height = 'auto';
   ta.style.height = ta.scrollHeight + 'px';
@@ -173,7 +282,7 @@ function updateTagsPreview(content) {
   const container = document.getElementById('editor-tags-preview');
   if (!container) return;
   const tags = [...new Set((content.match(/#([a-zA-Z0-9_\u00C0-\u024F]+)/g) || []))].map(t => t.slice(1));
-  container.innerHTML = tags.map(t => `<span class="editor-tag-pill">#${escapeHtml(t)}</span>`).join('');
+  container.innerHTML = tags.map(t => `<span class="editor-tag-pill">#${escHtml(t)}</span>`).join('');
 }
 
 function insertMarkdown(type) {
@@ -208,6 +317,6 @@ function insertAtCursor(ta, text) {
   ta.setSelectionRange(s + text.length, s + text.length);
 }
 
-function escapeHtml(str) {
-  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+function escHtml(str) {
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }

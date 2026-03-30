@@ -1,13 +1,15 @@
 package db
 
 import (
+	"fmt"
+
 	"github.com/edalcin/notes/internal/models"
 	"github.com/edalcin/notes/internal/services"
 )
 
 func (d *DB) ListHashtags() ([]models.Hashtag, error) {
 	rows, err := d.Query(`
-		SELECT h.name, COUNT(nh.note_id) as count
+		SELECT h.name, COUNT(nh.note_id) as count, COALESCE(h.color, '') as color
 		FROM hashtags h
 		LEFT JOIN note_hashtags nh ON h.id = nh.hashtag_id
 		GROUP BY h.id, h.name
@@ -20,7 +22,7 @@ func (d *DB) ListHashtags() ([]models.Hashtag, error) {
 	var hashtags []models.Hashtag
 	for rows.Next() {
 		var h models.Hashtag
-		if err := rows.Scan(&h.Name, &h.Count); err != nil {
+		if err := rows.Scan(&h.Name, &h.Count, &h.Color); err != nil {
 			return nil, err
 		}
 		hashtags = append(hashtags, h)
@@ -29,6 +31,18 @@ func (d *DB) ListHashtags() ([]models.Hashtag, error) {
 		hashtags = []models.Hashtag{}
 	}
 	return hashtags, nil
+}
+
+func (d *DB) UpdateHashtagColor(name, color string) error {
+	result, err := d.Exec("UPDATE hashtags SET color = ? WHERE name = ?", color, name)
+	if err != nil {
+		return fmt.Errorf("update hashtag color: %w", err)
+	}
+	n, _ := result.RowsAffected()
+	if n == 0 {
+		return fmt.Errorf("hashtag not found: %s", name)
+	}
+	return nil
 }
 
 func (d *DB) RenameHashtag(oldName, newName string) error {

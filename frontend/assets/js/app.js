@@ -24,10 +24,10 @@ document.addEventListener('note:tag-click', e => {
   import('./hashtags.js').then(m => m.setActiveHashtag(e.detail.tag));
 });
 
-function initApp() {
+async function initApp() {
   initEditor();
+  await loadHashtags(); // load tags first so colors are available when notes render
   loadNotes();
-  loadHashtags();
   bindUI();
 }
 

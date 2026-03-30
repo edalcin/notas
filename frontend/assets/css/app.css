@@ -184,7 +184,7 @@ input, textarea { font-family: inherit; }
 .hashtag-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 7px;
   width: 100%;
   padding: 7px 10px;
   background: none;
@@ -195,6 +195,19 @@ input, textarea { font-family: inherit; }
   font-weight: 500;
   text-align: left;
   transition: background 0.15s, color 0.15s;
+}
+
+.hashtag-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+.hashtag-label {
+  flex: 1;
+  text-align: left;
 }
 
 .hashtag-item:hover {
@@ -285,6 +298,7 @@ input, textarea { font-family: inherit; }
   max-width: 660px;
   width: 100%;
   margin: 0 auto;
+  position: relative;
 }
 
 /* ─── Editor box ────────────────────────────────────────────────────────────── */
@@ -867,6 +881,164 @@ input, textarea { font-family: inherit; }
   font-size: 13px;
   color: var(--danger);
   text-align: center;
+}
+
+/* ─── Tag manager (inside modal) ───────────────────────────────────────────── */
+.tag-manager-empty {
+  color: var(--text-muted);
+  padding: 12px 0;
+  font-size: 14px;
+}
+
+.tag-manager-row {
+  border-bottom: 1px solid var(--border);
+}
+
+.tag-manager-row:last-child {
+  border-bottom: none;
+}
+
+.tag-row-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+}
+
+.tag-manager-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  border: 2px solid transparent;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.1);
+}
+
+.tag-manager-name {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.tag-manager-count {
+  font-size: 12px;
+  color: var(--text-muted);
+  min-width: 60px;
+  text-align: right;
+}
+
+.tag-manager-actions {
+  display: flex;
+  gap: 2px;
+}
+
+/* Color picker */
+.tag-color-picker {
+  padding: 6px 0 10px 22px;
+}
+
+.color-picker-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.color-swatch {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.12s, border-color 0.12s;
+  flex-shrink: 0;
+}
+
+.color-swatch:hover {
+  transform: scale(1.2);
+}
+
+.color-swatch.selected {
+  border-color: var(--text);
+  transform: scale(1.15);
+}
+
+.color-swatch-none {
+  background: var(--bg);
+  border: 2px solid var(--border);
+  color: var(--text-muted);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* Rename form */
+.tag-rename-form {
+  padding: 0 0 10px 22px;
+}
+
+.rename-form-inner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-sm {
+  padding: 5px 12px;
+  font-size: 13px;
+  border-radius: 6px;
+}
+
+/* ─── Tag autocomplete dropdown ─────────────────────────────────────────────── */
+#tag-autocomplete {
+  /* Positioned via JS top/left relative to editor-box rect + scrollY */
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 300;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+#tag-autocomplete[hidden] {
+  display: none;
+}
+
+.tag-ac-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.1s;
+}
+
+.tag-ac-item:hover,
+.tag-ac-item.ac-active {
+  background: var(--accent-subtle);
+}
+
+.tag-ac-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+.tag-ac-count {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--text-muted);
 }
 
 /* ─── Utilities ─────────────────────────────────────────────────────────────── */
