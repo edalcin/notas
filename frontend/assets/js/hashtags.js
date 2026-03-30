@@ -42,12 +42,9 @@ function renderHashtagList(hashtags) {
 
   list.innerHTML = hashtags.map(ht => {
     const active = ht.name === activeHashtag ? 'active' : '';
-    const dotStyle = ht.color ? `background:${ht.color}` : '';
-    return `<li><button class="hashtag-item ${active}" data-hashtag="${esc(ht.name)}">
-      <span class="hashtag-dot" style="${dotStyle}"></span>
-      <span class="hashtag-label">#${esc(ht.name)}</span>
-      <span class="hashtag-count">${ht.count}</span>
-    </button></li>`;
+    const colorStyle = ht.color ? `style="color:${ht.color}"` : '';
+    const countStr = ht.count > 1 ? `<span class="hashtag-count-inline">(${ht.count})</span>` : '';
+    return `<li><button class="hashtag-item ${active}" data-hashtag="${esc(ht.name)}" ${colorStyle}>#&nbsp;${esc(ht.name)}${countStr}</button></li>`;
   }).join('');
 
   list.querySelectorAll('.hashtag-item').forEach(btn =>
