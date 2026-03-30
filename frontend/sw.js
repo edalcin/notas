@@ -1,4 +1,4 @@
-const CACHE_NAME = 'notas-v2';
+const CACHE_NAME = 'notas-v3';
 
 const APP_SHELL = [
   '/',
@@ -10,6 +10,7 @@ const APP_SHELL = [
   '/assets/js/tagStore.js',
   '/assets/js/theme.js',
   '/assets/js/attachments.js',
+  '/assets/js/attachments-view.js',
   '/manifest.json',
 ];
 

@@ -77,6 +77,7 @@ func main() {
 			r.Post("/{id}/attachments", attachmentHandler.Upload)
 			r.Delete("/{id}/attachments/{attachment_id}", attachmentHandler.Delete)
 		})
+		r.Get("/attachments", attachmentHandler.ListAll)
 		r.Route("/hashtags", func(r chi.Router) {
 			r.Get("/", hashtagHandler.List)
 			r.Put("/{name}", hashtagHandler.Rename)

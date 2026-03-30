@@ -61,6 +61,34 @@ func (d *DB) GetAttachmentsByNote(noteID int64) ([]models.Attachment, error) {
 	return attachments, nil
 }
 
+func (d *DB) ListAllAttachments() ([]models.AttachmentListItem, error) {
+	rows, err := d.Query(`
+		SELECT a.id, a.note_id, a.original_name, a.mime_type, a.size_bytes, a.stored_filename, a.created_at,
+		       COALESCE(SUBSTR(n.content, 1, 80), '') AS note_preview
+		FROM attachments a
+		LEFT JOIN notes n ON n.id = a.note_id
+		ORDER BY a.created_at DESC`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var items []models.AttachmentListItem
+	for rows.Next() {
+		var item models.AttachmentListItem
+		var storedFilename string
+		if err := rows.Scan(&item.ID, &item.NoteID, &item.OriginalName, &item.MimeType, &item.SizeBytes, &storedFilename, &item.CreatedAt, &item.NotePreview); err != nil {
+			return nil, err
+		}
+		item.URL = "/files/" + storedFilename
+		items = append(items, item)
+	}
+	if items == nil {
+		items = []models.AttachmentListItem{}
+	}
+	return items, nil
+}
+
 func (d *DB) DeleteAttachment(id int64) (string, error) {
 	var storedFilename string
 	if err := d.QueryRow("SELECT stored_filename FROM attachments WHERE id = ?", id).Scan(&storedFilename); err != nil {

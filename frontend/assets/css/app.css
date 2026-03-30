@@ -1036,6 +1036,124 @@ input, textarea { font-family: inherit; }
   color: var(--text-muted);
 }
 
+/* ─── Note card attachment badge ────────────────────────────────────────────── */
+.note-attach-badge {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  line-height: 1.4;
+}
+
+/* ─── Global attachments view ────────────────────────────────────────────────── */
+#attachments-view {
+  padding-top: 4px;
+}
+
+.attach-view-header-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.attach-view-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+}
+
+.attach-view-loading,
+.attach-view-empty {
+  color: var(--text-muted);
+  font-size: 14px;
+  padding: 40px 0;
+  text-align: center;
+}
+
+.attach-view-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 8px;
+  transition: box-shadow 0.15s;
+}
+
+.attach-view-item:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.attach-thumb-link {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  text-decoration: none;
+}
+
+.attach-thumb {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  display: block;
+}
+
+.attach-icon-placeholder {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.attach-view-meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.attach-filename {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.attach-filename:hover {
+  text-decoration: underline;
+}
+
+.attach-size {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.attach-note-preview {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* ─── Utilities ─────────────────────────────────────────────────────────────── */
 .text-muted {
   color: var(--text-muted);

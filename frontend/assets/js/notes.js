@@ -65,11 +65,16 @@ function noteCardHTML(note) {
   const time = relativeTime(note.updated_at || note.created_at);
   const rendered = typeof marked !== 'undefined' ? marked.parse(note.content || '') : `<p>${esc(note.content || '')}</p>`;
   const long = (note.content || '').length > 400;
+  const attachCount = (note.attachments || []).length;
+  const attachBadge = attachCount > 0
+    ? `<span class="note-attach-badge" title="${attachCount} anexo${attachCount !== 1 ? 's' : ''}">📎 ${attachCount}</span>`
+    : '';
 
   return `<div class="note-card ${pinClass}" data-id="${note.id}" role="listitem">
     <div class="note-card-header">
       <span class="note-card-time">${note.pinned ? '<span class="pin-badge">📌</span>' : ''}${time}</span>
       <div class="note-card-actions">
+        ${attachBadge}
         <button class="tb-btn btn-pin" data-id="${note.id}" data-pinned="${note.pinned}" title="${note.pinned ? 'Desafixar' : 'Fixar'}">${note.pinned ? '📌' : '📍'}</button>
       </div>
     </div>

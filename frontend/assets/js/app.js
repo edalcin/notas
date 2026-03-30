@@ -3,6 +3,7 @@ import { loadHashtags, clearFilter } from './hashtags.js';
 import { initTheme, toggleTheme } from './theme.js';
 import { initEditor, loadNoteForEdit } from './editor.js';
 import { openHashtagManager, closeHashtagManager } from './hashtags.js';
+import { loadAttachmentsView, onAttachmentDeleted } from './attachments-view.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   initTheme();
@@ -29,6 +30,7 @@ async function initApp() {
   await loadHashtags(); // load tags first so colors are available when notes render
   loadNotes();
   bindUI();
+  onAttachmentDeleted(() => loadNotes()); // refresh note badges after global delete
 }
 
 async function checkAuth() {
@@ -86,7 +88,13 @@ function bindUI() {
   });
   document.getElementById('btn-all-notes')?.addEventListener('click', () => {
     setActiveNav(document.getElementById('btn-all-notes'));
+    showNotesView();
     clearFilter();
+  });
+
+  document.getElementById('btn-attachments')?.addEventListener('click', () => {
+    setActiveNav(document.getElementById('btn-attachments'));
+    showAttachmentsView();
   });
 
   // Mobile sidebar
@@ -117,4 +125,17 @@ function bindUI() {
 export function setActiveNav(el) {
   document.querySelectorAll('#sidebar-nav .nav-item, #hashtag-list .hashtag-item').forEach(n => n.classList.remove('active'));
   el?.classList.add('active');
+}
+
+function showNotesView() {
+  document.getElementById('editor-box').hidden = false;
+  document.getElementById('notes-feed').hidden = false;
+  document.getElementById('attachments-view').hidden = true;
+}
+
+function showAttachmentsView() {
+  document.getElementById('editor-box').hidden = true;
+  document.getElementById('notes-feed').hidden = true;
+  document.getElementById('attachments-view').hidden = false;
+  loadAttachmentsView();
 }

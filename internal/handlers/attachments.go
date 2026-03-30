@@ -92,6 +92,15 @@ func (h *AttachmentHandler) Upload(w http.ResponseWriter, r *http.Request) {
 	jsonResponse(w, http.StatusCreated, attachment)
 }
 
+func (h *AttachmentHandler) ListAll(w http.ResponseWriter, r *http.Request) {
+	items, err := h.db.ListAllAttachments()
+	if err != nil {
+		jsonError(w, "database error", http.StatusInternalServerError)
+		return
+	}
+	jsonResponse(w, http.StatusOK, map[string]interface{}{"attachments": items})
+}
+
 func (h *AttachmentHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	attachmentID, err := strconv.ParseInt(chi.URLParam(r, "attachment_id"), 10, 64)
 	if err != nil {

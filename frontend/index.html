@@ -23,6 +23,9 @@
         <button class="nav-item active" id="btn-all-notes">
           <span class="nav-icon">📋</span><span>Todas as notas</span>
         </button>
+        <button class="nav-item" id="btn-attachments">
+          <span class="nav-icon">📎</span><span>Arquivos anexados</span>
+        </button>
       </nav>
       <div class="sidebar-section">
         <div class="sidebar-section-header">
@@ -91,6 +94,14 @@
             <p>Nenhuma nota encontrada.</p>
           </div>
         </div><!-- /#notes-feed -->
+
+        <div id="attachments-view" hidden>
+          <div class="attach-view-header-row">
+            <h2 class="attach-view-title">Arquivos anexados</h2>
+            <span id="attach-view-header" class="text-muted"></span>
+          </div>
+          <div id="attachments-view-list"></div>
+        </div>
         </div><!-- /#content-col -->
       </main>
     </div>
