@@ -10,5 +10,13 @@ FROM alpine:3.19
 RUN apk add --no-cache ca-certificates tzdata
 WORKDIR /app
 COPY --from=builder /build/server .
+
+# Default data paths — override via env vars or docker-compose volumes
+ENV DB_PATH=/data/notas.db
+ENV FILES_PATH=/data/files
+
+# Declare persistent directories so Docker creates named volumes automatically
+VOLUME ["/data"]
+
 EXPOSE 8080
 ENTRYPOINT ["/app/server"]

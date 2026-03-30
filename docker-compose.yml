@@ -1,0 +1,17 @@
+services:
+  notas:
+    build: .
+    image: notas:latest
+    ports:
+      - "8080:8080"
+    environment:
+      DB_PATH: /data/notas.db
+      FILES_PATH: /data/files
+      # APP_PIN: ""        # optional: set a PIN to protect the app
+      # PORT: "8080"       # optional: change the listening port
+    volumes:
+      - notas-data:/data   # named volume — survives image rebuilds and container recreation
+    restart: unless-stopped
+
+volumes:
+  notas-data:              # Docker manages this volume; data persists across deploys
