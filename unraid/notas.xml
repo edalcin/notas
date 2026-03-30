@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>notas</Name>
+  <Repository>ghcr.io/edalcin/notes:latest</Repository>
+  <Registry>https://github.com/edalcin/notas/pkgs/container/notes</Registry>
+  <Network>bridge</Network>
+  <Privileged>false</Privileged>
+  <Support/>
+  <Project>https://github.com/edalcin/notas</Project>
+  <Overview>Sistema de anotações pessoais com suporte a Markdown, hashtags, anexos e PIN de acesso.</Overview>
+  <Category>Productivity:</Category>
+  <WebUI>http://[IP]:[PORT:8080]/</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/edalcin/notas/main/unraid/notas.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/edalcin/notas/main/notebook.png</Icon>
+  <ExtraParams>--pids-limit 2048</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires/>
+
+  <!-- Ports -->
+  <Config Name="Web UI Port" Target="8080" Default="8080" Mode="tcp" Description="Porta de acesso ao aplicativo" Type="Port" Display="always" Required="true" Mask="false">8080</Config>
+
+  <!-- Volumes -->
+  <Config Name="Banco de dados" Target="/data/db" Default="/mnt/user/appdata/notas/db" Mode="rw" Description="Diretório onde o arquivo notes.db é armazenado" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/notas/db</Config>
+  <Config Name="Arquivos anexados" Target="/data/files" Default="/mnt/user/appdata/notas/files" Mode="rw" Description="Diretório para arquivos e imagens anexados às notas" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/notas/files</Config>
+
+  <!-- Environment variables -->
+  <Config Name="DB_PATH" Target="DB_PATH" Default="/data/db/notes.db" Description="Caminho completo do arquivo SQLite dentro do container (não alterar)" Type="Variable" Display="advanced" Required="true" Mask="false">/data/db/notes.db</Config>
+  <Config Name="FILES_PATH" Target="FILES_PATH" Default="/data/files" Description="Diretório de arquivos dentro do container (não alterar)" Type="Variable" Display="advanced" Required="true" Mask="false">/data/files</Config>
+  <Config Name="APP_PIN" Target="APP_PIN" Default="" Description="PIN numérico para proteger o acesso (deixar em branco para desativar)" Type="Variable" Display="always" Required="false" Mask="true"></Config>
+  <Config Name="PORT" Target="PORT" Default="8080" Description="Porta interna do servidor" Type="Variable" Display="advanced" Required="false" Mask="false">8080</Config>
+  <Config Name="MAX_UPLOAD_BYTES" Target="MAX_UPLOAD_BYTES" Default="52428800" Description="Tamanho máximo de upload em bytes (padrão: 50 MB)" Type="Variable" Display="advanced" Required="false" Mask="false">52428800</Config>
+  <Config Name="TZ" Target="TZ" Default="America/Sao_Paulo" Description="Fuso horário" Type="Variable" Display="always" Required="false" Mask="false">America/Sao_Paulo</Config>
+</Container>

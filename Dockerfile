@@ -12,11 +12,11 @@ WORKDIR /app
 COPY --from=builder /build/server .
 
 # Default data paths — override via env vars or docker-compose volumes
-ENV DB_PATH=/data/notas.db
+ENV DB_PATH=/data/db/notes.db
 ENV FILES_PATH=/data/files
 
 # Declare persistent directories so Docker creates named volumes automatically
-VOLUME ["/data"]
+VOLUME ["/data/db", "/data/files"]
 
 EXPOSE 8080
 ENTRYPOINT ["/app/server"]
