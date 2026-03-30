@@ -1,24 +1,81 @@
 import { loadNotes } from './notes.js';
 import { loadHashtags, clearFilter } from './hashtags.js';
 import { initTheme, toggleTheme } from './theme.js';
-import { initEditor, loadNoteForEdit, resetEditor } from './editor.js';
+import { initEditor, loadNoteForEdit } from './editor.js';
 import { openHashtagManager, closeHashtagManager } from './hashtags.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   initTheme();
-  initEditor();
-  loadNotes();
-  loadHashtags();
-  bindUI();
+
+  const authenticated = await checkAuth();
+  if (!authenticated) {
+    showPINOverlay();
+    return;
+  }
+
+  initApp();
 });
 
-// Cross-module events
+// Cross-module events — safe to register early; they only fire from user actions inside the app
 document.addEventListener('note:saved', () => { loadNotes(); loadHashtags(); });
 document.addEventListener('note:deleted', () => { loadNotes(); loadHashtags(); });
 document.addEventListener('note:edit', e => loadNoteForEdit(e.detail.id));
 document.addEventListener('note:tag-click', e => {
   import('./hashtags.js').then(m => m.setActiveHashtag(e.detail.tag));
 });
+
+function initApp() {
+  initEditor();
+  loadNotes();
+  loadHashtags();
+  bindUI();
+}
+
+async function checkAuth() {
+  try {
+    const res = await fetch('/api/notes?limit=1');
+    return res.status !== 401;
+  } catch {
+    return true; // network error — proceed and let API calls fail naturally
+  }
+}
+
+function showPINOverlay() {
+  const overlay = document.getElementById('pin-overlay');
+  if (!overlay) return;
+  overlay.hidden = false;
+
+  const input = document.getElementById('pin-input');
+  const errorEl = document.getElementById('pin-error');
+  input?.focus();
+
+  async function submit() {
+    if (errorEl) errorEl.hidden = true;
+    const pin = input?.value ?? '';
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin }),
+      });
+      if (res.ok) {
+        overlay.hidden = true;
+        initApp();
+      } else {
+        if (errorEl) errorEl.hidden = false;
+        input?.select();
+      }
+    } catch {
+      if (errorEl) { errorEl.textContent = 'Erro de conexão'; errorEl.hidden = false; }
+    }
+  }
+
+  document.getElementById('btn-pin-submit')?.addEventListener('click', submit);
+  input?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') submit();
+    if (errorEl) errorEl.hidden = true;
+  });
+}
 
 function bindUI() {
   document.getElementById('btn-theme-toggle')?.addEventListener('click', toggleTheme);
@@ -44,7 +101,7 @@ function bindUI() {
     overlay?.classList.remove('visible');
   });
 
-  // Search with debounce
+  // Search (now in sidebar — binds by ID regardless of position)
   let searchTimer = null;
   document.getElementById('search-input')?.addEventListener('input', e => {
     clearTimeout(searchTimer);

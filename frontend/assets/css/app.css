@@ -79,8 +79,46 @@ input, textarea { font-family: inherit; }
   flex-shrink: 0;
 }
 
+/* ─── Sidebar search ────────────────────────────────────────────────────────── */
+.sidebar-search {
+  padding: 10px 8px 6px;
+  flex-shrink: 0;
+}
+
+.search-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 9px;
+  font-size: 15px;
+  color: var(--text-muted);
+  pointer-events: none;
+  line-height: 1;
+}
+
+.sidebar-search input {
+  width: 100%;
+  padding: 7px 10px 7px 30px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.sidebar-search input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-subtle);
+}
+
 #sidebar-nav {
-  padding: 8px 8px 0;
+  padding: 6px 8px 0;
   flex-shrink: 0;
 }
 
@@ -214,6 +252,7 @@ input, textarea { font-family: inherit; }
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  min-width: 0;
 }
 
 /* Top bar — mobile only */
@@ -221,43 +260,24 @@ input, textarea { font-family: inherit; }
   display: none;
   align-items: center;
   gap: 10px;
-  padding: 0 12px;
+  padding: 0 14px;
   height: var(--topbar-height);
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
 }
 
-#search-wrapper {
-  flex: 1;
-  max-width: 480px;
-}
-
-#search-input {
-  width: 100%;
-  padding: 7px 14px;
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  background: var(--bg);
+.topbar-brand {
+  font-size: 16px;
+  font-weight: 700;
   color: var(--text);
-  font-size: 14px;
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-#search-input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-subtle);
 }
 
 /* ─── Main content ──────────────────────────────────────────────────────────── */
 #main {
   flex: 1;
   overflow-y: auto;
-  padding: 24px 20px;
-  max-width: 720px;
-  width: 100%;
-  margin: 0 auto;
+  padding: 28px 32px;
 }
 
 /* ─── Editor box ────────────────────────────────────────────────────────────── */
@@ -266,7 +286,7 @@ input, textarea { font-family: inherit; }
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow-sm);
-  margin-bottom: 24px;
+  margin-bottom: 28px;
   overflow: hidden;
 }
 
@@ -414,7 +434,7 @@ input, textarea { font-family: inherit; }
 #notes-feed {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 20px;
 }
 
 #feed-header {
@@ -445,7 +465,7 @@ input, textarea { font-family: inherit; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 14px 0;
+  padding: 12px 16px 0;
   gap: 8px;
 }
 
@@ -474,9 +494,9 @@ input, textarea { font-family: inherit; }
 
 /* Note content: rendered markdown */
 .note-content {
-  padding: 8px 14px 10px;
+  padding: 10px 16px 12px;
   position: relative;
-  max-height: 300px;
+  max-height: 320px;
   overflow: hidden;
 }
 
@@ -536,7 +556,7 @@ input, textarea { font-family: inherit; }
   padding-left: 1.4em;
   margin-bottom: 0.5em;
 }
-.note-content li { margin-bottom: 0.1em; }
+.note-content li { margin-bottom: 0.2em; }
 .note-content blockquote {
   border-left: 3px solid var(--accent);
   padding-left: 10px;
@@ -552,7 +572,7 @@ input, textarea { font-family: inherit; }
 
 /* Card footer: hashtag pills */
 .note-card-footer {
-  padding: 0 14px 10px;
+  padding: 0 16px 12px;
 }
 
 .note-hashtags {
@@ -768,6 +788,73 @@ input, textarea { font-family: inherit; }
   outline: none;
 }
 
+/* ─── PIN overlay ───────────────────────────────────────────────────────────── */
+#pin-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+}
+
+#pin-overlay[hidden] {
+  display: none;
+}
+
+.pin-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 36px 32px;
+  width: 100%;
+  max-width: 320px;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.pin-brand {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.pin-subtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: -4px;
+}
+
+.pin-input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 20px;
+  outline: none;
+  text-align: center;
+  letter-spacing: 0.3em;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.pin-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-subtle);
+}
+
+.pin-error {
+  font-size: 13px;
+  color: var(--danger);
+  text-align: center;
+}
+
 /* ─── Utilities ─────────────────────────────────────────────────────────────── */
 .text-muted {
   color: var(--text-muted);
@@ -791,7 +878,7 @@ input, textarea { font-family: inherit; }
   }
 
   #main {
-    padding: 28px 24px;
+    padding: 32px 40px;
   }
 }
 
@@ -816,7 +903,7 @@ input, textarea { font-family: inherit; }
   }
 
   #main {
-    padding: 16px 12px;
+    padding: 16px 14px;
   }
 
   #editor-toolbar {

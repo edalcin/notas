@@ -42,6 +42,9 @@ func main() {
 		}
 	}
 
+	appPIN := os.Getenv("APP_PIN")
+	sessionSecret := handlers.NewSessionSecret()
+
 	database, err := db.Open(dbPath)
 	if err != nil {
 		log.Fatalf("open database: %v", err)
@@ -57,8 +60,11 @@ func main() {
 	r.Use(middleware.Recoverer)
 	r.Use(handlers.FilesPathMiddleware(filesPath))
 	r.Use(handlers.MaxUploadMiddleware(maxUploadBytes))
+	r.Use(handlers.PINMiddleware(appPIN, sessionSecret))
 
 	r.Get("/health", handlers.Health(database))
+	r.Post("/api/auth/login", handlers.PINLogin(appPIN, sessionSecret))
+	r.Get("/api/auth/logout", handlers.PINLogout())
 
 	r.Route("/api", func(r chi.Router) {
 		r.Route("/notes", func(r chi.Router) {
@@ -90,6 +96,9 @@ func main() {
 	addr := fmt.Sprintf(":%s", port)
 	log.Printf("Starting server on %s", addr)
 	log.Printf("DB_PATH=%s, FILES_PATH=%s", dbPath, filesPath)
+	if appPIN != "" {
+		log.Printf("PIN protection: enabled")
+	}
 
 	if err := http.ListenAndServe(addr, r); err != nil {
 		log.Fatalf("server error: %v", err)

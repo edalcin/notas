@@ -12,6 +12,9 @@ export function initEditor() {
     if ((e.ctrlKey || e.metaKey) && e.key === 'i') { e.preventDefault(); insertMarkdown('italic'); }
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); saveNote(); }
     if (e.key === 'Tab') { e.preventDefault(); insertAtCursor(ta, '  '); }
+    if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
+      if (handleSmartList(ta)) e.preventDefault();
+    }
   });
 
   document.getElementById('editor-toolbar')?.addEventListener('click', e => {
@@ -100,6 +103,65 @@ async function saveNote() {
     console.error('saveNote error:', err);
     alert('Erro ao salvar nota.');
   }
+}
+
+// Smart list: when Enter is pressed inside a list item, continue or exit the list.
+// Returns true if the Enter was handled (caller should preventDefault).
+function handleSmartList(ta) {
+  const pos = ta.selectionStart;
+  // Only act when cursor is at the end of a selection (no multi-line selection)
+  if (ta.selectionEnd !== pos) return false;
+
+  const text = ta.value;
+  const lineStart = text.lastIndexOf('\n', pos - 1) + 1;
+  // currentLine = content from start of line up to cursor
+  const currentLine = text.slice(lineStart, pos);
+
+  // Bullet list: "- " or "* " with optional leading spaces
+  const bulletMatch = currentLine.match(/^(\s*)([-*]) (.*)/);
+  if (bulletMatch) {
+    const [, indent, bullet, content] = bulletMatch;
+    if (!content.trim()) {
+      // Empty list item — exit list by removing the prefix
+      ta.value = text.slice(0, lineStart) + text.slice(pos);
+      ta.setSelectionRange(lineStart, lineStart);
+      autoResize(ta);
+      updateTagsPreview(ta.value);
+      return true;
+    }
+    // Continue list
+    const insert = '\n' + indent + bullet + ' ';
+    ta.value = text.slice(0, pos) + insert + text.slice(ta.selectionEnd);
+    const newPos = pos + insert.length;
+    ta.setSelectionRange(newPos, newPos);
+    autoResize(ta);
+    updateTagsPreview(ta.value);
+    return true;
+  }
+
+  // Ordered list: "1. " with optional leading spaces
+  const orderedMatch = currentLine.match(/^(\s*)(\d+)\. (.*)/);
+  if (orderedMatch) {
+    const [, indent, numStr, content] = orderedMatch;
+    if (!content.trim()) {
+      // Empty list item — exit list
+      ta.value = text.slice(0, lineStart) + text.slice(pos);
+      ta.setSelectionRange(lineStart, lineStart);
+      autoResize(ta);
+      updateTagsPreview(ta.value);
+      return true;
+    }
+    const nextNum = parseInt(numStr, 10) + 1;
+    const insert = '\n' + indent + nextNum + '. ';
+    ta.value = text.slice(0, pos) + insert + text.slice(ta.selectionEnd);
+    const newPos = pos + insert.length;
+    ta.setSelectionRange(newPos, newPos);
+    autoResize(ta);
+    updateTagsPreview(ta.value);
+    return true;
+  }
+
+  return false;
 }
 
 function autoResize(ta) {
