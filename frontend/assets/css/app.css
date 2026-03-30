@@ -280,6 +280,13 @@ input, textarea { font-family: inherit; }
   padding: 28px 32px;
 }
 
+/* Centered content column — constrains editor + feed to a readable width */
+#content-col {
+  max-width: 660px;
+  width: 100%;
+  margin: 0 auto;
+}
+
 /* ─── Editor box ────────────────────────────────────────────────────────────── */
 #editor-box {
   background: var(--surface);
@@ -432,6 +439,13 @@ input, textarea { font-family: inherit; }
 
 /* ─── Notes feed ────────────────────────────────────────────────────────────── */
 #notes-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Note cards live inside #notes-list, so gap goes here */
+#notes-list {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -878,7 +892,7 @@ input, textarea { font-family: inherit; }
   }
 
   #main {
-    padding: 32px 40px;
+    padding: 32px 48px;
   }
 }
 
