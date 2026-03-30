@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
@@ -24,6 +25,11 @@ func main() {
 	}
 	if filesPath == "" {
 		log.Fatal("FILES_PATH environment variable is required")
+	}
+
+	// Ensure the directory containing the DB file exists
+	if err := os.MkdirAll(filepath.Dir(dbPath), 0755); err != nil {
+		log.Fatalf("cannot create DB directory %s: %v", filepath.Dir(dbPath), err)
 	}
 
 	if err := os.MkdirAll(filesPath, 0755); err != nil {
