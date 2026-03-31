@@ -34,40 +34,82 @@ function renderAttachmentsView(container, items) {
   container.innerHTML = items.map(itemHTML).join('');
 
   container.querySelectorAll('.btn-delete-attach-global').forEach(btn => {
-    btn.addEventListener('click', () => deleteGlobalAttachment(Number(btn.dataset.id), Number(btn.dataset.noteId)));
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      deleteGlobalAttachment(Number(btn.dataset.id), Number(btn.dataset.noteId));
+    });
   });
 }
 
 function itemHTML(a) {
   const isImage = a.mime_type && a.mime_type.startsWith('image/');
   const thumb = isImage
-    ? `<img src="${a.url}" alt="${esc(a.original_name)}" class="attach-thumb" loading="lazy">`
-    : `<span class="attach-icon-placeholder">${mimeIcon(a.mime_type)}</span>`;
-  const size = formatBytes(a.size_bytes);
-  const preview = a.note_preview ? `<span class="attach-note-preview">${esc(a.note_preview)}</span>` : '';
+    ? `<img src="${a.url}" alt="${esc(a.original_name)}" class="attach-grid-img" loading="lazy">`
+    : `<span class="attach-grid-icon">${mimeIcon(a.mime_type)}</span>`;
 
-  return `<div class="attach-view-item" data-id="${a.id}">
-    <a href="${a.url}" target="_blank" rel="noopener" class="attach-thumb-link">${thumb}</a>
-    <div class="attach-view-meta">
-      <a href="${a.url}" target="_blank" rel="noopener" class="attach-filename">${esc(a.original_name)}</a>
-      <span class="attach-size">${size}</span>
-      ${preview}
-    </div>
-    <button class="btn-icon btn-delete-attach-global" data-id="${a.id}" data-note-id="${a.note_id}" title="Excluir anexo" aria-label="Excluir anexo">🗑️</button>
+  return `<div class="attach-grid-item" title="${esc(a.original_name)}">
+    <a href="${a.url}" target="_blank" rel="noopener" class="attach-grid-link">${thumb}</a>
+    <button class="btn-delete-attach-global attach-grid-delete" data-id="${a.id}" data-note-id="${a.note_id}" aria-label="Excluir ${esc(a.original_name)}">🗑️</button>
   </div>`;
 }
 
 async function deleteGlobalAttachment(attachmentId, noteId) {
-  if (!confirm('Excluir este anexo permanentemente?')) return;
+  let noteContent = '';
   try {
-    const res = await fetch(`/api/notes/${noteId}/attachments/${attachmentId}`, { method: 'DELETE' });
-    if (!res.ok && res.status !== 404) throw new Error('delete failed');
-    await loadAttachmentsView();
-    if (_deleteCallback) _deleteCallback();
-  } catch (err) {
-    console.error('deleteGlobalAttachment error:', err);
-    alert('Erro ao excluir anexo.');
-  }
+    const res = await fetch(`/api/notes/${noteId}`);
+    if (res.ok) {
+      const note = await res.json();
+      noteContent = note.content || '';
+    }
+  } catch {}
+
+  showDeleteConfirm(noteContent, async (deleteNoteAlso) => {
+    try {
+      if (deleteNoteAlso) {
+        const res = await fetch(`/api/notes/${noteId}`, { method: 'DELETE' });
+        if (!res.ok && res.status !== 404) throw new Error('delete note failed');
+        document.dispatchEvent(new CustomEvent('note:deleted'));
+      } else {
+        const res = await fetch(`/api/notes/${noteId}/attachments/${attachmentId}`, { method: 'DELETE' });
+        if (!res.ok && res.status !== 404) throw new Error('delete failed');
+      }
+      await loadAttachmentsView();
+      if (_deleteCallback) _deleteCallback();
+    } catch (err) {
+      console.error('deleteGlobalAttachment error:', err);
+      alert('Erro ao excluir.');
+    }
+  });
+}
+
+function showDeleteConfirm(noteContent, onConfirm) {
+  const rendered = typeof marked !== 'undefined'
+    ? marked.parse(noteContent, { breaks: true })
+    : `<p>${esc(noteContent)}</p>`;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'attach-confirm-overlay';
+  overlay.innerHTML = `
+    <div class="attach-confirm-box">
+      <p class="attach-confirm-title">O que deseja excluir?</p>
+      <div class="attach-confirm-note-preview">${rendered}</div>
+      <div class="attach-confirm-actions">
+        <button class="btn-confirm-file-only">Excluir apenas o arquivo</button>
+        <button class="btn-confirm-note-too">Excluir nota e arquivo</button>
+        <button class="btn-confirm-cancel">Cancelar</button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  const close = () => document.body.removeChild(overlay);
+
+  overlay.querySelector('.btn-confirm-file-only').addEventListener('click', () => { close(); onConfirm(false); });
+  overlay.querySelector('.btn-confirm-note-too').addEventListener('click', () => { close(); onConfirm(true); });
+  overlay.querySelector('.btn-confirm-cancel').addEventListener('click', close);
+  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
 }
 
 export function onAttachmentDeleted(cb) {
@@ -81,13 +123,6 @@ function mimeIcon(mime) {
   if (mime.includes('word') || mime.includes('document')) return '📝';
   if (mime.includes('sheet') || mime.includes('excel')) return '📊';
   return '📄';
-}
-
-function formatBytes(bytes) {
-  if (!bytes) return '';
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1048576) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / 1048576).toFixed(1)} MB`;
 }
 
 function esc(str) {

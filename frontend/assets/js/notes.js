@@ -35,7 +35,7 @@ function renderFeed(notes) {
   // Double-click on card body → edit (ignore clicks on buttons/tags)
   list.querySelectorAll('.note-card').forEach(card =>
     card.addEventListener('dblclick', e => {
-      if (e.target.closest('button, .note-tag')) return;
+      if (e.target.closest('button, .note-tag, .note-card-attach-link')) return;
       document.dispatchEvent(new CustomEvent('note:edit', { detail: { id: Number(card.dataset.id) } }));
     })
   );
@@ -65,22 +65,35 @@ function noteCardHTML(note) {
   const time = relativeTime(note.updated_at || note.created_at);
   const rendered = typeof marked !== 'undefined' ? marked.parse(note.content || '', { breaks: true }) : `<p>${esc(note.content || '')}</p>`;
   const long = (note.content || '').length > 400;
-  const attachCount = (note.attachments || []).length;
-  const attachBadge = attachCount > 0
-    ? `<span class="note-attach-badge" title="${attachCount} anexo${attachCount !== 1 ? 's' : ''}">📎 ${attachCount}</span>`
+  const attachments = note.attachments || [];
+  const attachThumbsHTML = attachments.length > 0
+    ? `<div class="note-card-attachments">${attachments.map(a => {
+        const isImage = a.mime_type && a.mime_type.startsWith('image/');
+        return isImage
+          ? `<a href="${a.url}" target="_blank" rel="noopener" class="note-card-attach-link" title="${esc(a.original_name)}"><img src="${a.url}" alt="${esc(a.original_name)}" class="note-card-attach-img" loading="lazy"></a>`
+          : `<a href="${a.url}" target="_blank" rel="noopener" class="note-card-attach-link note-card-attach-icon" title="${esc(a.original_name)}">${noteAttachIcon(a.mime_type)}</a>`;
+      }).join('')}</div>`
     : '';
 
   return `<div class="note-card ${pinClass}" data-id="${note.id}" role="listitem">
     <div class="note-card-header">
       <span class="note-card-time">${note.pinned ? '<span class="pin-badge">📌</span>' : ''}${time}</span>
       <div class="note-card-actions">
-        ${attachBadge}
         <button class="tb-btn btn-pin" data-id="${note.id}" data-pinned="${note.pinned}" title="${note.pinned ? 'Desafixar' : 'Fixar'}">${note.pinned ? '📌' : '📍'}</button>
       </div>
     </div>
     <div class="note-content">${rendered}${long ? '<div class="note-content-fade"></div>' : ''}</div>
+    ${attachThumbsHTML}
     ${tags ? `<div class="note-card-footer"><div class="note-hashtags">${tags}</div></div>` : ''}
   </div>`;
+}
+
+function noteAttachIcon(mime) {
+  if (!mime) return '📄';
+  if (mime === 'application/pdf') return '📕';
+  if (mime.includes('word') || mime.includes('document')) return '📝';
+  if (mime.includes('sheet') || mime.includes('excel')) return '📊';
+  return '📄';
 }
 
 export async function deleteNote(id) {

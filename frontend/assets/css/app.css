@@ -1036,18 +1036,39 @@ input, textarea { font-family: inherit; }
   color: var(--text-muted);
 }
 
-/* ─── Note card attachment badge ────────────────────────────────────────────── */
-.note-attach-badge {
-  font-size: 12px;
-  color: var(--text-muted);
-  display: inline-flex;
+/* ─── Note card attachment strip ────────────────────────────────────────────── */
+.note-card-attachments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 14px 10px;
+  border-top: 1px solid var(--border);
+}
+
+.note-card-attach-link {
+  display: flex;
   align-items: center;
-  gap: 2px;
-  padding: 2px 6px;
-  border-radius: 10px;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 6px;
+  overflow: hidden;
   background: var(--bg);
   border: 1px solid var(--border);
-  line-height: 1.4;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.note-card-attach-img {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  display: block;
+}
+
+.note-card-attach-icon {
+  font-size: 26px;
+  line-height: 1;
 }
 
 /* ─── Global attachments view ────────────────────────────────────────────────── */
@@ -1077,82 +1098,153 @@ input, textarea { font-family: inherit; }
   text-align: center;
 }
 
-.attach-view-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
+#attachments-view-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+}
+
+.attach-grid-item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: var(--radius);
+  overflow: hidden;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  margin-bottom: 8px;
-  transition: box-shadow 0.15s;
 }
 
-.attach-view-item:hover {
-  box-shadow: var(--shadow-sm);
-}
-
-.attach-thumb-link {
-  flex-shrink: 0;
+.attach-grid-link {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 6px;
-  overflow: hidden;
-  background: var(--bg);
-  border: 1px solid var(--border);
+  width: 100%;
+  height: 100%;
   text-decoration: none;
 }
 
-.attach-thumb {
-  width: 44px;
-  height: 44px;
+.attach-grid-img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   display: block;
 }
 
-.attach-icon-placeholder {
-  font-size: 22px;
+.attach-grid-icon {
+  font-size: 38px;
   line-height: 1;
 }
 
-.attach-view-meta {
-  flex: 1;
-  min-width: 0;
+.attach-grid-delete {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.75;
+  transition: opacity 0.15s, background 0.15s;
+  padding: 0;
+}
+
+.attach-grid-delete:hover {
+  opacity: 1;
+  background: rgba(239, 68, 68, 0.85);
+}
+
+/* ─── Attachment delete confirmation modal ──────────────────────────────────── */
+.attach-confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.attach-confirm-box {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  padding: 24px;
+  max-width: 480px;
+  width: 100%;
+}
+
+.attach-confirm-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.attach-confirm-note-preview {
+  font-size: 13px;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  max-height: 160px;
+  overflow-y: auto;
+  line-height: 1.5;
+}
+
+.attach-confirm-note-preview p { margin: 0 0 4px; }
+.attach-confirm-note-preview p:last-child { margin-bottom: 0; }
+
+.attach-confirm-actions {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 8px;
 }
 
-.attach-filename {
+.btn-confirm-file-only {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 9px 16px;
   font-size: 14px;
   font-weight: 500;
-  color: var(--text);
-  text-decoration: none;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  cursor: pointer;
 }
 
-.attach-filename:hover {
-  text-decoration: underline;
+.btn-confirm-file-only:hover { background: var(--accent-hover); }
+
+.btn-confirm-note-too {
+  background: var(--danger);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 9px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
 }
 
-.attach-size {
-  font-size: 12px;
+.btn-confirm-note-too:hover { background: var(--danger-hover); }
+
+.btn-confirm-cancel {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 9px 16px;
+  font-size: 14px;
+  cursor: pointer;
   color: var(--text-muted);
 }
 
-.attach-note-preview {
-  font-size: 12px;
-  color: var(--text-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+.btn-confirm-cancel:hover { background: var(--bg); }
 
 /* ─── Utilities ─────────────────────────────────────────────────────────────── */
 .text-muted {
