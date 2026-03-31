@@ -52,7 +52,11 @@ export function initEditor() {
   });
 
   document.getElementById('file-input')?.addEventListener('change', async e => {
-    if (!currentNoteId) return;
+    if (!currentNoteId) {
+      alert('Abra uma nota para edição antes de anexar arquivos.');
+      e.target.value = '';
+      return;
+    }
     for (const file of e.target.files) {
       try { await uploadAttachment(currentNoteId, file); }
       catch (err) { alert(err.message); }
