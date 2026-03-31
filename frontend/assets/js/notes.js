@@ -1,58 +1,158 @@
 import { getTagColor } from './tagStore.js';
 
+const PAGE_SIZE = 20;
+
 let currentFilter = {};
+let pagination = { offset: 0, loading: false, done: false };
+let generation = 0;   // incremented on each fresh loadNotes() to discard stale responses
+let observer = null;
+
+// ─── Public API ───────────────────────────────────────────────────────────────
 
 export async function loadNotes(params = {}) {
   currentFilter = params;
-  const qs = new URLSearchParams({ limit: '100', ...params });
-  try {
-    const res = await fetch(`/api/notes?${qs}`);
-    const data = await res.json();
-    renderFeed(data.notes || []);
-  } catch (err) {
-    console.error('loadNotes error:', err);
-  }
-}
+  pagination = { offset: 0, loading: false, done: false };
+  generation++;
 
-function renderFeed(notes) {
   const list = document.getElementById('notes-list');
   const empty = document.getElementById('notes-empty');
   const header = document.getElementById('feed-header');
-  const count = document.getElementById('notes-count');
 
-  if (!notes.length) {
-    list.innerHTML = '';
+  if (list) list.innerHTML = '';
+  if (empty) empty.hidden = true;
+  if (header) header.hidden = true;
+
+  setSentinel('idle');
+  disconnectObserver();
+
+  await fetchPage(generation);
+  setupObserver();
+}
+
+export async function deleteNote(id) {
+  if (!confirm('Excluir esta nota? Esta ação não pode ser desfeita.')) return false;
+  try {
+    const res = await fetch(`/api/notes/${id}`, { method: 'DELETE' });
+    if (!res.ok && res.status !== 404) throw new Error('Delete failed');
+    document.dispatchEvent(new CustomEvent('note:deleted'));
+    return true;
+  } catch (err) {
+    console.error('deleteNote error:', err);
+    alert('Erro ao excluir nota.');
+    return false;
+  }
+}
+
+// ─── Pagination ───────────────────────────────────────────────────────────────
+
+async function fetchPage(gen) {
+  if (pagination.loading) return;
+  pagination.loading = true;
+  setSentinel('loading');
+
+  const qs = new URLSearchParams({
+    limit: String(PAGE_SIZE),
+    offset: String(pagination.offset),
+    ...currentFilter,
+  });
+
+  try {
+    const res = await fetch(`/api/notes?${qs}`);
+    const data = await res.json();
+    if (gen !== generation) return; // stale — a new loadNotes() was called
+
+    const notes = data.notes || [];
+    pagination.offset += notes.length;
+    pagination.done = notes.length < PAGE_SIZE;
+
+    appendCards(notes);
+    updateHeader();
+    setSentinel(pagination.done ? 'done' : 'idle');
+  } catch (err) {
+    if (gen === generation) {
+      console.error('fetchPage error:', err);
+      setSentinel('idle');
+    }
+  } finally {
+    if (gen === generation) pagination.loading = false;
+  }
+}
+
+function setupObserver() {
+  if (pagination.done) return;
+
+  const sentinel = document.getElementById('notes-sentinel');
+  if (!sentinel) return;
+
+  observer = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting && !pagination.loading && !pagination.done) {
+      fetchPage(generation);
+    }
+  }, { rootMargin: '300px' });
+
+  observer.observe(sentinel);
+}
+
+function disconnectObserver() {
+  if (observer) { observer.disconnect(); observer = null; }
+}
+
+// ─── Rendering ────────────────────────────────────────────────────────────────
+
+function appendCards(notes) {
+  const list = document.getElementById('notes-list');
+  const empty = document.getElementById('notes-empty');
+  if (!list) return;
+
+  if (notes.length === 0 && pagination.offset === 0) {
     if (empty) empty.hidden = false;
-    if (header) header.hidden = true;
     return;
   }
-  if (empty) empty.hidden = true;
-  if (header) header.hidden = false;
-  if (count) count.textContent = `${notes.length} nota${notes.length !== 1 ? 's' : ''}`;
 
-  list.innerHTML = notes.map(noteCardHTML).join('');
+  const frag = document.createDocumentFragment();
+  for (const note of notes) {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = noteCardHTML(note);
+    const card = tmp.firstElementChild;
+    bindCardEvents(card);
+    frag.appendChild(card);
+  }
+  list.appendChild(frag);
+}
 
-  // Double-click on card body → edit (ignore clicks on buttons/tags)
-  list.querySelectorAll('.note-card').forEach(card =>
-    card.addEventListener('dblclick', e => {
-      if (e.target.closest('button, .note-tag, .note-card-attach-link')) return;
-      document.dispatchEvent(new CustomEvent('note:edit', { detail: { id: Number(card.dataset.id) } }));
-    })
-  );
+function bindCardEvents(card) {
+  card.addEventListener('dblclick', e => {
+    if (e.target.closest('button, .note-tag, .note-card-attach-link')) return;
+    document.dispatchEvent(new CustomEvent('note:edit', { detail: { id: Number(card.dataset.id) } }));
+  });
 
-  list.querySelectorAll('.btn-pin').forEach(btn =>
-    btn.addEventListener('click', async e => {
-      e.stopPropagation();
-      await togglePin(Number(btn.dataset.id), btn.dataset.pinned !== 'true');
-    })
-  );
+  card.querySelector('.btn-pin')?.addEventListener('click', async e => {
+    e.stopPropagation();
+    const btn = e.currentTarget;
+    await togglePin(Number(btn.dataset.id), btn.dataset.pinned !== 'true');
+  });
 
-  list.querySelectorAll('.note-tag[data-tag]').forEach(tag =>
+  card.querySelectorAll('.note-tag[data-tag]').forEach(tag =>
     tag.addEventListener('click', e => {
       e.stopPropagation();
       document.dispatchEvent(new CustomEvent('note:tag-click', { detail: { tag: tag.dataset.tag } }));
     })
   );
+}
+
+function updateHeader() {
+  const header = document.getElementById('feed-header');
+  const count = document.getElementById('notes-count');
+  const loaded = document.querySelectorAll('#notes-list .note-card').length;
+  if (loaded > 0) {
+    if (header) header.hidden = false;
+    if (count) count.textContent = `${loaded} nota${loaded !== 1 ? 's' : ''}`;
+  }
+}
+
+function setSentinel(state) {
+  const el = document.getElementById('notes-sentinel');
+  if (el) el.dataset.state = state;
 }
 
 function noteCardHTML(note) {
@@ -92,20 +192,7 @@ function noteCardHTML(note) {
   </div>`;
 }
 
-
-export async function deleteNote(id) {
-  if (!confirm('Excluir esta nota? Esta ação não pode ser desfeita.')) return false;
-  try {
-    const res = await fetch(`/api/notes/${id}`, { method: 'DELETE' });
-    if (!res.ok && res.status !== 404) throw new Error('Delete failed');
-    document.dispatchEvent(new CustomEvent('note:deleted'));
-    return true;
-  } catch (err) {
-    console.error('deleteNote error:', err);
-    alert('Erro ao excluir nota.');
-    return false;
-  }
-}
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 async function togglePin(id, pinned) {
   try {

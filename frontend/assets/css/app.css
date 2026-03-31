@@ -445,6 +445,29 @@ input, textarea { font-family: inherit; }
   white-space: nowrap;
 }
 
+/* ─── Infinite scroll sentinel ─────────────────────────────────────────────── */
+#notes-sentinel {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+#notes-sentinel[data-state="idle"] {
+  visibility: hidden; /* keep in layout so Observer can detect it */
+}
+
+#notes-sentinel[data-state="loading"]::after {
+  content: 'Carregando…';
+}
+
+#notes-sentinel[data-state="done"]::after {
+  content: '─ fim das notas ─';
+  opacity: 0.45;
+}
+
 /* ─── Notes feed ────────────────────────────────────────────────────────────── */
 #notes-feed {
   display: flex;
