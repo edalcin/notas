@@ -12,8 +12,9 @@ import (
 )
 
 const sessionCookieName = "notas_session"
+const sessionMaxAge = 30 * 24 * 60 * 60 // 30 days in seconds
 
-// NewSessionSecret generates a random 32-byte hex secret for this server run.
+// NewSessionSecret generates a random 32-byte hex secret.
 func NewSessionSecret() string {
 	b := make([]byte, 32)
 	if _, err := rand.Read(b); err != nil {
@@ -31,7 +32,7 @@ func tokenForPIN(pin, secret string) string {
 // PINMiddleware enforces PIN authentication when pin is non-empty.
 // Exempts /api/auth/login and /health so they are always reachable.
 // API/files paths return 401 JSON; HTML/static routes serve the SPA (which shows PIN overlay).
-func PINMiddleware(pin, secret string) func(http.Handler) http.Handler {
+func PINMiddleware(pin, secret string, secureCookie bool) func(http.Handler) http.Handler {
 	if pin == "" {
 		return func(next http.Handler) http.Handler { return next }
 	}
@@ -62,7 +63,7 @@ func PINMiddleware(pin, secret string) func(http.Handler) http.Handler {
 }
 
 // PINLogin handles POST /api/auth/login.
-func PINLogin(pin, secret string) http.HandlerFunc {
+func PINLogin(pin, secret string, secureCookie bool) http.HandlerFunc {
 	expected := tokenForPIN(pin, secret)
 	return func(w http.ResponseWriter, r *http.Request) {
 		var body struct {
@@ -82,8 +83,10 @@ func PINLogin(pin, secret string) http.HandlerFunc {
 			Name:     sessionCookieName,
 			Value:    expected,
 			Path:     "/",
+			MaxAge:   sessionMaxAge,
 			HttpOnly: true,
-			SameSite: http.SameSiteStrictMode,
+			Secure:   secureCookie,
+			SameSite: http.SameSiteLaxMode,
 		})
 		w.Header().Set("Content-Type", "application/json")
 		w.Write([]byte(`{"ok":true}`))

@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -49,7 +50,17 @@ func main() {
 	}
 
 	appPIN := os.Getenv("APP_PIN")
-	sessionSecret := handlers.NewSessionSecret()
+
+	// Session secret: use env var for persistence across restarts, or generate a random one
+	sessionSecret := os.Getenv("SESSION_SECRET")
+	if sessionSecret == "" {
+		sessionSecret = handlers.NewSessionSecret()
+		log.Printf("SESSION_SECRET not set — generated ephemeral secret (sessions will not survive restarts)")
+	}
+
+	// Detect HTTPS from BASE_URL to set Secure flag on cookies
+	baseURL := os.Getenv("BASE_URL")
+	secureCookie := strings.HasPrefix(baseURL, "https://")
 
 	database, err := db.Open(dbPath)
 	if err != nil {
@@ -66,10 +77,10 @@ func main() {
 	r.Use(middleware.Recoverer)
 	r.Use(handlers.FilesPathMiddleware(filesPath))
 	r.Use(handlers.MaxUploadMiddleware(maxUploadBytes))
-	r.Use(handlers.PINMiddleware(appPIN, sessionSecret))
+	r.Use(handlers.PINMiddleware(appPIN, sessionSecret, secureCookie))
 
 	r.Get("/health", handlers.Health(database))
-	r.Post("/api/auth/login", handlers.PINLogin(appPIN, sessionSecret))
+	r.Post("/api/auth/login", handlers.PINLogin(appPIN, sessionSecret, secureCookie))
 	r.Get("/api/auth/logout", handlers.PINLogout())
 
 	r.Route("/api", func(r chi.Router) {
@@ -104,6 +115,9 @@ func main() {
 	addr := fmt.Sprintf(":%s", port)
 	log.Printf("Starting server on %s", addr)
 	log.Printf("DB_PATH=%s, FILES_PATH=%s", dbPath, filesPath)
+	if baseURL != "" {
+		log.Printf("BASE_URL=%s (secure cookies: %v)", baseURL, secureCookie)
+	}
 	if appPIN != "" {
 		log.Printf("PIN protection: enabled")
 	}

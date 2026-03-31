@@ -1,4 +1,4 @@
-const CACHE_NAME = 'notas-v4';
+const CACHE_NAME = 'notas-v5';
 
 const APP_SHELL = [
   '/',
@@ -51,15 +51,32 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // GET /api/notes* — stale-while-revalidate
-  if (url.pathname.startsWith('/api/notes')) {
-    event.respondWith(staleWhileRevalidate(request));
+  // ALL /api/* routes: network-first (fresh data, cache fallback for offline)
+  if (url.pathname.startsWith('/api/')) {
+    event.respondWith(networkFirst(request));
     return;
   }
 
-  // Everything else: cache-first
+  // Static assets & app shell: cache-first
   event.respondWith(cacheFirst(request));
 });
+
+async function networkFirst(request) {
+  try {
+    const response = await fetch(request);
+    if (response.ok) {
+      const cache = await caches.open(CACHE_NAME);
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch {
+    const cached = await caches.match(request);
+    return cached || new Response(JSON.stringify({ error: 'Offline' }), {
+      status: 503,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+}
 
 async function cacheFirst(request) {
   const cached = await caches.match(request);
@@ -70,16 +87,4 @@ async function cacheFirst(request) {
     cache.put(request, response.clone());
   }
   return response;
-}
-
-async function staleWhileRevalidate(request) {
-  const cache = await caches.open(CACHE_NAME);
-  const cached = await cache.match(request);
-
-  const fetchPromise = fetch(request).then(response => {
-    if (response.ok) cache.put(request, response.clone());
-    return response;
-  }).catch(() => null);
-
-  return cached || fetchPromise;
 }

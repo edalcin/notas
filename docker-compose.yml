@@ -7,8 +7,10 @@ services:
     environment:
       DB_PATH: /data/db/notes.db
       FILES_PATH: /data/files
-      # APP_PIN: ""        # optional: set a PIN to protect the app
-      # PORT: "8080"       # optional: change the listening port
+      # APP_PIN: ""              # optional: set a PIN to protect the app
+      # SESSION_SECRET: ""       # optional: fixed secret so sessions survive restarts (generate with: openssl rand -hex 32)
+      # BASE_URL: "https://notas.dalc.in"  # optional: set to your public HTTPS URL to enable secure cookies
+      # PORT: "8080"             # optional: change the listening port
     volumes:
       - notas-db:/data/db       # SQLite database
       - notas-files:/data/files # uploaded attachments
