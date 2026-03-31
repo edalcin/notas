@@ -69,9 +69,13 @@ function noteCardHTML(note) {
   const attachThumbsHTML = attachments.length > 0
     ? `<div class="note-card-attachments">${attachments.map(a => {
         const isImage = a.mime_type && a.mime_type.startsWith('image/');
-        return isImage
-          ? `<a href="${a.url}" target="_blank" rel="noopener" class="note-card-attach-link" title="${esc(a.original_name)}"><img src="${a.url}" alt="${esc(a.original_name)}" class="note-card-attach-img" loading="lazy"></a>`
-          : `<a href="${a.url}" target="_blank" rel="noopener" class="note-card-attach-link note-card-attach-icon" title="${esc(a.original_name)}">${noteAttachIcon(a.mime_type)}</a>`;
+        const preview = isImage
+          ? `<img src="${a.url}" alt="${esc(a.original_name)}" loading="lazy">`
+          : `<span>&#128196;</span>`;
+        return `<div class="attachment-item">
+          <a href="${a.url}" target="_blank" rel="noopener" title="${esc(a.original_name)}">${preview}</a>
+          <span class="attachment-name" title="${esc(a.original_name)}">${esc(a.original_name)}</span>
+        </div>`;
       }).join('')}</div>`
     : '';
 
@@ -88,13 +92,6 @@ function noteCardHTML(note) {
   </div>`;
 }
 
-function noteAttachIcon(mime) {
-  if (!mime) return '📄';
-  if (mime === 'application/pdf') return '📕';
-  if (mime.includes('word') || mime.includes('document')) return '📝';
-  if (mime.includes('sheet') || mime.includes('excel')) return '📊';
-  return '📄';
-}
 
 export async function deleteNote(id) {
   if (!confirm('Excluir esta nota? Esta ação não pode ser desfeita.')) return false;
