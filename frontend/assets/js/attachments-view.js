@@ -65,9 +65,25 @@ async function deleteGlobalAttachment(attachmentId, noteId) {
   } catch {}
 
   showDeleteConfirm(noteContent, async (deleteNoteAlso) => {
-    // Remove thumbnail immediately so it disappears before the network call.
-    const btn = document.querySelector(`.btn-delete-attach-global[data-id="${attachmentId}"]`);
-    btn?.closest('.attach-grid-item')?.remove();
+    const container = document.getElementById('attachments-view-list');
+
+    // Remove thumbnails from DOM immediately — before any network call.
+    // Deleting the note removes ALL its attachments; deleting just the file removes one.
+    if (deleteNoteAlso) {
+      container?.querySelectorAll(`.btn-delete-attach-global[data-note-id="${noteId}"]`)
+        .forEach(b => b.closest('.attach-grid-item')?.remove());
+    } else {
+      document.querySelector(`.btn-delete-attach-global[data-id="${attachmentId}"]`)
+        ?.closest('.attach-grid-item')?.remove();
+    }
+
+    // Update header count; show empty state if the grid is now empty.
+    const remaining = container?.querySelectorAll('.attach-grid-item').length ?? 0;
+    const header = document.getElementById('attach-view-header');
+    if (header) header.textContent = remaining ? `${remaining} anexo${remaining !== 1 ? 's' : ''}` : '';
+    if (remaining === 0 && container) {
+      container.innerHTML = '<p class="attach-view-empty">Nenhum arquivo anexado ainda.</p>';
+    }
 
     try {
       if (deleteNoteAlso) {
@@ -78,12 +94,11 @@ async function deleteGlobalAttachment(attachmentId, noteId) {
         const res = await fetch(`/api/notes/${noteId}/attachments/${attachmentId}`, { method: 'DELETE' });
         if (!res.ok && res.status !== 404) throw new Error('delete failed');
       }
-      await loadAttachmentsView();
       if (_deleteCallback) _deleteCallback();
     } catch (err) {
       console.error('deleteGlobalAttachment error:', err);
       alert('Erro ao excluir.');
-      await loadAttachmentsView(); // restore correct state on failure
+      await loadAttachmentsView(); // full reload only on failure to restore correct state
     }
   });
 }
