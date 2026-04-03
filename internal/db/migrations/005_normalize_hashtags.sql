@@ -18,8 +18,11 @@ WHERE hashtag_id IN (
 );
 
 -- Step 3: Delete the non-canonical hashtag rows.
+-- Uses GROUP BY to avoid the correlated-subquery column-scope ambiguity in SQLite.
 DELETE FROM hashtags
-WHERE id != (SELECT MIN(h2.id) FROM hashtags h2 WHERE LOWER(h2.name) = LOWER(name));
+WHERE id NOT IN (
+    SELECT MIN(id) FROM hashtags GROUP BY LOWER(name)
+);
 
 -- Step 4: Lowercase the canonical rows that still have mixed-case names.
 UPDATE hashtags SET name = LOWER(name) WHERE name != LOWER(name);

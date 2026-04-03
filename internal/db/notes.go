@@ -239,6 +239,61 @@ func syncNoteHashtags(tx *sql.Tx, noteID int64, hashtags []string) error {
 	return nil
 }
 
+// RepairHashtagsFromNotes rebuilds the note_hashtags table by re-extracting
+// hashtags from every note's content. Idempotent — safe to run at every startup.
+// Preserves existing hashtag records (including colors); only rebuilds links.
+func (d *DB) RepairHashtagsFromNotes() error {
+	rows, err := d.Query("SELECT id, content FROM notes")
+	if err != nil {
+		return fmt.Errorf("repair hashtags: list notes: %w", err)
+	}
+	type noteRow struct {
+		id      int64
+		content string
+	}
+	var notes []noteRow
+	for rows.Next() {
+		var n noteRow
+		rows.Scan(&n.id, &n.content)
+		notes = append(notes, n)
+	}
+	rows.Close()
+
+	tx, err := d.Begin()
+	if err != nil {
+		return fmt.Errorf("repair hashtags: begin tx: %w", err)
+	}
+	defer tx.Rollback()
+
+	// Rebuild note_hashtags from scratch.
+	if _, err := tx.Exec("DELETE FROM note_hashtags"); err != nil {
+		return fmt.Errorf("repair hashtags: clear note_hashtags: %w", err)
+	}
+
+	for _, n := range notes {
+		tags := services.ExtractHashtags(n.content)
+		for _, tag := range tags {
+			if _, err := tx.Exec("INSERT OR IGNORE INTO hashtags (name) VALUES (?)", tag); err != nil {
+				return fmt.Errorf("repair hashtags: insert hashtag: %w", err)
+			}
+			var hid int64
+			if err := tx.QueryRow("SELECT id FROM hashtags WHERE LOWER(name) = ?", tag).Scan(&hid); err != nil {
+				return fmt.Errorf("repair hashtags: get hashtag id: %w", err)
+			}
+			if _, err := tx.Exec("INSERT OR IGNORE INTO note_hashtags (note_id, hashtag_id) VALUES (?, ?)", n.id, hid); err != nil {
+				return fmt.Errorf("repair hashtags: insert note_hashtag: %w", err)
+			}
+		}
+	}
+
+	// Remove hashtags that no longer appear in any note.
+	if _, err := tx.Exec("DELETE FROM hashtags WHERE id NOT IN (SELECT DISTINCT hashtag_id FROM note_hashtags)"); err != nil {
+		return fmt.Errorf("repair hashtags: cleanup orphans: %w", err)
+	}
+
+	return tx.Commit()
+}
+
 // GetNoteUpdatedAt returns a note's updated_at timestamp.
 func (d *DB) GetNoteUpdatedAt(id int64) (time.Time, error) {
 	var t time.Time

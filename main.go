@@ -68,6 +68,10 @@ func main() {
 	}
 	defer database.Close()
 
+	if err := database.RepairHashtagsFromNotes(); err != nil {
+		log.Fatalf("repair hashtags: %v", err)
+	}
+
 	noteHandler := handlers.NewNoteHandler(database)
 	hashtagHandler := handlers.NewHashtagHandler(database)
 	attachmentHandler := handlers.NewAttachmentHandler(database)
