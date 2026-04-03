@@ -13,7 +13,7 @@ func (d *DB) ListHashtags() ([]models.Hashtag, error) {
 		FROM hashtags h
 		LEFT JOIN note_hashtags nh ON h.id = nh.hashtag_id
 		GROUP BY h.id, h.name
-		ORDER BY h.name ASC`)
+		ORDER BY LOWER(h.name) ASC`)
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +34,7 @@ func (d *DB) ListHashtags() ([]models.Hashtag, error) {
 }
 
 func (d *DB) UpdateHashtagColor(name, color string) error {
-	result, err := d.Exec("UPDATE hashtags SET color = ? WHERE name = ?", color, name)
+	result, err := d.Exec("UPDATE hashtags SET color = ? WHERE LOWER(name) = LOWER(?)", color, name)
 	if err != nil {
 		return fmt.Errorf("update hashtag color: %w", err)
 	}

@@ -474,6 +474,7 @@ input, textarea { font-family: inherit; }
   flex-direction: column;
   gap: 8px;
 }
+#notes-feed[hidden] { display: none; }
 
 /* Note cards live inside #notes-list, so gap goes here */
 #notes-list {

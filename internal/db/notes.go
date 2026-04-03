@@ -27,7 +27,7 @@ func (d *DB) ListNotes(limit, offset int) ([]models.Note, int, error) {
 }
 
 func (d *DB) FilterByHashtag(hashtag string, limit, offset int) ([]models.Note, int, error) {
-	where := "WHERE n.id IN (SELECT nh2.note_id FROM note_hashtags nh2 JOIN hashtags h2 ON nh2.hashtag_id = h2.id WHERE h2.name = ?)"
+	where := "WHERE n.id IN (SELECT nh2.note_id FROM note_hashtags nh2 JOIN hashtags h2 ON nh2.hashtag_id = h2.id WHERE LOWER(h2.name) = LOWER(?))"
 	q := fmt.Sprintf(baseNotesSQL, where)
 	return d.queryNotes(q, hashtag, limit, offset)
 }
@@ -224,7 +224,7 @@ func syncNoteHashtags(tx *sql.Tx, noteID int64, hashtags []string) error {
 			return fmt.Errorf("upsert hashtag: %w", err)
 		}
 		var hashtagID int64
-		if err := tx.QueryRow("SELECT id FROM hashtags WHERE name = ?", tag).Scan(&hashtagID); err != nil {
+		if err := tx.QueryRow("SELECT id FROM hashtags WHERE LOWER(name) = ?", tag).Scan(&hashtagID); err != nil {
 			return fmt.Errorf("get hashtag id: %w", err)
 		}
 		if _, err := tx.Exec("INSERT OR IGNORE INTO note_hashtags (note_id, hashtag_id) VALUES (?, ?)", noteID, hashtagID); err != nil {

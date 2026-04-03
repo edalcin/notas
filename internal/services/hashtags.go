@@ -11,7 +11,7 @@ func RenameHashtag(tx *sql.Tx, oldName, newName string) error {
 	oldTag := "#" + oldName
 	newTag := "#" + newName
 
-	result, err := tx.Exec("UPDATE hashtags SET name = ? WHERE name = ?", newName, oldName)
+	result, err := tx.Exec("UPDATE hashtags SET name = ? WHERE LOWER(name) = LOWER(?)", newName, oldName)
 	if err != nil {
 		return fmt.Errorf("update hashtag name: %w", err)
 	}
@@ -44,7 +44,7 @@ func DeleteHashtag(tx *sql.Tx, name string) error {
 		}
 	}
 
-	result, err := tx.Exec("DELETE FROM hashtags WHERE name = ?", name)
+	result, err := tx.Exec("DELETE FROM hashtags WHERE LOWER(name) = LOWER(?)", name)
 	if err != nil {
 		return fmt.Errorf("delete hashtag: %w", err)
 	}
