@@ -52,16 +52,16 @@ export function initEditor() {
   });
 
   document.getElementById('file-input')?.addEventListener('change', async e => {
-    if (!currentNoteId) {
-      alert('Abra uma nota para edição antes de anexar arquivos.');
-      e.target.value = '';
-      return;
+    try {
+      const noteId = await ensureNote();
+      for (const file of e.target.files) {
+        try { await uploadAttachment(noteId, file); }
+        catch (err) { alert(err.message); }
+      }
+      await loadAttachments(noteId);
+    } catch (err) {
+      alert(err.message);
     }
-    for (const file of e.target.files) {
-      try { await uploadAttachment(currentNoteId, file); }
-      catch (err) { alert(err.message); }
-    }
-    await loadAttachments(currentNoteId);
     e.target.value = '';
   });
 }
@@ -108,6 +108,37 @@ export function resetEditor() {
     const list = document.getElementById('attachments-list');
     if (list) list.innerHTML = '';
   }
+}
+
+// Creates a new note if none is open, puts the editor into edit mode, and
+// returns the note id. Idempotent — returns currentNoteId immediately if set.
+async function ensureNote() {
+  if (currentNoteId) return currentNoteId;
+
+  const ta = document.getElementById('editor-textarea');
+  const content = ta?.value || '';
+
+  const res = await fetch('/api/notes', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content }),
+  });
+  if (!res.ok) throw new Error('Erro ao criar nota.');
+  const note = await res.json();
+
+  currentNoteId = note.id;
+
+  const bar = document.getElementById('editor-mode-bar');
+  if (bar) bar.hidden = false;
+  const label = document.getElementById('editor-mode-label');
+  if (label) label.textContent = `Editando nota #${note.id}`;
+  const btnDel = document.getElementById('btn-delete-note');
+  if (btnDel) btnDel.hidden = false;
+  const attachSection = document.getElementById('attachments-section');
+  if (attachSection) attachSection.hidden = false;
+
+  document.dispatchEvent(new CustomEvent('note:saved'));
+  return note.id;
 }
 
 async function saveNote() {
