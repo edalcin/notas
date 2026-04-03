@@ -7,7 +7,7 @@ export async function loadAttachmentsView() {
   container.innerHTML = '<p class="attach-view-loading">Carregando…</p>';
 
   try {
-    const res = await fetch('/api/attachments');
+    const res = await fetch('/api/attachments', { cache: 'no-store' });
     if (!res.ok) throw new Error('fetch failed');
     const data = await res.json();
     const items = data.attachments || [];

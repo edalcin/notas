@@ -1,4 +1,4 @@
-const CACHE_NAME = 'notas-v8';
+const CACHE_NAME = 'notas-v9';
 
 const APP_SHELL = [
   '/',
@@ -69,7 +69,9 @@ self.addEventListener('fetch', event => {
 
 async function networkFirst(request) {
   try {
-    const response = await fetch(request);
+    // { cache: 'no-store' } bypasses the browser HTTP cache so the SW always
+    // fetches from the origin server, not a potentially stale browser cache entry.
+    const response = await fetch(request, { cache: 'no-store' });
     if (response.ok) {
       const cache = await caches.open(CACHE_NAME);
       cache.put(request, response.clone());
