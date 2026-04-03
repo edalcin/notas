@@ -65,6 +65,10 @@ async function deleteGlobalAttachment(attachmentId, noteId) {
   } catch {}
 
   showDeleteConfirm(noteContent, async (deleteNoteAlso) => {
+    // Remove thumbnail immediately so it disappears before the network call.
+    const btn = document.querySelector(`.btn-delete-attach-global[data-id="${attachmentId}"]`);
+    btn?.closest('.attach-grid-item')?.remove();
+
     try {
       if (deleteNoteAlso) {
         const res = await fetch(`/api/notes/${noteId}`, { method: 'DELETE' });
@@ -79,6 +83,7 @@ async function deleteGlobalAttachment(attachmentId, noteId) {
     } catch (err) {
       console.error('deleteGlobalAttachment error:', err);
       alert('Erro ao excluir.');
+      await loadAttachmentsView(); // restore correct state on failure
     }
   });
 }

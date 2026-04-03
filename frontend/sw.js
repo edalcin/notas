@@ -1,4 +1,4 @@
-const CACHE_NAME = 'notas-v7';
+const CACHE_NAME = 'notas-v8';
 
 const APP_SHELL = [
   '/',
@@ -53,6 +53,12 @@ self.addEventListener('fetch', event => {
 
   // ALL /api/* routes: network-first (fresh data, cache fallback for offline)
   if (url.pathname.startsWith('/api/')) {
+    event.respondWith(networkFirst(request));
+    return;
+  }
+
+  // Uploaded files: network-first so deleted files are not served from cache
+  if (url.pathname.startsWith('/files/')) {
     event.respondWith(networkFirst(request));
     return;
   }
