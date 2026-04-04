@@ -3,6 +3,7 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	"strings"
 
 	"github.com/edalcin/notes/internal/models"
 )
@@ -61,13 +62,33 @@ func (d *DB) GetAttachmentsByNote(noteID int64) ([]models.Attachment, error) {
 	return attachments, nil
 }
 
-func (d *DB) ListAllAttachments() ([]models.AttachmentListItem, error) {
-	rows, err := d.Query(`
+func (d *DB) ListAllAttachments(hashtag string) ([]models.AttachmentListItem, error) {
+	query := `
 		SELECT a.id, a.note_id, a.original_name, a.mime_type, a.size_bytes, a.stored_filename, a.created_at,
-		       COALESCE(SUBSTR(n.content, 1, 80), '') AS note_preview
+		       COALESCE(SUBSTR(n.content, 1, 300), '') AS note_content,
+		       n.created_at AS note_created_at,
+		       GROUP_CONCAT(h.name, ',') AS hashtag_names
 		FROM attachments a
 		LEFT JOIN notes n ON n.id = a.note_id
-		ORDER BY a.created_at DESC`)
+		LEFT JOIN note_hashtags nh ON nh.note_id = n.id
+		LEFT JOIN hashtags h ON h.id = nh.hashtag_id`
+
+	var args []interface{}
+	if hashtag != "" {
+		query += `
+		WHERE n.id IN (
+			SELECT nh2.note_id FROM note_hashtags nh2
+			JOIN hashtags h2 ON nh2.hashtag_id = h2.id
+			WHERE LOWER(h2.name) = LOWER(?)
+		)`
+		args = append(args, hashtag)
+	}
+
+	query += `
+		GROUP BY a.id
+		ORDER BY COALESCE(n.created_at, a.created_at) DESC`
+
+	rows, err := d.Query(query, args...)
 	if err != nil {
 		return nil, err
 	}
@@ -77,16 +98,61 @@ func (d *DB) ListAllAttachments() ([]models.AttachmentListItem, error) {
 	for rows.Next() {
 		var item models.AttachmentListItem
 		var storedFilename string
-		if err := rows.Scan(&item.ID, &item.NoteID, &item.OriginalName, &item.MimeType, &item.SizeBytes, &storedFilename, &item.CreatedAt, &item.NotePreview); err != nil {
+		var noteContent string
+		var noteCreatedAt sql.NullTime
+		var hashtagNames sql.NullString
+		if err := rows.Scan(
+			&item.ID, &item.NoteID, &item.OriginalName, &item.MimeType, &item.SizeBytes,
+			&storedFilename, &item.CreatedAt, &noteContent, &noteCreatedAt, &hashtagNames,
+		); err != nil {
 			return nil, err
 		}
 		item.URL = "/files/" + storedFilename
+		item.NoteTitle = extractNoteTitle(noteContent)
+		if noteCreatedAt.Valid {
+			t := noteCreatedAt.Time
+			item.NoteCreatedAt = &t
+		}
+		item.Hashtags = parseHashtagList(hashtagNames)
 		items = append(items, item)
 	}
 	if items == nil {
 		items = []models.AttachmentListItem{}
 	}
 	return items, nil
+}
+
+func extractNoteTitle(content string) string {
+	for _, line := range strings.Split(content, "\n") {
+		line = strings.TrimSpace(line)
+		if strings.HasPrefix(line, "#") {
+			title := strings.TrimLeft(line, "#")
+			title = strings.TrimSpace(title)
+			if title != "" {
+				return title
+			}
+		}
+	}
+	return ""
+}
+
+func parseHashtagList(s sql.NullString) []string {
+	if !s.Valid || s.String == "" {
+		return []string{}
+	}
+	seen := make(map[string]bool)
+	var result []string
+	for _, p := range strings.Split(s.String, ",") {
+		p = strings.TrimSpace(p)
+		if p != "" && !seen[p] {
+			seen[p] = true
+			result = append(result, p)
+		}
+	}
+	if result == nil {
+		return []string{}
+	}
+	return result
 }
 
 func (d *DB) DeleteAttachment(id int64) (string, error) {

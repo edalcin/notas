@@ -57,6 +57,7 @@ export function setActiveHashtag(name) {
   document.querySelectorAll('#sidebar-nav .nav-item').forEach(n => n.classList.remove('active'));
   loadHashtags();
   loadNotes({ hashtag: name });
+  document.dispatchEvent(new CustomEvent('hashtag:selected', { detail: { tag: name } }));
 }
 
 export function clearFilter() {
@@ -64,6 +65,7 @@ export function clearFilter() {
   document.getElementById('btn-all-notes')?.classList.add('active');
   loadHashtags();
   loadNotes({});
+  document.dispatchEvent(new CustomEvent('hashtag:selected', { detail: { tag: '' } }));
 }
 
 // ─── Tag Manager Modal ──────────────────────────────────────────────────────

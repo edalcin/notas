@@ -1,13 +1,16 @@
 let _deleteCallback = null;
 
-export async function loadAttachmentsView() {
+export async function loadAttachmentsView(hashtag = '') {
   const container = document.getElementById('attachments-view-list');
   if (!container) return;
 
   container.innerHTML = '<p class="attach-view-loading">Carregando…</p>';
 
   try {
-    const res = await fetch('/api/attachments', { cache: 'no-store' });
+    const url = hashtag
+      ? `/api/attachments?hashtag=${encodeURIComponent(hashtag)}`
+      : '/api/attachments';
+    const res = await fetch(url, { cache: 'no-store' });
     if (!res.ok) throw new Error('fetch failed');
     const data = await res.json();
     const items = data.attachments || [];
@@ -35,23 +38,72 @@ function renderAttachmentsView(container, items) {
 
   container.querySelectorAll('.btn-delete-attach-global').forEach(btn => {
     btn.addEventListener('click', e => {
-      e.preventDefault();
-      e.stopPropagation();
+      e.preventDefault(); e.stopPropagation();
       deleteGlobalAttachment(Number(btn.dataset.id), Number(btn.dataset.noteId));
     });
   });
+
+  container.querySelectorAll('.attach-caption-tag').forEach(tag => {
+    tag.addEventListener('click', e => {
+      e.preventDefault(); e.stopPropagation();
+      import('./hashtags.js').then(m => m.setActiveHashtag(tag.dataset.tag));
+    });
+  });
+
+  renderPDFThumbs(container);
 }
 
 function itemHTML(a) {
   const isImage = a.mime_type && a.mime_type.startsWith('image/');
-  const thumb = isImage
-    ? `<img src="${a.url}" alt="${esc(a.original_name)}" class="attach-grid-img" loading="lazy">`
-    : `<span class="attach-grid-icon">${mimeIcon(a.mime_type)}</span>`;
+  const isPDF   = a.mime_type === 'application/pdf';
+
+  let thumb;
+  if (isImage) {
+    thumb = `<img src="${a.url}" alt="${esc(a.original_name)}" class="attach-grid-img" loading="lazy">`;
+  } else if (isPDF) {
+    thumb = `<canvas class="attach-grid-img attach-pdf-canvas" data-pdf-url="${a.url}"></canvas>`;
+  } else {
+    thumb = `<span class="attach-grid-icon">${mimeIcon(a.mime_type)}</span>`;
+  }
+
+  const dateStr = a.note_created_at
+    ? new Date(a.note_created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })
+    : '';
+
+  const tagsHTML = (a.hashtags || []).length
+    ? `<div class="attach-caption-tags">${(a.hashtags).map(t =>
+        `<span class="attach-caption-tag" data-tag="${esc(t)}">#${esc(t)}</span>`).join('')}</div>`
+    : '';
 
   return `<div class="attach-grid-item" title="${esc(a.original_name)}">
-    <a href="${a.url}" target="_blank" rel="noopener" class="attach-grid-link">${thumb}</a>
-    <button class="btn-delete-attach-global attach-grid-delete" data-id="${a.id}" data-note-id="${a.note_id}" aria-label="Excluir ${esc(a.original_name)}">🗑️</button>
+    <div class="attach-grid-thumb">
+      <a href="${a.url}" target="_blank" rel="noopener" class="attach-grid-link">${thumb}</a>
+      <button class="btn-delete-attach-global attach-grid-delete" data-id="${a.id}" data-note-id="${a.note_id}" aria-label="Excluir ${esc(a.original_name)}">🗑️</button>
+    </div>
+    <div class="attach-grid-caption">
+      ${a.note_title ? `<div class="attach-caption-title">${esc(a.note_title)}</div>` : ''}
+      ${dateStr ? `<div class="attach-caption-date">${dateStr}</div>` : ''}
+      ${tagsHTML}
+    </div>
   </div>`;
+}
+
+async function renderPDFThumbs(container) {
+  if (!window.pdfjsLib) return;
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+  for (const canvas of container.querySelectorAll('.attach-pdf-canvas')) {
+    try {
+      const pdf  = await pdfjsLib.getDocument(canvas.dataset.pdfUrl).promise;
+      const page = await pdf.getPage(1);
+      const vp   = page.getViewport({ scale: 1 });
+      const scale = (canvas.closest('.attach-grid-thumb')?.clientWidth || 150) / vp.width;
+      const scaled = page.getViewport({ scale });
+      canvas.width  = scaled.width;
+      canvas.height = scaled.height;
+      await page.render({ canvasContext: canvas.getContext('2d'), viewport: scaled }).promise;
+    } catch { /* leave canvas blank on error */ }
+  }
 }
 
 async function deleteGlobalAttachment(attachmentId, noteId) {

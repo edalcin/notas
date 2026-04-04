@@ -1128,17 +1128,25 @@ input, textarea { font-family: inherit; }
 
 #attachments-view-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
 }
 
 .attach-grid-item {
   position: relative;
-  aspect-ratio: 1;
   border-radius: var(--radius);
   overflow: hidden;
   background: var(--surface);
   border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+}
+
+.attach-grid-thumb {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--bg);
 }
 
 .attach-grid-link {
@@ -1160,6 +1168,49 @@ input, textarea { font-family: inherit; }
 .attach-grid-icon {
   font-size: 38px;
   line-height: 1;
+}
+
+.attach-grid-caption {
+  padding: 7px 9px 8px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-height: 0;
+}
+
+.attach-caption-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.attach-caption-date {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.attach-caption-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin-top: 2px;
+}
+
+.attach-caption-tag {
+  font-size: 0.65rem;
+  color: var(--accent);
+  cursor: pointer;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.attach-caption-tag:hover {
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
 }
 
 .attach-grid-delete {

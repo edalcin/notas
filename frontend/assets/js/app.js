@@ -31,6 +31,12 @@ async function initApp() {
   loadNotes();
   bindUI();
   onAttachmentDeleted(() => loadNotes()); // refresh note badges after global delete
+
+  document.addEventListener('hashtag:selected', e => {
+    if (!document.getElementById('attachments-view').hidden) {
+      loadAttachmentsView(e.detail.tag);
+    }
+  });
 }
 
 async function checkAuth() {

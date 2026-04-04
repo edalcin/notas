@@ -93,7 +93,8 @@ func (h *AttachmentHandler) Upload(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *AttachmentHandler) ListAll(w http.ResponseWriter, r *http.Request) {
-	items, err := h.db.ListAllAttachments()
+	hashtag := r.URL.Query().Get("hashtag")
+	items, err := h.db.ListAllAttachments(hashtag)
 	if err != nil {
 		jsonError(w, "database error", http.StatusInternalServerError)
 		return
