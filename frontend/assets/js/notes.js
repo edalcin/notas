@@ -138,6 +138,14 @@ function bindCardEvents(card) {
       document.dispatchEvent(new CustomEvent('note:tag-click', { detail: { tag: tag.dataset.tag } }));
     })
   );
+
+  card.querySelector('.btn-expand')?.addEventListener('click', e => {
+    e.stopPropagation();
+    const content = card.querySelector('.note-content');
+    const expanded = content.classList.toggle('expanded');
+    e.currentTarget.textContent = expanded ? 'Ver menos' : 'Ver mais…';
+    e.currentTarget.setAttribute('aria-expanded', String(expanded));
+  });
 }
 
 function updateHeader() {
@@ -187,6 +195,7 @@ function noteCardHTML(note) {
       </div>
     </div>
     <div class="note-content">${rendered}${long ? '<div class="note-content-fade"></div>' : ''}</div>
+    ${long ? '<button class="btn-expand" aria-expanded="false">Ver mais…</button>' : ''}
     ${attachThumbsHTML}
     ${tags ? `<div class="note-card-footer"><div class="note-hashtags">${tags}</div></div>` : ''}
   </div>`;
