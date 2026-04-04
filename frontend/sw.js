@@ -1,4 +1,4 @@
-const CACHE_NAME = 'notas-v9';
+const CACHE_NAME = 'notas-v10';
 
 const APP_SHELL = [
   '/',
@@ -51,9 +51,17 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // ALL /api/* routes: network-first (fresh data, cache fallback for offline)
+  // ALL /api/* routes: always fetch fresh from origin, never cache.
+  // Uses request.url (string) + { cache: 'no-store' } to reliably bypass
+  // both the browser HTTP cache and the SW cache across all browsers.
   if (url.pathname.startsWith('/api/')) {
-    event.respondWith(networkFirst(request));
+    event.respondWith(
+      fetch(request.url, { cache: 'no-store', credentials: 'same-origin' })
+        .catch(() => new Response(JSON.stringify({ error: 'Offline — operação indisponível' }), {
+          status: 503,
+          headers: { 'Content-Type': 'application/json' },
+        }))
+    );
     return;
   }
 

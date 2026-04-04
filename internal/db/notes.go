@@ -187,7 +187,25 @@ func (d *DB) UpdateNote(id int64, content string) (*models.Note, error) {
 }
 
 func (d *DB) DeleteNote(id int64) error {
-	result, err := d.Exec("DELETE FROM notes WHERE id = ?", id)
+	tx, err := d.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	// Explicitly delete related records before the note, so cleanup is guaranteed
+	// regardless of whether SQLite FK cascade is active on this connection.
+	if _, err := tx.Exec("DELETE FROM note_hashtags WHERE note_id = ?", id); err != nil {
+		return fmt.Errorf("delete note hashtags: %w", err)
+	}
+	if _, err := tx.Exec("DELETE FROM attachments WHERE note_id = ?", id); err != nil {
+		return fmt.Errorf("delete note attachments: %w", err)
+	}
+	if _, err := tx.Exec("DELETE FROM hashtags WHERE id NOT IN (SELECT hashtag_id FROM note_hashtags)"); err != nil {
+		return fmt.Errorf("cleanup orphan hashtags: %w", err)
+	}
+
+	result, err := tx.Exec("DELETE FROM notes WHERE id = ?", id)
 	if err != nil {
 		return err
 	}
@@ -195,7 +213,7 @@ func (d *DB) DeleteNote(id int64) error {
 	if n == 0 {
 		return sql.ErrNoRows
 	}
-	return nil
+	return tx.Commit()
 }
 
 func (d *DB) TogglePin(id int64, pinned bool) error {
