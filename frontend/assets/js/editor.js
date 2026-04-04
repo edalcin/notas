@@ -341,7 +341,7 @@ function insertMarkdown(type) {
     heading: ['## ', '', 'Título'],
     ul:      ['- ', '', 'item'],
     ol:      ['1. ', '', 'item'],
-    code:    ['`', '`', 'código'],
+    code:    ['```\n', '\n```', 'código'],
     link:    ['[', '](url)', 'texto'],
   };
   const [before, after, ph] = map[type] || ['', '', ''];
