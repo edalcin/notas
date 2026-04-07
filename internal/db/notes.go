@@ -16,7 +16,7 @@ SELECT n.id, n.content, n.pinned, n.created_at, n.updated_at,
 FROM notes n
 LEFT JOIN note_hashtags nh ON n.id = nh.note_id
 LEFT JOIN hashtags h ON nh.hashtag_id = h.id
-%s
+WHERE n.deleted_at IS NULL%s
 GROUP BY n.id
 ORDER BY n.pinned DESC, n.created_at DESC
 LIMIT ? OFFSET ?`
@@ -27,7 +27,7 @@ func (d *DB) ListNotes(limit, offset int) ([]models.Note, int, error) {
 }
 
 func (d *DB) FilterByHashtag(hashtag string, limit, offset int) ([]models.Note, int, error) {
-	where := "WHERE n.id IN (SELECT nh2.note_id FROM note_hashtags nh2 JOIN hashtags h2 ON nh2.hashtag_id = h2.id WHERE LOWER(h2.name) = LOWER(?))"
+	where := " AND n.id IN (SELECT nh2.note_id FROM note_hashtags nh2 JOIN hashtags h2 ON nh2.hashtag_id = h2.id WHERE LOWER(h2.name) = LOWER(?))"
 	q := fmt.Sprintf(baseNotesSQL, where)
 	return d.queryNotes(q, hashtag, limit, offset)
 }
@@ -40,6 +40,7 @@ FROM notes n
 LEFT JOIN note_hashtags nh ON n.id = nh.note_id
 LEFT JOIN hashtags h ON nh.hashtag_id = h.id
 WHERE n.id IN (SELECT rowid FROM notes_fts WHERE notes_fts MATCH ?)
+AND n.deleted_at IS NULL
 GROUP BY n.id
 ORDER BY n.pinned DESC, n.created_at DESC
 LIMIT ? OFFSET ?`
@@ -108,7 +109,7 @@ func (d *DB) GetNote(id int64) (*models.Note, error) {
 		FROM notes n
 		LEFT JOIN note_hashtags nh ON n.id = nh.note_id
 		LEFT JOIN hashtags h ON nh.hashtag_id = h.id
-		WHERE n.id = ?
+		WHERE n.id = ? AND n.deleted_at IS NULL
 		GROUP BY n.id`, id)
 
 	var n models.Note
@@ -214,6 +215,123 @@ func (d *DB) DeleteNote(id int64) error {
 		return sql.ErrNoRows
 	}
 	return tx.Commit()
+}
+
+func (d *DB) TrashNote(id int64) error {
+	result, err := d.Exec(
+		"UPDATE notes SET deleted_at = CURRENT_TIMESTAMP WHERE id = ? AND deleted_at IS NULL",
+		id,
+	)
+	if err != nil {
+		return err
+	}
+	n, _ := result.RowsAffected()
+	if n == 0 {
+		return sql.ErrNoRows
+	}
+	return nil
+}
+
+func (d *DB) RestoreNote(id int64) error {
+	result, err := d.Exec(
+		"UPDATE notes SET deleted_at = NULL WHERE id = ? AND deleted_at IS NOT NULL",
+		id,
+	)
+	if err != nil {
+		return err
+	}
+	n, _ := result.RowsAffected()
+	if n == 0 {
+		return sql.ErrNoRows
+	}
+	return nil
+}
+
+func (d *DB) ListTrashedNotes(limit, offset int) ([]models.Note, int, error) {
+	q := `
+SELECT n.id, n.content, n.pinned, n.created_at, n.updated_at,
+       GROUP_CONCAT(h.name, ',') as hashtag_names,
+       n.deleted_at
+FROM notes n
+LEFT JOIN note_hashtags nh ON n.id = nh.note_id
+LEFT JOIN hashtags h ON nh.hashtag_id = h.id
+WHERE n.deleted_at IS NOT NULL
+GROUP BY n.id
+ORDER BY n.deleted_at DESC
+LIMIT ? OFFSET ?`
+	rows, err := d.Query(q, limit, offset)
+	if err != nil {
+		return nil, 0, err
+	}
+	defer rows.Close()
+	return scanTrashedNotes(rows)
+}
+
+func scanTrashedNotes(rows *sql.Rows) ([]models.Note, int, error) {
+	var notes []models.Note
+	for rows.Next() {
+		var n models.Note
+		var pinnedInt int
+		var hashtagNames sql.NullString
+		var deletedAt sql.NullTime
+		if err := rows.Scan(&n.ID, &n.Content, &pinnedInt, &n.CreatedAt, &n.UpdatedAt, &hashtagNames, &deletedAt); err != nil {
+			return nil, 0, err
+		}
+		n.Pinned = pinnedInt == 1
+		n.Preview = services.GeneratePreview(n.Content, 100)
+		n.Hashtags = parseHashtags(hashtagNames)
+		n.Attachments = []models.Attachment{}
+		if deletedAt.Valid {
+			t := deletedAt.Time
+			n.DeletedAt = &t
+		}
+		notes = append(notes, n)
+	}
+	if notes == nil {
+		notes = []models.Note{}
+	}
+	return notes, len(notes), nil
+}
+
+// EmptyTrash permanently deletes all trashed notes and returns their attachments
+// so the caller can remove the physical files.
+func (d *DB) EmptyTrash() ([]models.Attachment, error) {
+	rows, err := d.Query(`
+		SELECT a.id, a.note_id, a.stored_filename, a.original_name, a.mime_type, a.size_bytes, a.created_at
+		FROM attachments a
+		JOIN notes n ON a.note_id = n.id
+		WHERE n.deleted_at IS NOT NULL`)
+	if err != nil {
+		return nil, fmt.Errorf("empty trash: list attachments: %w", err)
+	}
+	var attachments []models.Attachment
+	for rows.Next() {
+		var a models.Attachment
+		if err := rows.Scan(&a.ID, &a.NoteID, &a.StoredFilename, &a.OriginalName, &a.MimeType, &a.SizeBytes, &a.CreatedAt); err != nil {
+			rows.Close()
+			return nil, fmt.Errorf("empty trash: scan attachment: %w", err)
+		}
+		attachments = append(attachments, a)
+	}
+	rows.Close()
+
+	tx, err := d.Begin()
+	if err != nil {
+		return nil, err
+	}
+	defer tx.Rollback()
+
+	if _, err := tx.Exec("DELETE FROM notes WHERE deleted_at IS NOT NULL"); err != nil {
+		return nil, fmt.Errorf("empty trash: delete notes: %w", err)
+	}
+	if _, err := tx.Exec("DELETE FROM hashtags WHERE id NOT IN (SELECT hashtag_id FROM note_hashtags)"); err != nil {
+		return nil, fmt.Errorf("empty trash: cleanup hashtags: %w", err)
+	}
+
+	if err := tx.Commit(); err != nil {
+		return nil, err
+	}
+	return attachments, nil
 }
 
 func (d *DB) TogglePin(id int64, pinned bool) error {

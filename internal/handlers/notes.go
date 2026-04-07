@@ -159,6 +159,86 @@ func (h *NoteHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+func (h *NoteHandler) Trash(w http.ResponseWriter, r *http.Request) {
+	id, err := parseID(r)
+	if err != nil {
+		jsonError(w, "invalid id", http.StatusBadRequest)
+		return
+	}
+
+	if err := h.db.TrashNote(id); err != nil {
+		if err == sql.ErrNoRows {
+			jsonError(w, "note not found", http.StatusNotFound)
+			return
+		}
+		jsonError(w, "database error", http.StatusInternalServerError)
+		return
+	}
+
+	jsonResponse(w, http.StatusOK, map[string]interface{}{"id": id, "trashed": true})
+}
+
+func (h *NoteHandler) Restore(w http.ResponseWriter, r *http.Request) {
+	id, err := parseID(r)
+	if err != nil {
+		jsonError(w, "invalid id", http.StatusBadRequest)
+		return
+	}
+
+	if err := h.db.RestoreNote(id); err != nil {
+		if err == sql.ErrNoRows {
+			jsonError(w, "note not found", http.StatusNotFound)
+			return
+		}
+		jsonError(w, "database error", http.StatusInternalServerError)
+		return
+	}
+
+	jsonResponse(w, http.StatusOK, map[string]interface{}{"id": id, "trashed": false})
+}
+
+func (h *NoteHandler) ListTrash(w http.ResponseWriter, r *http.Request) {
+	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
+	if limit <= 0 || limit > 200 {
+		limit = 50
+	}
+	offset, _ := strconv.Atoi(r.URL.Query().Get("offset"))
+
+	notes, total, err := h.db.ListTrashedNotes(limit, offset)
+	if err != nil {
+		jsonError(w, "database error", http.StatusInternalServerError)
+		return
+	}
+
+	for i := range notes {
+		attachments, _ := h.db.GetAttachmentsByNote(notes[i].ID)
+		notes[i].Attachments = attachments
+	}
+
+	jsonResponse(w, http.StatusOK, models.NotesResponse{
+		Notes:  notes,
+		Total:  total,
+		Offset: offset,
+		Limit:  limit,
+	})
+}
+
+func (h *NoteHandler) EmptyTrash(w http.ResponseWriter, r *http.Request) {
+	filesPath := getFilesPath(r)
+
+	attachments, err := h.db.EmptyTrash()
+	if err != nil {
+		jsonError(w, "database error", http.StatusInternalServerError)
+		return
+	}
+
+	for _, a := range attachments {
+		deleteFileFromPath(a.StoredFilename, filesPath)
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
 func (h *NoteHandler) TogglePin(w http.ResponseWriter, r *http.Request) {
 	id, err := parseID(r)
 	if err != nil {

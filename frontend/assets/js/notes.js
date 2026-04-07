@@ -1,4 +1,5 @@
 import { getTagColor } from './tagStore.js';
+import { showConfirmModal } from './modal.js';
 
 const PAGE_SIZE = 20;
 
@@ -29,18 +30,20 @@ export async function loadNotes(params = {}) {
   setupObserver();
 }
 
-export async function deleteNote(id) {
-  if (!confirm('Excluir esta nota? Esta ação não pode ser desfeita.')) return false;
-  try {
-    const res = await fetch(`/api/notes/${id}`, { method: 'DELETE' });
-    if (!res.ok && res.status !== 404) throw new Error('Delete failed');
-    document.dispatchEvent(new CustomEvent('note:deleted'));
-    return true;
-  } catch (err) {
-    console.error('deleteNote error:', err);
-    alert('Erro ao excluir nota.');
-    return false;
-  }
+export async function trashNote(id) {
+  return new Promise(resolve => {
+    showConfirmModal('Mover esta nota para a lixeira?', async () => {
+      try {
+        const res = await fetch(`/api/notes/${id}/trash`, { method: 'PUT' });
+        if (!res.ok && res.status !== 404) throw new Error('Trash failed');
+        document.dispatchEvent(new CustomEvent('note:deleted'));
+        resolve(true);
+      } catch (err) {
+        console.error('trashNote error:', err);
+        resolve(false);
+      }
+    });
+  });
 }
 
 // ─── Pagination ───────────────────────────────────────────────────────────────
@@ -139,6 +142,11 @@ function bindCardEvents(card) {
     })
   );
 
+  card.querySelector('.btn-trash')?.addEventListener('click', async e => {
+    e.stopPropagation();
+    await trashNote(Number(e.currentTarget.dataset.id));
+  });
+
   card.querySelector('.btn-expand')?.addEventListener('click', e => {
     e.stopPropagation();
     const content = card.querySelector('.note-content');
@@ -192,6 +200,7 @@ function noteCardHTML(note) {
       <span class="note-card-time">${note.pinned ? '<span class="pin-badge">📌</span>' : ''}${time}</span>
       <div class="note-card-actions">
         <button class="tb-btn btn-pin" data-id="${note.id}" data-pinned="${note.pinned}" title="${note.pinned ? 'Desafixar' : 'Fixar'}">${note.pinned ? '📌' : '📍'}</button>
+        <button class="tb-btn btn-trash" data-id="${note.id}" title="Mover para lixeira">🗑️</button>
       </div>
     </div>
     <div class="note-content">${rendered}${long ? '<div class="note-content-fade"></div>' : ''}</div>

@@ -4,6 +4,7 @@ import { initTheme, toggleTheme } from './theme.js';
 import { initEditor, loadNoteForEdit } from './editor.js';
 import { openHashtagManager, closeHashtagManager } from './hashtags.js';
 import { loadAttachmentsView, onAttachmentDeleted } from './attachments-view.js';
+import { loadTrash, initTrash } from './trash.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   initTheme();
@@ -27,6 +28,7 @@ document.addEventListener('note:tag-click', e => {
 
 async function initApp() {
   initEditor();
+  initTrash();
   await loadHashtags(); // load tags first so colors are available when notes render
   loadNotes();
   bindUI();
@@ -103,6 +105,18 @@ function bindUI() {
     showAttachmentsView();
   });
 
+  document.getElementById('btn-trash')?.addEventListener('click', () => {
+    setActiveNav(document.getElementById('btn-trash'));
+    showTrashView();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      const modal = document.getElementById('modal-confirm');
+      if (modal && !modal.hidden) modal.hidden = true;
+    }
+  });
+
   // Mobile sidebar
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('sidebar-overlay');
@@ -137,11 +151,21 @@ function showNotesView() {
   document.getElementById('editor-box').hidden = false;
   document.getElementById('notes-feed').hidden = false;
   document.getElementById('attachments-view').hidden = true;
+  document.getElementById('trash-view').hidden = true;
 }
 
 function showAttachmentsView() {
   document.getElementById('editor-box').hidden = true;
   document.getElementById('notes-feed').hidden = true;
   document.getElementById('attachments-view').hidden = false;
+  document.getElementById('trash-view').hidden = true;
   loadAttachmentsView();
+}
+
+function showTrashView() {
+  document.getElementById('editor-box').hidden = true;
+  document.getElementById('notes-feed').hidden = true;
+  document.getElementById('attachments-view').hidden = true;
+  document.getElementById('trash-view').hidden = false;
+  loadTrash();
 }

@@ -32,6 +32,9 @@
         <button class="nav-item" id="btn-attachments">
           <span class="nav-icon">📎</span><span>Arquivos anexados</span>
         </button>
+        <button class="nav-item" id="btn-trash">
+          <span class="nav-icon">🗑️</span><span>Lixeira</span>
+        </button>
       </nav>
       <div class="sidebar-section">
         <div class="sidebar-section-header">
@@ -60,7 +63,6 @@
           <div id="editor-mode-bar" hidden>
             <span id="editor-mode-label">Editando nota</span>
             <div class="editor-mode-actions">
-              <button id="btn-delete-note" class="btn-danger-sm">Excluir</button>
               <button id="btn-cancel-edit" class="btn-text-sm">Cancelar</button>
             </div>
           </div>
@@ -109,6 +111,17 @@
           </div>
           <div id="attachments-view-list"></div>
         </div>
+
+        <div id="trash-view" hidden>
+          <div class="trash-view-header-row">
+            <h2 class="trash-view-title">Lixeira</h2>
+            <button id="btn-empty-trash" class="btn-danger-sm" disabled>Esvaziar lixeira</button>
+          </div>
+          <div id="trash-list" role="list"></div>
+          <div id="trash-empty" class="empty-state" hidden>
+            <p>A lixeira está vazia.</p>
+          </div>
+        </div>
         </div><!-- /#content-col -->
       </main>
     </div>
@@ -122,6 +135,16 @@
       <input type="password" id="pin-input" class="pin-input" placeholder="••••" maxlength="32" inputmode="numeric" autocomplete="current-password">
       <div id="pin-error" class="pin-error" hidden>PIN incorreto</div>
       <button id="btn-pin-submit" class="btn-primary" style="width:100%">Entrar</button>
+    </div>
+  </div>
+
+  <div id="modal-confirm" class="modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="modal-confirm-message">
+    <div class="modal-box modal-confirm-box">
+      <p id="modal-confirm-message"></p>
+      <div class="modal-confirm-actions">
+        <button id="btn-confirm-ok" class="btn-danger-sm">Confirmar</button>
+        <button id="btn-confirm-cancel" class="btn-text-sm">Cancelar</button>
+      </div>
     </div>
   </div>
 

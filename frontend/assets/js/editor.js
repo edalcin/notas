@@ -1,6 +1,5 @@
 import { loadAttachments, renderAttachments, uploadAttachment } from './attachments.js';
 import { getTags } from './tagStore.js';
-import { deleteNote } from './notes.js';
 
 let currentNoteId = null;
 let acSelectedIndex = -1;
@@ -45,11 +44,6 @@ export function initEditor() {
 
   document.getElementById('btn-save')?.addEventListener('click', saveNote);
   document.getElementById('btn-cancel-edit')?.addEventListener('click', resetEditor);
-  document.getElementById('btn-delete-note')?.addEventListener('click', async () => {
-    if (!currentNoteId) return;
-    const deleted = await deleteNote(currentNoteId);
-    if (deleted) resetEditor();
-  });
 
   document.getElementById('file-input')?.addEventListener('change', async e => {
     try {
@@ -82,8 +76,6 @@ export async function loadNoteForEdit(noteId) {
   if (bar) bar.hidden = false;
   const label = document.getElementById('editor-mode-label');
   if (label) label.textContent = `Editando nota #${noteId}`;
-  const btnDel = document.getElementById('btn-delete-note');
-  if (btnDel) btnDel.hidden = false;
 
   const attachSection = document.getElementById('attachments-section');
   if (attachSection) attachSection.hidden = false;
@@ -100,8 +92,6 @@ export function resetEditor() {
   hideAutocomplete();
   const bar = document.getElementById('editor-mode-bar');
   if (bar) bar.hidden = true;
-  const btnDel = document.getElementById('btn-delete-note');
-  if (btnDel) btnDel.hidden = true;
   const attachSection = document.getElementById('attachments-section');
   if (attachSection) {
     attachSection.hidden = true;
@@ -132,8 +122,6 @@ async function ensureNote() {
   if (bar) bar.hidden = false;
   const label = document.getElementById('editor-mode-label');
   if (label) label.textContent = `Editando nota #${note.id}`;
-  const btnDel = document.getElementById('btn-delete-note');
-  if (btnDel) btnDel.hidden = false;
   const attachSection = document.getElementById('attachments-section');
   if (attachSection) attachSection.hidden = false;
 
