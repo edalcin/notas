@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -268,4 +269,95 @@ func (h *NoteHandler) TogglePin(w http.ResponseWriter, r *http.Request) {
 
 func parseID(r *http.Request) (int64, error) {
 	return strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
+}
+
+// Share generates (or returns the existing) share token for a note and returns
+// the full public URL.
+func (h *NoteHandler) Share(w http.ResponseWriter, r *http.Request) {
+	id, err := parseID(r)
+	if err != nil {
+		jsonError(w, "invalid id", http.StatusBadRequest)
+		return
+	}
+
+	note, err := h.db.GetNote(id)
+	if err != nil {
+		jsonError(w, "database error", http.StatusInternalServerError)
+		return
+	}
+	if note == nil {
+		jsonError(w, "note not found", http.StatusNotFound)
+		return
+	}
+
+	token, err := h.db.SetShareToken(id)
+	if err != nil {
+		jsonError(w, "database error", http.StatusInternalServerError)
+		return
+	}
+
+	scheme := "http"
+	if fwd := r.Header.Get("X-Forwarded-Proto"); fwd != "" {
+		scheme = fwd
+	}
+	url := fmt.Sprintf("%s://%s/s/%s", scheme, r.Host, token)
+
+	jsonResponse(w, http.StatusOK, map[string]interface{}{
+		"token":  token,
+		"url":    url,
+		"shared": true,
+	})
+}
+
+// Unshare removes the share token from a note, making it private again.
+func (h *NoteHandler) Unshare(w http.ResponseWriter, r *http.Request) {
+	id, err := parseID(r)
+	if err != nil {
+		jsonError(w, "invalid id", http.StatusBadRequest)
+		return
+	}
+
+	note, err := h.db.GetNote(id)
+	if err != nil {
+		jsonError(w, "database error", http.StatusInternalServerError)
+		return
+	}
+	if note == nil {
+		jsonError(w, "note not found", http.StatusNotFound)
+		return
+	}
+
+	if err := h.db.ClearShareToken(id); err != nil {
+		jsonError(w, "database error", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+// ListShared returns all notes that have an active public share link.
+func (h *NoteHandler) ListShared(w http.ResponseWriter, r *http.Request) {
+	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
+	if limit <= 0 || limit > 200 {
+		limit = 50
+	}
+	offset, _ := strconv.Atoi(r.URL.Query().Get("offset"))
+
+	notes, total, err := h.db.ListSharedNotes(limit, offset)
+	if err != nil {
+		jsonError(w, "database error", http.StatusInternalServerError)
+		return
+	}
+
+	for i := range notes {
+		attachments, _ := h.db.GetAttachmentsByNote(notes[i].ID)
+		notes[i].Attachments = attachments
+	}
+
+	jsonResponse(w, http.StatusOK, models.NotesResponse{
+		Notes:  notes,
+		Total:  total,
+		Offset: offset,
+		Limit:  limit,
+	})
 }

@@ -32,6 +32,9 @@
         <button class="nav-item" id="btn-attachments">
           <span class="nav-icon">📎</span><span>Arquivos anexados</span>
         </button>
+        <button class="nav-item" id="btn-shared-notes">
+          <span class="nav-icon">🔗</span><span>Compartilhadas</span>
+        </button>
         <button class="nav-item" id="btn-trash">
           <span class="nav-icon">🗑️</span><span>Lixeira</span>
         </button>
@@ -112,6 +115,16 @@
           <div id="attachments-view-list"></div>
         </div>
 
+        <div id="shared-view" hidden>
+          <div class="shared-view-header-row">
+            <h2 class="shared-view-title">Compartilhadas</h2>
+          </div>
+          <div id="shared-list" role="list"></div>
+          <div id="shared-empty" class="empty-state" hidden>
+            <p>Nenhuma nota compartilhada.</p>
+          </div>
+        </div>
+
         <div id="trash-view" hidden>
           <div class="trash-view-header-row">
             <h2 class="trash-view-title">Lixeira</h2>
@@ -144,6 +157,26 @@
       <div class="modal-confirm-actions">
         <button id="btn-confirm-ok" class="btn-danger-sm">Confirmar</button>
         <button id="btn-confirm-cancel" class="btn-text-sm">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="share-modal" class="modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="share-modal-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 id="share-modal-title">Compartilhar nota</h2>
+        <button id="share-modal-close" class="btn-icon" aria-label="Fechar">&times;</button>
+      </div>
+      <div class="share-modal-body">
+        <label class="share-url-label" for="share-url-input">Link público</label>
+        <div class="share-url-row">
+          <input type="text" id="share-url-input" class="share-url-input" readonly placeholder="Clique em Gerar link para criar um link público">
+          <button id="share-copy-btn" class="btn-primary" hidden>Copiar</button>
+        </div>
+        <div class="share-modal-actions">
+          <button id="share-generate-btn" class="btn-primary">Gerar link</button>
+          <button id="share-revoke-btn" class="btn-danger-sm" hidden>Revogar link</button>
+        </div>
       </div>
     </div>
   </div>

@@ -1,5 +1,6 @@
 import { getTagColor } from './tagStore.js';
 import { showConfirmModal } from './modal.js';
+import { openShareModal } from './shared.js';
 
 const PAGE_SIZE = 20;
 
@@ -147,6 +148,11 @@ function bindCardEvents(card) {
     await trashNote(Number(e.currentTarget.dataset.id));
   });
 
+  card.querySelector('.btn-share')?.addEventListener('click', async e => {
+    e.stopPropagation();
+    await openShareModal(Number(e.currentTarget.dataset.id));
+  });
+
   card.querySelector('.btn-expand')?.addEventListener('click', e => {
     e.stopPropagation();
     const content = card.querySelector('.note-content');
@@ -200,6 +206,7 @@ function noteCardHTML(note) {
       <span class="note-card-time">${note.pinned ? '<span class="pin-badge">📌</span>' : ''}${time}</span>
       <div class="note-card-actions">
         <button class="tb-btn btn-pin" data-id="${note.id}" data-pinned="${note.pinned}" title="${note.pinned ? 'Desafixar' : 'Fixar'}">${note.pinned ? '📌' : '📍'}</button>
+        <button class="tb-btn btn-share${note.shared ? ' btn-share--active' : ''}" data-id="${note.id}" data-shared="${note.shared}" title="${note.shared ? 'Link compartilhado' : 'Compartilhar'}">🔗</button>
         <button class="tb-btn btn-trash" data-id="${note.id}" title="Mover para lixeira">🗑️</button>
       </div>
     </div>

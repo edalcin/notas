@@ -98,6 +98,7 @@ func main() {
 	noteHandler := handlers.NewNoteHandler(database)
 	hashtagHandler := handlers.NewHashtagHandler(database)
 	attachmentHandler := handlers.NewAttachmentHandler(database)
+	publicHandler := handlers.NewPublicHandler(database)
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
@@ -114,14 +115,20 @@ func main() {
 		r.Route("/notes", func(r chi.Router) {
 			r.Get("/", noteHandler.List)
 			r.Post("/", noteHandler.Create)
-			r.Get("/{id}", noteHandler.Get)
-			r.Put("/{id}", noteHandler.Update)
-			r.Delete("/{id}", noteHandler.Delete)
-			r.Put("/{id}/pin", noteHandler.TogglePin)
-			r.Put("/{id}/trash", noteHandler.Trash)
-			r.Put("/{id}/restore", noteHandler.Restore)
-			r.Post("/{id}/attachments", attachmentHandler.Upload)
-			r.Delete("/{id}/attachments/{attachment_id}", attachmentHandler.Delete)
+			// GET /api/notes/shared must come before /{id} to avoid chi treating "shared" as an ID
+			r.Get("/shared", noteHandler.ListShared)
+			r.Route("/{id}", func(r chi.Router) {
+				r.Get("/", noteHandler.Get)
+				r.Put("/", noteHandler.Update)
+				r.Delete("/", noteHandler.Delete)
+				r.Put("/pin", noteHandler.TogglePin)
+				r.Put("/trash", noteHandler.Trash)
+				r.Put("/restore", noteHandler.Restore)
+				r.Post("/share", noteHandler.Share)
+				r.Delete("/share", noteHandler.Unshare)
+				r.Post("/attachments", attachmentHandler.Upload)
+				r.Delete("/attachments/{attachment_id}", attachmentHandler.Delete)
+			})
 		})
 		r.Get("/attachments", attachmentHandler.ListAll)
 		r.Get("/trash", noteHandler.ListTrash)
@@ -135,6 +142,9 @@ func main() {
 	})
 
 	r.Get("/files/{filename}", handlers.ServeFile(filesPath))
+
+	// Public share page — no auth required; must come before the SPA catch-all
+	r.Get("/s/{token}", publicHandler.ServePublicNote)
 
 	// Serve embedded frontend SPA — must come after API routes
 	sub, err := fs.Sub(frontendFS, "frontend")

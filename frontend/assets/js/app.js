@@ -5,6 +5,7 @@ import { initEditor, loadNoteForEdit } from './editor.js';
 import { openHashtagManager, closeHashtagManager } from './hashtags.js';
 import { loadAttachmentsView, onAttachmentDeleted } from './attachments-view.js';
 import { loadTrash, initTrash } from './trash.js';
+import { loadSharedNotes } from './shared.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   initTheme();
@@ -105,6 +106,11 @@ function bindUI() {
     showAttachmentsView();
   });
 
+  document.getElementById('btn-shared-notes')?.addEventListener('click', () => {
+    setActiveNav(document.getElementById('btn-shared-notes'));
+    showSharedView();
+  });
+
   document.getElementById('btn-trash')?.addEventListener('click', () => {
     setActiveNav(document.getElementById('btn-trash'));
     showTrashView();
@@ -151,6 +157,7 @@ function showNotesView() {
   document.getElementById('editor-box').hidden = false;
   document.getElementById('notes-feed').hidden = false;
   document.getElementById('attachments-view').hidden = true;
+  document.getElementById('shared-view').hidden = true;
   document.getElementById('trash-view').hidden = true;
 }
 
@@ -158,14 +165,25 @@ function showAttachmentsView() {
   document.getElementById('editor-box').hidden = true;
   document.getElementById('notes-feed').hidden = true;
   document.getElementById('attachments-view').hidden = false;
+  document.getElementById('shared-view').hidden = true;
   document.getElementById('trash-view').hidden = true;
   loadAttachmentsView();
+}
+
+function showSharedView() {
+  document.getElementById('editor-box').hidden = true;
+  document.getElementById('notes-feed').hidden = true;
+  document.getElementById('attachments-view').hidden = true;
+  document.getElementById('shared-view').hidden = false;
+  document.getElementById('trash-view').hidden = true;
+  loadSharedNotes();
 }
 
 function showTrashView() {
   document.getElementById('editor-box').hidden = true;
   document.getElementById('notes-feed').hidden = true;
   document.getElementById('attachments-view').hidden = true;
+  document.getElementById('shared-view').hidden = true;
   document.getElementById('trash-view').hidden = false;
   loadTrash();
 }

@@ -39,8 +39,9 @@ func PINMiddleware(pin, secret string, secureCookie bool) func(http.Handler) htt
 	expected := tokenForPIN(pin, secret)
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			// Always allow these paths
-			if r.URL.Path == "/api/auth/login" || r.URL.Path == "/health" {
+			// Always allow these paths (public share pages need no auth)
+			if r.URL.Path == "/api/auth/login" || r.URL.Path == "/health" ||
+				strings.HasPrefix(r.URL.Path, "/s/") {
 				next.ServeHTTP(w, r)
 				return
 			}

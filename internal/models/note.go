@@ -7,6 +7,7 @@ type Note struct {
 	Content     string       `json:"content"`
 	Preview     string       `json:"preview"`
 	Pinned      bool         `json:"pinned"`
+	Shared      bool         `json:"shared"`
 	Hashtags    []string     `json:"hashtags"`
 	Attachments []Attachment `json:"attachments"`
 	CreatedAt   time.Time    `json:"created_at"`

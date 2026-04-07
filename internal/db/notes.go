@@ -1,7 +1,9 @@
 package db
 
 import (
+	"crypto/rand"
 	"database/sql"
+	"encoding/hex"
 	"fmt"
 	"strings"
 	"time"
@@ -12,7 +14,8 @@ import (
 
 const baseNotesSQL = `
 SELECT n.id, n.content, n.pinned, n.created_at, n.updated_at,
-       GROUP_CONCAT(h.name, ',') as hashtag_names
+       GROUP_CONCAT(h.name, ',') as hashtag_names,
+       (n.share_token IS NOT NULL) AS shared
 FROM notes n
 LEFT JOIN note_hashtags nh ON n.id = nh.note_id
 LEFT JOIN hashtags h ON nh.hashtag_id = h.id
@@ -35,7 +38,8 @@ func (d *DB) FilterByHashtag(hashtag string, limit, offset int) ([]models.Note, 
 func (d *DB) SearchNotes(query string, limit, offset int) ([]models.Note, int, error) {
 	q := `
 SELECT n.id, n.content, n.pinned, n.created_at, n.updated_at,
-       GROUP_CONCAT(h.name, ',') as hashtag_names
+       GROUP_CONCAT(h.name, ',') as hashtag_names,
+       (n.share_token IS NOT NULL) AS shared
 FROM notes n
 LEFT JOIN note_hashtags nh ON n.id = nh.note_id
 LEFT JOIN hashtags h ON nh.hashtag_id = h.id
@@ -67,11 +71,13 @@ func scanNotes(rows *sql.Rows) ([]models.Note, int, error) {
 	for rows.Next() {
 		var n models.Note
 		var pinnedInt int
+		var sharedInt int
 		var hashtagNames sql.NullString
-		if err := rows.Scan(&n.ID, &n.Content, &pinnedInt, &n.CreatedAt, &n.UpdatedAt, &hashtagNames); err != nil {
+		if err := rows.Scan(&n.ID, &n.Content, &pinnedInt, &n.CreatedAt, &n.UpdatedAt, &hashtagNames, &sharedInt); err != nil {
 			return nil, 0, err
 		}
 		n.Pinned = pinnedInt == 1
+		n.Shared = sharedInt == 1
 		n.Preview = services.GeneratePreview(n.Content, 100)
 		n.Hashtags = parseHashtags(hashtagNames)
 		n.Attachments = []models.Attachment{}
@@ -105,7 +111,8 @@ func parseHashtags(s sql.NullString) []string {
 func (d *DB) GetNote(id int64) (*models.Note, error) {
 	row := d.QueryRow(`
 		SELECT n.id, n.content, n.pinned, n.created_at, n.updated_at,
-		       GROUP_CONCAT(h.name, ',') as hashtag_names
+		       GROUP_CONCAT(h.name, ',') as hashtag_names,
+		       (n.share_token IS NOT NULL) AS shared
 		FROM notes n
 		LEFT JOIN note_hashtags nh ON n.id = nh.note_id
 		LEFT JOIN hashtags h ON nh.hashtag_id = h.id
@@ -114,14 +121,16 @@ func (d *DB) GetNote(id int64) (*models.Note, error) {
 
 	var n models.Note
 	var pinnedInt int
+	var sharedInt int
 	var hashtagNames sql.NullString
-	if err := row.Scan(&n.ID, &n.Content, &pinnedInt, &n.CreatedAt, &n.UpdatedAt, &hashtagNames); err != nil {
+	if err := row.Scan(&n.ID, &n.Content, &pinnedInt, &n.CreatedAt, &n.UpdatedAt, &hashtagNames, &sharedInt); err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil
 		}
 		return nil, err
 	}
 	n.Pinned = pinnedInt == 1
+	n.Shared = sharedInt == 1
 	n.Preview = services.GeneratePreview(n.Content, 100)
 	n.Hashtags = parseHashtags(hashtagNames)
 	n.Attachments = []models.Attachment{}
@@ -435,4 +444,116 @@ func (d *DB) GetNoteUpdatedAt(id int64) (time.Time, error) {
 	var t time.Time
 	err := d.QueryRow("SELECT updated_at FROM notes WHERE id = ?", id).Scan(&t)
 	return t, err
+}
+
+// generateShareToken creates a random 64-character hex string (32 bytes).
+func generateShareToken() (string, error) {
+	b := make([]byte, 32)
+	if _, err := rand.Read(b); err != nil {
+		return "", fmt.Errorf("generate share token: %w", err)
+	}
+	return hex.EncodeToString(b), nil
+}
+
+// SetShareToken assigns a share token to a note if it doesn't already have one,
+// then returns the current token. Idempotent — safe to call multiple times.
+func (d *DB) SetShareToken(noteID int64) (string, error) {
+	token, err := generateShareToken()
+	if err != nil {
+		return "", err
+	}
+	// Only set if currently NULL; if already set, the UPDATE is a no-op.
+	if _, err := d.Exec(
+		"UPDATE notes SET share_token = ? WHERE id = ? AND share_token IS NULL AND deleted_at IS NULL",
+		token, noteID,
+	); err != nil {
+		return "", fmt.Errorf("set share token: %w", err)
+	}
+	// Return whatever token is stored (the newly set one, or the pre-existing one).
+	var current string
+	err = d.QueryRow("SELECT share_token FROM notes WHERE id = ? AND deleted_at IS NULL", noteID).Scan(&current)
+	if err == sql.ErrNoRows {
+		return "", nil
+	}
+	return current, err
+}
+
+// ClearShareToken removes the share token from a note. Idempotent.
+func (d *DB) ClearShareToken(noteID int64) error {
+	_, err := d.Exec("UPDATE notes SET share_token = NULL WHERE id = ?", noteID)
+	return err
+}
+
+// GetNoteByShareToken looks up a non-trashed note by its public share token.
+func (d *DB) GetNoteByShareToken(token string) (*models.Note, error) {
+	row := d.QueryRow(`
+		SELECT n.id, n.content, n.pinned, n.created_at, n.updated_at,
+		       GROUP_CONCAT(h.name, ',') AS hashtag_names,
+		       (n.share_token IS NOT NULL) AS shared
+		FROM notes n
+		LEFT JOIN note_hashtags nh ON n.id = nh.note_id
+		LEFT JOIN hashtags h ON nh.hashtag_id = h.id
+		WHERE n.share_token = ? AND n.deleted_at IS NULL
+		GROUP BY n.id`, token)
+
+	var n models.Note
+	var pinnedInt int
+	var sharedInt int
+	var hashtagNames sql.NullString
+	if err := row.Scan(&n.ID, &n.Content, &pinnedInt, &n.CreatedAt, &n.UpdatedAt, &hashtagNames, &sharedInt); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, err
+	}
+	n.Pinned = pinnedInt == 1
+	n.Shared = sharedInt == 1
+	n.Preview = services.GeneratePreview(n.Content, 100)
+	n.Hashtags = parseHashtags(hashtagNames)
+	n.Attachments = []models.Attachment{}
+	return &n, nil
+}
+
+// ListSharedNotes returns all non-trashed notes that have an active share token.
+func (d *DB) ListSharedNotes(limit, offset int) ([]models.Note, int, error) {
+	q := `
+SELECT n.id, n.content, n.pinned, n.created_at, n.updated_at,
+       GROUP_CONCAT(h.name, ',') AS hashtag_names,
+       (n.share_token IS NOT NULL) AS shared
+FROM notes n
+LEFT JOIN note_hashtags nh ON n.id = nh.note_id
+LEFT JOIN hashtags h ON nh.hashtag_id = h.id
+WHERE n.share_token IS NOT NULL AND n.deleted_at IS NULL
+GROUP BY n.id
+ORDER BY n.created_at DESC
+LIMIT ? OFFSET ?`
+	rows, err := d.Query(q, limit, offset)
+	if err != nil {
+		return nil, 0, err
+	}
+	defer rows.Close()
+	return scanSharedNotes(rows)
+}
+
+func scanSharedNotes(rows *sql.Rows) ([]models.Note, int, error) {
+	var notes []models.Note
+	for rows.Next() {
+		var n models.Note
+		var pinnedInt int
+		var sharedInt int
+		var hashtagNames sql.NullString
+		if err := rows.Scan(&n.ID, &n.Content, &pinnedInt, &n.CreatedAt, &n.UpdatedAt, &hashtagNames, &sharedInt); err != nil {
+			return nil, 0, err
+		}
+		n.Pinned = pinnedInt == 1
+		n.Shared = sharedInt == 1
+		n.Preview = services.GeneratePreview(n.Content, 100)
+		n.Hashtags = parseHashtags(hashtagNames)
+		n.Attachments = []models.Attachment{}
+		notes = append(notes, n)
+	}
+	if notes == nil {
+		notes = []models.Note{}
+	}
+	return notes, len(notes), nil
 }
