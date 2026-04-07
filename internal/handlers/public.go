@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -202,8 +203,10 @@ func (h *PublicHandler) ServePublicNote(w http.ResponseWriter, r *http.Request) 
 
 	dateStr := note.CreatedAt.Format("02/01/2006 15:04")
 
-	// Encode the content as a JS string literal (template.JSStr is safe for <script>).
-	contentJSON := template.JSStr(note.Content)
+	// json.Marshal produces a quoted, escaped JSON string (e.g. "Hello\nworld").
+	// template.JS tells html/template to embed it verbatim in the <script> block.
+	contentBytes, _ := json.Marshal(note.Content)
+	contentJSON := template.JS(contentBytes)
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	publicPageTmpl.Execute(w, map[string]interface{}{ //nolint:errcheck
