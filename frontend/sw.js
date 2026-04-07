@@ -11,6 +11,7 @@ const APP_SHELL = [
   '/assets/js/theme.js',
   '/assets/js/attachments.js',
   '/assets/js/attachments-view.js',
+  '/assets/js/trash.js',
   '/manifest.json',
   '/assets/favicon.ico',
   '/assets/apple-touch-icon.png',

@@ -1,7 +1,9 @@
 package main
 
 import (
+	"crypto/md5"
 	"fmt"
+	"io"
 	"io/fs"
 	"log"
 	"net/http"
@@ -16,6 +18,27 @@ import (
 	"github.com/edalcin/notes/internal/db"
 	"github.com/edalcin/notes/internal/handlers"
 )
+
+// frontendHash walks all embedded frontend files and returns the first 8 hex
+// characters of their combined MD5. Any change to a frontend file produces a
+// new hash, which changes the Service Worker CACHE_NAME and forces browsers to
+// fetch fresh assets on the next page load.
+func frontendHash(sub fs.FS) string {
+	h := md5.New()
+	fs.WalkDir(sub, ".", func(path string, d fs.DirEntry, err error) error { //nolint:errcheck
+		if err != nil || d.IsDir() {
+			return nil
+		}
+		f, err := sub.Open(path)
+		if err != nil {
+			return nil
+		}
+		defer f.Close()
+		io.Copy(h, f) //nolint:errcheck
+		return nil
+	})
+	return fmt.Sprintf("%x", h.Sum(nil))[:8]
+}
 
 func main() {
 	dbPath := os.Getenv("DB_PATH")
@@ -118,6 +141,14 @@ func main() {
 	if err != nil {
 		log.Fatalf("create frontend sub-filesystem: %v", err)
 	}
+
+	// Compute a hash of all embedded frontend files at startup so the Service
+	// Worker CACHE_NAME changes automatically on every new deployment.
+	swVersion := frontendHash(sub)
+	log.Printf("Frontend cache version: %s", swVersion)
+
+	// sw.js is served dynamically so the CACHE_NAME version is injected.
+	r.Get("/sw.js", handlers.ServeSW(sub, swVersion))
 	r.Get("/*", handlers.SPAHandler(sub))
 
 	addr := fmt.Sprintf(":%s", port)
