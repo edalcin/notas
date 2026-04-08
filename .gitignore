@@ -30,3 +30,6 @@ Thumbs.db
 
 # Claude Code local settings (personal permissions, not project config)
 .claude/settings.local.json
+
+# Local audit reports — never commit to remote
+audit/
