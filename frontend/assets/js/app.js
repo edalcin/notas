@@ -7,6 +7,23 @@ import { loadAttachmentsView, onAttachmentDeleted } from './attachments-view.js'
 import { loadTrash, initTrash } from './trash.js';
 import { loadSharedNotes } from './shared.js';
 
+// Register SW as early as possible so update checks happen on every launch,
+// including when opened from a home-screen icon (PWA standalone mode).
+// Also listen for SW_UPDATED messages so the page reloads after a new SW
+// activates — without this, skipWaiting() hands control to the new SW but
+// the old JS bundle is still running in memory.
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('message', event => {
+    if (event.data?.type === 'SW_UPDATED') window.location.reload();
+  });
+  navigator.serviceWorker.register('/sw.js').then(reg => {
+    // Force an immediate update check. Browsers in standalone PWA mode may
+    // delay the routine check; calling update() here ensures each launch
+    // fetches the latest sw.js and installs a new SW if the file changed.
+    reg.update().catch(() => {});
+  }).catch(() => {});
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   initTheme();
 
@@ -143,9 +160,6 @@ function bindUI() {
     searchTimer = setTimeout(() => loadNotes(q ? { q } : {}), 300);
   });
 
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').catch(() => {});
-  }
 }
 
 export function setActiveNav(el) {

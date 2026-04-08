@@ -6,6 +6,8 @@ const APP_SHELL = [
   '/assets/js/app.js',
   '/assets/js/notes.js',
   '/assets/js/editor.js',
+  '/assets/js/modal.js',
+  '/assets/js/shared.js',
   '/assets/js/hashtags.js',
   '/assets/js/tagStore.js',
   '/assets/js/theme.js',
@@ -28,11 +30,19 @@ self.addEventListener('install', event => {
 
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-    )
+    (async () => {
+      const keys = await caches.keys();
+      await Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)));
+      await self.clients.claim();
+      // Tell all open pages to reload so they use the fresh cached assets.
+      // Without this, skipWaiting() hands control to the new SW but the
+      // already-running JS in each tab is still the old version.
+      const clients = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+      for (const client of clients) {
+        client.postMessage({ type: 'SW_UPDATED' });
+      }
+    })()
   );
-  self.clients.claim();
 });
 
 self.addEventListener('fetch', event => {
