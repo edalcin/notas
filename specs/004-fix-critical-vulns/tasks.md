@@ -54,7 +54,7 @@
 ### Implementation for User Story 2
 
 - [x] T008 [P] [US2] Adicionar middleware de security headers em `main.go` logo após `r.Use(middleware.Recoverer)`: middleware anônimo que seta os 5 headers — `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy: camera=(), microphone=(), geolocation=()`, e `Content-Security-Policy-Report-Only` com policy `default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; connect-src 'self'; worker-src 'self'; frame-ancestors 'none'`
-- [ ] T009 [US2] Validação manual: compilar e rodar a app (`go run .` ou `docker-compose up --build`), executar `curl -I http://localhost:8080/` e confirmar presença dos 5 headers; abrir browser, navegar por todas as views (criar nota, visualizar, compartilhar, upload), verificar que DevTools Console não mostra violações CSP e que SW permanece "activated" em Application → Service Workers
+- [x] T009 [US2] Validação manual: compilar e rodar a app (`go run .` ou `docker-compose up --build`), executar `curl -I http://localhost:8080/` e confirmar presença dos 5 headers; abrir browser, navegar por todas as views (criar nota, visualizar, compartilhar, upload), verificar que DevTools Console não mostra violações CSP e que SW permanece "activated" em Application → Service Workers
 
 **Checkpoint**: US2 completa. Headers presentes em todas as respostas. SW compatível com CSP.
 
@@ -80,8 +80,8 @@
 **Purpose**: Consistência de UX, teste de aceitação completo e promoção da CSP para modo enforce.
 
 - [x] T012 [P] Atualizar atributo `accept` no file input em `frontend/index.html` (linha ~88): remover `.doc,.docx,.xls,.xlsx` do valor — deixar apenas `accept="image/jpeg,image/png,image/gif,image/webp,application/pdf"` para refletir os tipos realmente aceitos pelo backend
-- [ ] T013 Executar checklist completo de validação manual em `specs/004-fix-critical-vulns/quickstart.md`: testar todos os cenários de C-01 (XSS), C-02 (headers + SW) e C-03 (upload) — registrar resultados
-- [ ] T014 Promover CSP de report-only para enforce em `main.go`: renomear `Content-Security-Policy-Report-Only` para `Content-Security-Policy` (somente após T013 confirmar zero violações CSP durante uso normal)
+- [x] T013 Executar checklist completo de validação manual em `specs/004-fix-critical-vulns/quickstart.md`: testar todos os cenários de C-01 (XSS), C-02 (headers + SW) e C-03 (upload) — registrar resultados
+- [x] T014 Promover CSP de report-only para enforce em `main.go`: renomear `Content-Security-Policy-Report-Only` para `Content-Security-Policy` (somente após T013 confirmar zero violações CSP durante uso normal)
 
 ---
 
