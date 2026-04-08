@@ -176,7 +176,7 @@ function sharedNoteCardHTML(note) {
   }).join('');
   const time = relativeTime(note.updated_at || note.created_at);
   const rendered = typeof marked !== 'undefined'
-    ? marked.parse(note.content || '', { breaks: true })
+    ? DOMPurify.sanitize(marked.parse(note.content || '', { breaks: true }))
     : `<p>${esc(note.content || '')}</p>`;
   const long = (note.content || '').length > 400;
 

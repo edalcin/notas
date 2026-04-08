@@ -49,7 +49,7 @@ func (h *AttachmentHandler) Upload(w http.ResponseWriter, r *http.Request) {
 	}
 	file.Close()
 
-	storedFilename, err := services.SaveFile(header, filesPath, maxBytes)
+	storedFilename, detectedMime, err := services.SaveFile(header, filesPath, maxBytes)
 	if err != nil {
 		msg := err.Error()
 		if strings.Contains(msg, "too large") {
@@ -60,21 +60,14 @@ func (h *AttachmentHandler) Upload(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if strings.Contains(msg, "unsupported") {
-			mimeType := header.Header.Get("Content-Type")
-			jsonResponse(w, http.StatusUnsupportedMediaType, map[string]interface{}{
-				"error":     "unsupported file type",
-				"mime_type": mimeType,
-			})
+			jsonError(w, "unsupported file type", http.StatusUnsupportedMediaType)
 			return
 		}
 		jsonError(w, "upload failed", http.StatusInternalServerError)
 		return
 	}
 
-	mimeType := header.Header.Get("Content-Type")
-	if idx := strings.Index(mimeType, ";"); idx != -1 {
-		mimeType = strings.TrimSpace(mimeType[:idx])
-	}
+	mimeType := detectedMime
 
 	attachment, err := h.db.CreateAttachment(&models.Attachment{
 		NoteID:         noteID,

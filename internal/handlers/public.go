@@ -167,13 +167,11 @@ var publicPageTmpl = template.Must(template.New("public").Parse(`<!DOCTYPE html>
       <a href="/" class="page-brand">📝 Notas</a>
       <span class="note-date">{{.Date}}</span>
     </header>
-    <div class="note-body" id="note-content"></div>
+    <div class="note-body" id="note-content" data-content="{{.ContentJSON}}"></div>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script>
-    const raw = {{.ContentJSON}};
-    document.getElementById('note-content').innerHTML = marked.parse(raw, { breaks: true });
-  </script>
+  <script src="/assets/js/public.js"></script>
 </body>
 </html>`))
 
@@ -204,13 +202,12 @@ func (h *PublicHandler) ServePublicNote(w http.ResponseWriter, r *http.Request) 
 	dateStr := note.CreatedAt.Format("02/01/2006 15:04")
 
 	// json.Marshal produces a quoted, escaped JSON string (e.g. "Hello\nworld").
-	// template.JS tells html/template to embed it verbatim in the <script> block.
+	// Passed as a plain string so html/template applies HTML attribute escaping.
 	contentBytes, _ := json.Marshal(note.Content)
-	contentJSON := template.JS(contentBytes)
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	publicPageTmpl.Execute(w, map[string]interface{}{ //nolint:errcheck
 		"Date":        dateStr,
-		"ContentJSON": contentJSON,
+		"ContentJSON": string(contentBytes),
 	})
 }

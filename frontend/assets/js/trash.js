@@ -76,7 +76,7 @@ function trashCardHTML(note) {
     return `<span class="note-tag" data-tag="${esc(t)}" ${style}>#${esc(t)}</span>`;
   }).join('');
   const deletedTime = note.deleted_at ? formatDeletedAt(note.deleted_at) : '';
-  const rendered = typeof marked !== 'undefined' ? marked.parse(note.content || '', { breaks: true }) : `<p>${esc(note.content || '')}</p>`;
+  const rendered = typeof marked !== 'undefined' ? DOMPurify.sanitize(marked.parse(note.content || '', { breaks: true })) : `<p>${esc(note.content || '')}</p>`;
 
   return `<div class="note-card" data-id="${note.id}" role="listitem">
     <div class="note-card-header">

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"io"
 	"mime/multipart"
+	"net/http"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/google/uuid"
 )
@@ -16,50 +16,50 @@ var allowedMimeTypes = map[string]bool{
 	"image/png":       true,
 	"image/gif":       true,
 	"image/webp":      true,
-	"image/svg+xml":   true,
 	"application/pdf": true,
-	"application/msword": true,
-	"application/vnd.openxmlformats-officedocument.wordprocessingml.document": true,
-	"application/vnd.ms-excel": true,
-	"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": true,
 }
 
-// SaveFile validates and saves an uploaded file. Returns stored filename and error.
-func SaveFile(header *multipart.FileHeader, filesPath string, maxBytes int64) (string, error) {
+// SaveFile validates and saves an uploaded file using magic bytes detection.
+// Returns the stored filename, the detected MIME type, and any error.
+func SaveFile(header *multipart.FileHeader, filesPath string, maxBytes int64) (string, string, error) {
 	if header.Size > maxBytes {
-		return "", fmt.Errorf("file too large: %d bytes (max %d)", header.Size, maxBytes)
+		return "", "", fmt.Errorf("file too large: %d bytes (max %d)", header.Size, maxBytes)
 	}
 
-	mimeType := header.Header.Get("Content-Type")
-	if idx := strings.Index(mimeType, ";"); idx != -1 {
-		mimeType = strings.TrimSpace(mimeType[:idx])
+	src, err := header.Open()
+	if err != nil {
+		return "", "", fmt.Errorf("open upload: %w", err)
 	}
-	if !allowedMimeTypes[mimeType] && !strings.HasPrefix(mimeType, "image/") {
-		return "", fmt.Errorf("unsupported file type: %s", mimeType)
+	defer src.Close()
+
+	// Detect real MIME type from file content, ignoring client-declared Content-Type.
+	buf := make([]byte, 512)
+	n, _ := src.Read(buf)
+	detectedMime := http.DetectContentType(buf[:n])
+	if _, err := src.Seek(0, io.SeekStart); err != nil {
+		return "", "", fmt.Errorf("seek upload: %w", err)
+	}
+
+	if !allowedMimeTypes[detectedMime] {
+		return "", "", fmt.Errorf("unsupported file type")
 	}
 
 	ext := filepath.Ext(header.Filename)
 	storedFilename := uuid.New().String() + ext
 
-	src, err := header.Open()
-	if err != nil {
-		return "", fmt.Errorf("open upload: %w", err)
-	}
-	defer src.Close()
-
 	destPath := filepath.Join(filesPath, storedFilename)
 	dst, err := os.Create(destPath)
 	if err != nil {
-		return "", fmt.Errorf("create file: %w", err)
+		return "", "", fmt.Errorf("create file: %w", err)
 	}
 	defer dst.Close()
 
 	if _, err := io.Copy(dst, src); err != nil {
 		os.Remove(destPath)
-		return "", fmt.Errorf("write file: %w", err)
+		return "", "", fmt.Errorf("write file: %w", err)
 	}
 
-	return storedFilename, nil
+	return storedFilename, detectedMime, nil
 }
 
 // DeleteFile removes a file from the storage directory. Ignores not-found errors.

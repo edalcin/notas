@@ -157,7 +157,7 @@ async function deleteGlobalAttachment(attachmentId, noteId) {
 
 function showDeleteConfirm(noteContent, onConfirm) {
   const rendered = typeof marked !== 'undefined'
-    ? marked.parse(noteContent, { breaks: true })
+    ? DOMPurify.sanitize(marked.parse(noteContent, { breaks: true }))
     : `<p>${esc(noteContent)}</p>`;
 
   const overlay = document.createElement('div');

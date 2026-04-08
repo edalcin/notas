@@ -85,7 +85,7 @@
             <div id="editor-tags-preview"></div>
             <div class="editor-footer-actions">
               <label class="btn-attach" for="file-input" title="Anexar arquivo">📎 Anexar</label>
-              <input type="file" id="file-input" accept="image/*,application/pdf,.doc,.docx,.xls,.xlsx" hidden>
+              <input type="file" id="file-input" accept="image/jpeg,image/png,image/gif,image/webp,application/pdf" hidden>
               <button id="btn-save" class="btn-primary">Salvar</button>
             </div>
           </div>
@@ -191,6 +191,7 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
   <script type="module" src="/assets/js/app.js"></script>

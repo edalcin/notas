@@ -103,6 +103,23 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
+	r.Use(func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("X-Content-Type-Options", "nosniff")
+			w.Header().Set("X-Frame-Options", "DENY")
+			w.Header().Set("Referrer-Policy", "strict-origin-when-cross-origin")
+			w.Header().Set("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+			w.Header().Set("Content-Security-Policy-Report-Only",
+				"default-src 'self'; "+
+					"script-src 'self' https://cdn.jsdelivr.net; "+
+					"style-src 'self' 'unsafe-inline'; "+
+					"img-src 'self' data: blob: https:; "+
+					"connect-src 'self'; "+
+					"worker-src 'self'; "+
+					"frame-ancestors 'none'")
+			next.ServeHTTP(w, r)
+		})
+	})
 	r.Use(handlers.FilesPathMiddleware(filesPath))
 	r.Use(handlers.MaxUploadMiddleware(maxUploadBytes))
 	r.Use(handlers.PINMiddleware(appPIN, sessionSecret, secureCookie))
