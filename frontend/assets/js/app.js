@@ -57,6 +57,64 @@ async function initApp() {
       loadAttachmentsView(e.detail.tag);
     }
   });
+
+  await handleIncomingShare();
+}
+
+// Handles content arriving via the Web Share Target API.
+// The SW stores share data (query params + files in Cache) and redirects here.
+async function handleIncomingShare() {
+  const params = new URLSearchParams(location.search);
+  const content = params.get('share_content') || '';
+  const hasFiles = params.get('share_files') === '1';
+  if (!content && !hasFiles) return;
+
+  // Clean share params from URL without triggering a reload
+  history.replaceState(null, '', '/');
+
+  if (hasFiles) {
+    try {
+      const cache = await caches.open('notas-share-pending');
+      const keys = await cache.keys();
+      if (keys.length > 0) {
+        // Create note first so we have an ID to attach files to
+        const noteRes = await fetch('/api/notes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content: content || '📷 Arquivo compartilhado' }),
+        });
+        if (!noteRes.ok) throw new Error('create note failed');
+        const note = await noteRes.json();
+
+        for (const req of keys) {
+          const cached = await cache.match(req);
+          if (!cached) continue;
+          const blob = await cached.blob();
+          const rawName = cached.headers.get('X-File-Name') || new URL(req.url).pathname.split('/').pop();
+          const file = new File([blob], decodeURIComponent(rawName), { type: blob.type });
+          const fd = new FormData();
+          fd.append('file', file);
+          await fetch(`/api/notes/${note.id}/attachments`, { method: 'POST', body: fd });
+        }
+        await Promise.all(keys.map(k => cache.delete(k)));
+
+        // Open the note in the editor so the user can review before saving
+        loadNoteForEdit(note.id);
+        document.dispatchEvent(new CustomEvent('note:saved'));
+        return;
+      }
+    } catch (err) {
+      console.error('[share] file upload error:', err);
+    }
+  }
+
+  // Text / URL share: pre-fill the editor textarea for user review
+  const ta = document.getElementById('editor-textarea');
+  if (content && ta) {
+    ta.value = content;
+    ta.dispatchEvent(new Event('input')); // triggers autoResize + tag preview
+    ta.focus();
+  }
 }
 
 async function checkAuth() {

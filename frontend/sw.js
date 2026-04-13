@@ -130,40 +130,40 @@ async function handleShareTarget(request) {
     const url   = (formData.get('url')   || '').trim();
     const files = formData.getAll('media');
 
-    // Build note content; avoid duplicating URL when it's already inside text
+    // Build content string; avoid duplicating URL when already present in text
     const parts = [];
     if (title) parts.push(title);
     if (text)  parts.push(text);
     if (url && !text.includes(url)) parts.push(url);
+    const content = parts.join('\n');
 
-    let content = parts.join('\n');
-    if (!content && files.length > 0) content = '📷 Imagem compartilhada';
-    if (!content) return Response.redirect('/', 303);
+    const params = new URLSearchParams();
+    if (content) params.set('share_content', content);
 
-    // Create note using the existing API endpoint
-    const noteRes = await fetch('/api/notes', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'same-origin',
-      body: JSON.stringify({ content }),
-    });
-
-    // Upload shared images as attachments
-    if (noteRes.ok && files.length > 0) {
-      const note = await noteRes.json();
+    if (files.length > 0) {
+      // Store files in Cache so app.js can read them after redirect.
+      // Cache Storage API is available in both SW and page contexts (same origin).
+      const cache = await caches.open('notas-share-pending');
+      const oldKeys = await cache.keys();
+      await Promise.all(oldKeys.map(k => cache.delete(k)));
       for (const file of files) {
-        const fd = new FormData();
-        fd.append('file', file);
-        await fetch(`/api/notes/${note.id}/attachments`, {
-          method: 'POST',
-          credentials: 'same-origin',
-          body: fd,
-        });
+        const buf = await file.arrayBuffer();
+        await cache.put(
+          `/__share_file__/${encodeURIComponent(file.name)}`,
+          new Response(buf, {
+            headers: {
+              'Content-Type': file.type || 'application/octet-stream',
+              'X-File-Name': file.name,
+            },
+          })
+        );
       }
+      params.set('share_files', '1');
     }
+
+    return Response.redirect(params.toString() ? `/?${params}` : '/', 303);
   } catch (err) {
     console.error('[SW] Share target error:', err);
+    return Response.redirect('/', 303);
   }
-
-  return Response.redirect('/', 303);
 }
