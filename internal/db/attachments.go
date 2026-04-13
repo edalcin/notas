@@ -76,12 +76,16 @@ func (d *DB) ListAllAttachments(hashtag string) ([]models.AttachmentListItem, er
 	var args []interface{}
 	if hashtag != "" {
 		query += `
-		WHERE n.id IN (
+		WHERE n.deleted_at IS NULL
+		AND n.id IN (
 			SELECT nh2.note_id FROM note_hashtags nh2
 			JOIN hashtags h2 ON nh2.hashtag_id = h2.id
 			WHERE LOWER(h2.name) = LOWER(?)
 		)`
 		args = append(args, hashtag)
+	} else {
+		query += `
+		WHERE n.deleted_at IS NULL`
 	}
 
 	query += `
@@ -153,6 +157,26 @@ func parseHashtagList(s sql.NullString) []string {
 		return []string{}
 	}
 	return result
+}
+
+// AllStoredFilenames returns a set of every stored_filename currently in the
+// attachments table (including attachments on trashed notes). Used at startup
+// to identify files on disk that have no matching DB record.
+func (d *DB) AllStoredFilenames() (map[string]bool, error) {
+	rows, err := d.Query("SELECT stored_filename FROM attachments")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	known := make(map[string]bool)
+	for rows.Next() {
+		var name string
+		if err := rows.Scan(&name); err != nil {
+			return nil, err
+		}
+		known[name] = true
+	}
+	return known, rows.Err()
 }
 
 func (d *DB) DeleteAttachment(id int64) (string, error) {

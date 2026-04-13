@@ -40,6 +40,39 @@ func frontendHash(sub fs.FS) string {
 	return fmt.Sprintf("%x", h.Sum(nil))[:8]
 }
 
+// cleanOrphanFiles removes any file in filesPath that has no corresponding
+// record in the attachments table. Files belonging to trashed notes are kept
+// because the note (and its file) can still be restored.
+func cleanOrphanFiles(database *db.DB, filesPath string) {
+	known, err := database.AllStoredFilenames()
+	if err != nil {
+		log.Printf("warn: cleanOrphanFiles: query attachments: %v", err)
+		return
+	}
+
+	entries, err := os.ReadDir(filesPath)
+	if err != nil {
+		log.Printf("warn: cleanOrphanFiles: read dir: %v", err)
+		return
+	}
+
+	var removed int
+	for _, entry := range entries {
+		if entry.IsDir() || known[entry.Name()] {
+			continue
+		}
+		path := filepath.Join(filesPath, entry.Name())
+		if err := os.Remove(path); err != nil && !os.IsNotExist(err) {
+			log.Printf("warn: cleanOrphanFiles: remove %s: %v", entry.Name(), err)
+		} else {
+			removed++
+		}
+	}
+	if removed > 0 {
+		log.Printf("startup: removed %d orphan file(s) from %s", removed, filesPath)
+	}
+}
+
 func main() {
 	dbPath := os.Getenv("DB_PATH")
 	filesPath := os.Getenv("FILES_PATH")
@@ -94,6 +127,8 @@ func main() {
 	if err := database.RepairHashtagsFromNotes(); err != nil {
 		log.Fatalf("repair hashtags: %v", err)
 	}
+
+	cleanOrphanFiles(database, filesPath)
 
 	noteHandler := handlers.NewNoteHandler(database)
 	hashtagHandler := handlers.NewHashtagHandler(database)
