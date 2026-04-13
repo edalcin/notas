@@ -132,12 +132,13 @@ async function handleShareTarget(request) {
 
     // Build content string; avoid duplicating URL when already present in text
     const parts = [];
-    if (title) parts.push(title);
+    if (title) parts.push(`## ${title}`);
     if (text)  parts.push(text);
     if (url && !text.includes(url)) parts.push(url);
     let content = parts.join('\n');
     if (!content && files.length > 0) content = '📎 Arquivo compartilhado';
     if (!content) return Response.redirect('/', 303);
+    content += '\n#android';
 
     // Create note via existing API (SW has same-origin cookie access)
     const noteRes = await fetch('/api/notes', {
