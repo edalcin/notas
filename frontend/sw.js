@@ -49,6 +49,12 @@ self.addEventListener('fetch', event => {
   const { request } = event;
   const url = new URL(request.url);
 
+  // Web Share Target: Android shares arrive as POST /share-target
+  if (url.pathname === '/share-target' && request.method === 'POST') {
+    event.respondWith(handleShareTarget(request));
+    return;
+  }
+
   // Non-GET requests (writes): network-only; return 503 when offline
   if (request.method !== 'GET') {
     event.respondWith(
@@ -114,4 +120,50 @@ async function cacheFirst(request) {
     cache.put(request, response.clone());
   }
   return response;
+}
+
+async function handleShareTarget(request) {
+  try {
+    const formData = await request.formData();
+    const title = (formData.get('title') || '').trim();
+    const text  = (formData.get('text')  || '').trim();
+    const url   = (formData.get('url')   || '').trim();
+    const files = formData.getAll('media');
+
+    // Build note content; avoid duplicating URL when it's already inside text
+    const parts = [];
+    if (title) parts.push(title);
+    if (text)  parts.push(text);
+    if (url && !text.includes(url)) parts.push(url);
+
+    let content = parts.join('\n');
+    if (!content && files.length > 0) content = '📷 Imagem compartilhada';
+    if (!content) return Response.redirect('/', 303);
+
+    // Create note using the existing API endpoint
+    const noteRes = await fetch('/api/notes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ content }),
+    });
+
+    // Upload shared images as attachments
+    if (noteRes.ok && files.length > 0) {
+      const note = await noteRes.json();
+      for (const file of files) {
+        const fd = new FormData();
+        fd.append('file', file);
+        await fetch(`/api/notes/${note.id}/attachments`, {
+          method: 'POST',
+          credentials: 'same-origin',
+          body: fd,
+        });
+      }
+    }
+  } catch (err) {
+    console.error('[SW] Share target error:', err);
+  }
+
+  return Response.redirect('/', 303);
 }
