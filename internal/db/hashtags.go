@@ -9,10 +9,12 @@ import (
 
 func (d *DB) ListHashtags() ([]models.Hashtag, error) {
 	rows, err := d.Query(`
-		SELECT h.name, COUNT(nh.note_id) as count, COALESCE(h.color, '') as color
+		SELECT h.name, COUNT(n.id) as count, COALESCE(h.color, '') as color
 		FROM hashtags h
 		LEFT JOIN note_hashtags nh ON h.id = nh.hashtag_id
+		LEFT JOIN notes n ON nh.note_id = n.id AND n.deleted_at IS NULL
 		GROUP BY h.id, h.name
+		HAVING COUNT(n.id) > 0
 		ORDER BY LOWER(h.name) ASC`)
 	if err != nil {
 		return nil, err
