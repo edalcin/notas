@@ -135,33 +135,33 @@ async function handleShareTarget(request) {
     if (title) parts.push(title);
     if (text)  parts.push(text);
     if (url && !text.includes(url)) parts.push(url);
-    const content = parts.join('\n');
+    let content = parts.join('\n');
+    if (!content && files.length > 0) content = '📎 Arquivo compartilhado';
+    if (!content) return Response.redirect('/', 303);
 
-    const params = new URLSearchParams();
-    if (content) params.set('share_content', content);
+    // Create note via existing API (SW has same-origin cookie access)
+    const noteRes = await fetch('/api/notes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ content }),
+    });
+    if (!noteRes.ok) return Response.redirect('/', 303);
+    const note = await noteRes.json();
 
-    if (files.length > 0) {
-      // Store files in Cache so app.js can read them after redirect.
-      // Cache Storage API is available in both SW and page contexts (same origin).
-      const cache = await caches.open('notas-share-pending');
-      const oldKeys = await cache.keys();
-      await Promise.all(oldKeys.map(k => cache.delete(k)));
-      for (const file of files) {
-        const buf = await file.arrayBuffer();
-        await cache.put(
-          `/__share_file__/${encodeURIComponent(file.name)}`,
-          new Response(buf, {
-            headers: {
-              'Content-Type': file.type || 'application/octet-stream',
-              'X-File-Name': file.name,
-            },
-          })
-        );
-      }
-      params.set('share_files', '1');
+    // Upload any shared files as attachments
+    for (const file of files) {
+      const fd = new FormData();
+      fd.append('file', file);
+      await fetch(`/api/notes/${note.id}/attachments`, {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: fd,
+      });
     }
 
-    return Response.redirect(params.toString() ? `/?${params}` : '/', 303);
+    // Redirect with the note ID so the app opens it in the editor for review
+    return Response.redirect(`/?share_edit=${note.id}`, 303);
   } catch (err) {
     console.error('[SW] Share target error:', err);
     return Response.redirect('/', 303);
