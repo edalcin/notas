@@ -76,7 +76,8 @@ func (d *DB) ListAllAttachments(hashtag string) ([]models.AttachmentListItem, er
 	var args []interface{}
 	if hashtag != "" {
 		query += `
-		WHERE n.deleted_at IS NULL
+		WHERE n.id IS NOT NULL
+		AND n.deleted_at IS NULL
 		AND n.id IN (
 			SELECT nh2.note_id FROM note_hashtags nh2
 			JOIN hashtags h2 ON nh2.hashtag_id = h2.id
@@ -85,7 +86,8 @@ func (d *DB) ListAllAttachments(hashtag string) ([]models.AttachmentListItem, er
 		args = append(args, hashtag)
 	} else {
 		query += `
-		WHERE n.deleted_at IS NULL`
+		WHERE n.id IS NOT NULL
+		AND n.deleted_at IS NULL`
 	}
 
 	query += `
@@ -157,6 +159,36 @@ func parseHashtagList(s sql.NullString) []string {
 		return []string{}
 	}
 	return result
+}
+
+// DeleteOrphanAttachments removes attachment records whose note no longer
+// exists in the notes table. Returns the stored filenames of deleted records
+// so the caller can remove the physical files. Called at startup as a safety
+// net for any state left by a crash or a missing explicit delete.
+func (d *DB) DeleteOrphanAttachments() ([]string, error) {
+	rows, err := d.Query(`
+		SELECT stored_filename FROM attachments
+		WHERE note_id NOT IN (SELECT id FROM notes)`)
+	if err != nil {
+		return nil, err
+	}
+	var names []string
+	for rows.Next() {
+		var name string
+		if err := rows.Scan(&name); err != nil {
+			rows.Close()
+			return nil, err
+		}
+		names = append(names, name)
+	}
+	rows.Close()
+	if len(names) == 0 {
+		return nil, nil
+	}
+	if _, err := d.Exec(`DELETE FROM attachments WHERE note_id NOT IN (SELECT id FROM notes)`); err != nil {
+		return nil, err
+	}
+	return names, nil
 }
 
 // AllStoredFilenames returns a set of every stored_filename currently in the

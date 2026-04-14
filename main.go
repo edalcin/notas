@@ -128,6 +128,21 @@ func main() {
 		log.Fatalf("repair hashtags: %v", err)
 	}
 
+	// Remove any attachment DB records whose note no longer exists (safety net
+	// for state left by a crash or a missing cascade delete).
+	if orphanFiles, err := database.DeleteOrphanAttachments(); err != nil {
+		log.Printf("warn: delete orphan attachments: %v", err)
+	} else if len(orphanFiles) > 0 {
+		log.Printf("startup: removed %d orphan attachment record(s) from database", len(orphanFiles))
+		// Also clean up the physical files for those orphan records.
+		for _, name := range orphanFiles {
+			path := filepath.Join(filesPath, name)
+			if err := os.Remove(path); err != nil && !os.IsNotExist(err) {
+				log.Printf("warn: remove orphan file %s: %v", name, err)
+			}
+		}
+	}
+
 	cleanOrphanFiles(database, filesPath)
 
 	noteHandler := handlers.NewNoteHandler(database)

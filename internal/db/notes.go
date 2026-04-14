@@ -330,6 +330,15 @@ func (d *DB) EmptyTrash() ([]models.Attachment, error) {
 	}
 	defer tx.Rollback()
 
+	// Explicitly delete related records before the notes — same pattern as
+	// DeleteNote — so cleanup is guaranteed regardless of whether SQLite FK
+	// cascade is active on this connection.
+	if _, err := tx.Exec("DELETE FROM note_hashtags WHERE note_id IN (SELECT id FROM notes WHERE deleted_at IS NOT NULL)"); err != nil {
+		return nil, fmt.Errorf("empty trash: delete note_hashtags: %w", err)
+	}
+	if _, err := tx.Exec("DELETE FROM attachments WHERE note_id IN (SELECT id FROM notes WHERE deleted_at IS NOT NULL)"); err != nil {
+		return nil, fmt.Errorf("empty trash: delete attachments: %w", err)
+	}
 	if _, err := tx.Exec("DELETE FROM notes WHERE deleted_at IS NOT NULL"); err != nil {
 		return nil, fmt.Errorf("empty trash: delete notes: %w", err)
 	}
