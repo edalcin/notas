@@ -23,7 +23,11 @@ type NoteHandler struct {
 }
 
 func NewNoteHandler(database *db.DB, pkdURL, pkdToken string) *NoteHandler {
-	return &NoteHandler{db: database, pkdURL: pkdURL, pkdToken: pkdToken}
+	return &NoteHandler{
+		db:       database,
+		pkdURL:   strings.TrimSpace(pkdURL),
+		pkdToken: strings.TrimSpace(pkdToken),
+	}
 }
 
 func (h *NoteHandler) List(w http.ResponseWriter, r *http.Request) {
