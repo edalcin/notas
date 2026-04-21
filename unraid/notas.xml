@@ -34,4 +34,6 @@
   <Config Name="PORT" Target="PORT" Default="8080" Description="Porta interna do servidor" Type="Variable" Display="advanced" Required="false" Mask="false">8080</Config>
   <Config Name="MAX_UPLOAD_BYTES" Target="MAX_UPLOAD_BYTES" Default="52428800" Description="Tamanho máximo de upload em bytes (padrão: 50 MB)" Type="Variable" Display="advanced" Required="false" Mask="false">52428800</Config>
   <Config Name="TZ" Target="TZ" Default="America/Sao_Paulo" Description="Fuso horário" Type="Variable" Display="always" Required="false" Mask="false">America/Sao_Paulo</Config>
+  <Config Name="PKD_URL" Target="PKD_URL" Default="" Description="URL base da instância PKD para exportar notas (ex: http://192.168.1.x:8080). Deixar em branco para desativar a integração." Type="Variable" Display="always" Required="false" Mask="false"></Config>
+  <Config Name="PKD_TOKEN" Target="PKD_TOKEN" Default="" Description="Token secreto compartilhado com PKD_IMPORT_TOKEN no container pkd" Type="Variable" Display="always" Required="false" Mask="true"></Config>
 </Container>
