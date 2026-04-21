@@ -145,7 +145,10 @@ func main() {
 
 	cleanOrphanFiles(database, filesPath)
 
-	noteHandler := handlers.NewNoteHandler(database)
+	pkdURL := os.Getenv("PKD_URL")
+	pkdToken := os.Getenv("PKD_TOKEN")
+
+	noteHandler := handlers.NewNoteHandler(database, pkdURL, pkdToken)
 	hashtagHandler := handlers.NewHashtagHandler(database)
 	attachmentHandler := handlers.NewAttachmentHandler(database)
 	publicHandler := handlers.NewPublicHandler(database)
@@ -193,6 +196,7 @@ func main() {
 				r.Put("/restore", noteHandler.Restore)
 				r.Post("/share", noteHandler.Share)
 				r.Delete("/share", noteHandler.Unshare)
+				r.Post("/export-to-pkd", noteHandler.ExportToPKD)
 				r.Post("/attachments", attachmentHandler.Upload)
 				r.Delete("/attachments/{attachment_id}", attachmentHandler.Delete)
 			})
@@ -236,6 +240,9 @@ func main() {
 	}
 	if appPIN != "" {
 		log.Printf("PIN protection: enabled")
+	}
+	if pkdURL != "" {
+		log.Printf("PKD integration: enabled (url=%s)", pkdURL)
 	}
 
 	if err := http.ListenAndServe(addr, r); err != nil {

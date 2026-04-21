@@ -153,6 +153,11 @@ function bindCardEvents(card) {
     await openShareModal(Number(e.currentTarget.dataset.id));
   });
 
+  card.querySelector('.btn-pkd')?.addEventListener('click', async e => {
+    e.stopPropagation();
+    await exportToPKD(e.currentTarget);
+  });
+
   card.querySelector('.btn-expand')?.addEventListener('click', e => {
     e.stopPropagation();
     const content = card.querySelector('.note-content');
@@ -207,6 +212,7 @@ function noteCardHTML(note) {
       <div class="note-card-actions">
         <button class="tb-btn btn-pin" data-id="${note.id}" data-pinned="${note.pinned}" title="${note.pinned ? 'Desafixar' : 'Fixar'}">${note.pinned ? '📌' : '📍'}</button>
         <button class="tb-btn btn-share${note.shared ? ' btn-share--active' : ''}" data-id="${note.id}" data-shared="${note.shared}" title="${note.shared ? 'Link compartilhado' : 'Compartilhar'}">🔗</button>
+        <button class="tb-btn btn-pkd" data-id="${note.id}" title="Enviar para PKD">📤</button>
         <button class="tb-btn btn-trash" data-id="${note.id}" title="Mover para lixeira">🗑️</button>
       </div>
     </div>
@@ -218,6 +224,30 @@ function noteCardHTML(note) {
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
+
+async function exportToPKD(btn) {
+  const id = Number(btn.dataset.id);
+  const original = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = '⏳';
+  try {
+    const res = await fetch(`/api/notes/${id}/export-to-pkd`, { method: 'POST' });
+    if (res.ok) {
+      btn.textContent = '✅';
+      btn.title = 'Enviado para PKD!';
+      setTimeout(() => { btn.textContent = original; btn.title = 'Enviar para PKD'; btn.disabled = false; }, 2500);
+    } else {
+      const data = await res.json().catch(() => ({}));
+      btn.textContent = '❌';
+      btn.title = data.error || 'Erro ao enviar para PKD';
+      setTimeout(() => { btn.textContent = original; btn.title = 'Enviar para PKD'; btn.disabled = false; }, 3000);
+    }
+  } catch {
+    btn.textContent = '❌';
+    btn.title = 'Erro de conexão';
+    setTimeout(() => { btn.textContent = original; btn.title = 'Enviar para PKD'; btn.disabled = false; }, 3000);
+  }
+}
 
 async function togglePin(id, pinned) {
   try {

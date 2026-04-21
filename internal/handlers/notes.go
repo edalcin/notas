@@ -1,24 +1,29 @@
 package handlers
 
 import (
+	"bytes"
 	"database/sql"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/yuin/goldmark"
 
 	"github.com/edalcin/notes/internal/db"
 	"github.com/edalcin/notes/internal/models"
 )
 
 type NoteHandler struct {
-	db *db.DB
+	db       *db.DB
+	pkdURL   string
+	pkdToken string
 }
 
-func NewNoteHandler(database *db.DB) *NoteHandler {
-	return &NoteHandler{db: database}
+func NewNoteHandler(database *db.DB, pkdURL, pkdToken string) *NoteHandler {
+	return &NoteHandler{db: database, pkdURL: pkdURL, pkdToken: pkdToken}
 }
 
 func (h *NoteHandler) List(w http.ResponseWriter, r *http.Request) {
@@ -333,6 +338,77 @@ func (h *NoteHandler) Unshare(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusNoContent)
+}
+
+// ExportToPKD sends a note to the configured PKD instance via /api/import.
+func (h *NoteHandler) ExportToPKD(w http.ResponseWriter, r *http.Request) {
+	if h.pkdURL == "" {
+		jsonError(w, "PKD integration not configured (PKD_URL not set)", http.StatusServiceUnavailable)
+		return
+	}
+
+	id, err := parseID(r)
+	if err != nil {
+		jsonError(w, "invalid id", http.StatusBadRequest)
+		return
+	}
+
+	note, err := h.db.GetNote(id)
+	if err != nil {
+		jsonError(w, "database error", http.StatusInternalServerError)
+		return
+	}
+	if note == nil {
+		jsonError(w, "note not found", http.StatusNotFound)
+		return
+	}
+
+	// Convert markdown to HTML for PKD's rich-text body
+	var htmlBuf bytes.Buffer
+	if err := goldmark.Convert([]byte(note.Content), &htmlBuf); err != nil {
+		jsonError(w, "markdown conversion error", http.StatusInternalServerError)
+		return
+	}
+
+	// Use the first non-empty line as the document title, stripping markdown headings
+	title := "Nota de Notas"
+	for _, line := range strings.SplitN(note.Content, "\n", 5) {
+		line = strings.TrimLeft(line, "#")
+		line = strings.TrimSpace(line)
+		if line != "" {
+			title = line
+			break
+		}
+	}
+
+	payload := map[string]interface{}{
+		"title":   title,
+		"content": htmlBuf.String(),
+		"tags":    note.Hashtags,
+	}
+	body, _ := json.Marshal(payload)
+
+	req, err := http.NewRequestWithContext(r.Context(), http.MethodPost, strings.TrimRight(h.pkdURL, "/")+"/api/import", bytes.NewReader(body))
+	if err != nil {
+		jsonError(w, "failed to build request", http.StatusInternalServerError)
+		return
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+h.pkdToken)
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		jsonError(w, "could not reach PKD: "+err.Error(), http.StatusBadGateway)
+		return
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusCreated {
+		jsonError(w, fmt.Sprintf("PKD returned %d", resp.StatusCode), http.StatusBadGateway)
+		return
+	}
+
+	jsonResponse(w, http.StatusOK, map[string]interface{}{"exported": true})
 }
 
 // ListShared returns all notes that have an active public share link.
