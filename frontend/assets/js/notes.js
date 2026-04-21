@@ -233,9 +233,8 @@ async function exportToPKD(btn) {
   try {
     const res = await fetch(`/api/notes/${id}/export-to-pkd`, { method: 'POST' });
     if (res.ok) {
-      btn.textContent = '✅';
-      btn.title = 'Enviado para PKD!';
-      setTimeout(() => { btn.textContent = original; btn.title = 'Enviar para PKD'; btn.disabled = false; }, 2500);
+      await fetch(`/api/notes/${id}/trash`, { method: 'PUT' });
+      document.dispatchEvent(new CustomEvent('note:deleted'));
     } else {
       const data = await res.json().catch(() => ({}));
       btn.textContent = '❌';
