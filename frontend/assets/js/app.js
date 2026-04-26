@@ -8,15 +8,6 @@ import { loadTrash, initTrash } from './trash.js';
 import { loadSharedNotes } from './shared.js';
 import { initBackup } from './backup.js';
 
-// Open all markdown links in a new tab
-marked.use({
-  renderer: {
-    link({ href, title, text }) {
-      return `<a href="${href}"${title ? ` title="${title}"` : ''} target="_blank" rel="noopener noreferrer">${text}</a>`;
-    },
-  },
-});
-
 // Register SW as early as possible so update checks happen on every launch,
 // including when opened from a home-screen icon (PWA standalone mode).
 // Also listen for SW_UPDATED messages so the page reloads after a new SW
@@ -162,6 +153,17 @@ function bindUI() {
     setActiveNav(document.getElementById('btn-backup'));
     showBackupView();
   });
+
+  // Open external links from rendered markdown in a new tab.
+  // Using capture phase so this fires before any card-level click handlers.
+  document.getElementById('main')?.addEventListener('click', e => {
+    const link = e.target.closest('a[href]');
+    if (!link) return;
+    const href = link.getAttribute('href');
+    if (!href || href.startsWith('#') || href.startsWith('/') || href.startsWith('mailto:')) return;
+    e.preventDefault();
+    window.open(href, '_blank', 'noopener,noreferrer');
+  }, true);
 
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
