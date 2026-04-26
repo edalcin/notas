@@ -1456,3 +1456,63 @@ input, textarea { font-family: inherit; }
   font-weight: 600;
   color: var(--text);
 }
+
+/* ─── Backup view ────────────────────────────────────────────────────────────── */
+.backup-view-header-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.backup-view-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.backup-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 540px;
+}
+
+.backup-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: var(--shadow-sm);
+}
+
+.backup-card h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.backup-card p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+.backup-card code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.85em;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 4px;
+}
+
+.restore-file-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}

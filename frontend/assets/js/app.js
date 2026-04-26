@@ -6,6 +6,16 @@ import { openHashtagManager, closeHashtagManager } from './hashtags.js';
 import { loadAttachmentsView, onAttachmentDeleted } from './attachments-view.js';
 import { loadTrash, initTrash } from './trash.js';
 import { loadSharedNotes } from './shared.js';
+import { initBackup } from './backup.js';
+
+// Open all markdown links in a new tab
+marked.use({
+  renderer: {
+    link({ href, title, text }) {
+      return `<a href="${href}"${title ? ` title="${title}"` : ''} target="_blank" rel="noopener noreferrer">${text}</a>`;
+    },
+  },
+});
 
 // Register SW as early as possible so update checks happen on every launch,
 // including when opened from a home-screen icon (PWA standalone mode).
@@ -47,6 +57,7 @@ document.addEventListener('note:tag-click', e => {
 async function initApp() {
   initEditor();
   initTrash();
+  initBackup();
   await loadHashtags(); // load tags first so colors are available when notes render
   loadNotes();
   bindUI();
@@ -147,6 +158,11 @@ function bindUI() {
     showTrashView();
   });
 
+  document.getElementById('btn-backup')?.addEventListener('click', () => {
+    setActiveNav(document.getElementById('btn-backup'));
+    showBackupView();
+  });
+
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       const modal = document.getElementById('modal-confirm');
@@ -187,6 +203,7 @@ function showNotesView() {
   document.getElementById('attachments-view').hidden = true;
   document.getElementById('shared-view').hidden = true;
   document.getElementById('trash-view').hidden = true;
+  document.getElementById('backup-view').hidden = true;
 }
 
 function showAttachmentsView() {
@@ -195,6 +212,7 @@ function showAttachmentsView() {
   document.getElementById('attachments-view').hidden = false;
   document.getElementById('shared-view').hidden = true;
   document.getElementById('trash-view').hidden = true;
+  document.getElementById('backup-view').hidden = true;
   loadAttachmentsView();
 }
 
@@ -204,6 +222,7 @@ function showSharedView() {
   document.getElementById('attachments-view').hidden = true;
   document.getElementById('shared-view').hidden = false;
   document.getElementById('trash-view').hidden = true;
+  document.getElementById('backup-view').hidden = true;
   loadSharedNotes();
 }
 
@@ -213,5 +232,15 @@ function showTrashView() {
   document.getElementById('attachments-view').hidden = true;
   document.getElementById('shared-view').hidden = true;
   document.getElementById('trash-view').hidden = false;
+  document.getElementById('backup-view').hidden = true;
   loadTrash();
+}
+
+function showBackupView() {
+  document.getElementById('editor-box').hidden = true;
+  document.getElementById('notes-feed').hidden = true;
+  document.getElementById('attachments-view').hidden = true;
+  document.getElementById('shared-view').hidden = true;
+  document.getElementById('trash-view').hidden = true;
+  document.getElementById('backup-view').hidden = false;
 }

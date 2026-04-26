@@ -152,6 +152,7 @@ func main() {
 	hashtagHandler := handlers.NewHashtagHandler(database)
 	attachmentHandler := handlers.NewAttachmentHandler(database)
 	publicHandler := handlers.NewPublicHandler(database)
+	backupHandler := handlers.NewBackupHandler(database, dbPath)
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
@@ -204,6 +205,8 @@ func main() {
 		r.Get("/attachments", attachmentHandler.ListAll)
 		r.Get("/trash", noteHandler.ListTrash)
 		r.Delete("/trash", noteHandler.EmptyTrash)
+		r.Get("/backup", backupHandler.Download)
+		r.Post("/restore", backupHandler.Restore)
 		r.Route("/hashtags", func(r chi.Router) {
 			r.Get("/", hashtagHandler.List)
 			r.Put("/{name}", hashtagHandler.Rename)

@@ -38,6 +38,9 @@
         <button class="nav-item" id="btn-trash">
           <span class="nav-icon">🗑️</span><span>Lixeira</span>
         </button>
+        <button class="nav-item" id="btn-backup">
+          <span class="nav-icon">💾</span><span>Backup & Restore</span>
+        </button>
       </nav>
       <div class="sidebar-section">
         <div class="sidebar-section-header">
@@ -135,6 +138,28 @@
             <p>A lixeira está vazia.</p>
           </div>
         </div>
+        <div id="backup-view" hidden>
+          <div class="backup-view-header-row">
+            <h2 class="backup-view-title">Backup & Restore</h2>
+          </div>
+          <div class="backup-cards">
+            <div class="backup-card">
+              <h3>Backup do banco de dados</h3>
+              <p>Baixe uma cópia completa do banco de dados SQLite. O arquivo pode ser usado para restaurar os dados posteriormente.</p>
+              <button id="btn-download-backup" class="btn-primary">⬇ Baixar backup</button>
+            </div>
+            <div class="backup-card">
+              <h3>Restaurar backup</h3>
+              <p>Restaure o banco de dados a partir de um arquivo de backup <code>.sqlite</code>. <strong>Todos os dados atuais serão substituídos.</strong></p>
+              <div class="restore-file-row">
+                <label id="restore-file-label" class="btn-attach" for="restore-file-input">📂 Selecionar arquivo .sqlite</label>
+                <input type="file" id="restore-file-input" accept=".sqlite,application/octet-stream" hidden>
+                <button id="btn-restore" class="btn-danger-sm" hidden>Restaurar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         </div><!-- /#content-col -->
       </main>
     </div>
