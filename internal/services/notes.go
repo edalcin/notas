@@ -6,7 +6,9 @@ import (
 	"unicode/utf8"
 )
 
-var hashtagRegex = regexp.MustCompile(`#([a-zA-Z0-9_\x{00C0}-\x{017E}]+)`)
+// (?m) multiline: ^ matches start of each line.
+// (?:^|\s) ensures # is preceded by whitespace or line start, not by URL path chars.
+var hashtagRegex = regexp.MustCompile(`(?m)(?:^|\s)#([a-zA-Z0-9_\x{00C0}-\x{017E}]+)`)
 
 // ExtractHashtags returns deduplicated lowercase hashtag names from content.
 func ExtractHashtags(content string) []string {
