@@ -6,10 +6,69 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"net"
 	"net/http"
 	"strings"
+	"sync"
 	"time"
 )
+
+// ─── Login rate limiter ────────────────────────────────────────────────────────
+
+const (
+	loginMaxAttempts   = 5
+	loginBlockDuration = 15 * time.Minute
+)
+
+type loginState struct {
+	failCount    int
+	blockedUntil time.Time
+}
+
+type loginRateLimiter struct {
+	mu       sync.Mutex
+	attempts map[string]*loginState
+}
+
+var authLimiter = &loginRateLimiter{attempts: make(map[string]*loginState)}
+
+func (l *loginRateLimiter) isBlocked(ip string) bool {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	s, ok := l.attempts[ip]
+	if !ok {
+		return false
+	}
+	if time.Now().After(s.blockedUntil) {
+		delete(l.attempts, ip)
+		return false
+	}
+	return true
+}
+
+func (l *loginRateLimiter) recordFailure(ip string) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	s := l.attempts[ip]
+	if s == nil {
+		s = &loginState{}
+		l.attempts[ip] = s
+	}
+	if time.Now().After(s.blockedUntil) {
+		s.failCount = 0
+		s.blockedUntil = time.Time{}
+	}
+	s.failCount++
+	if s.failCount >= loginMaxAttempts {
+		s.blockedUntil = time.Now().Add(loginBlockDuration)
+	}
+}
+
+func (l *loginRateLimiter) recordSuccess(ip string) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	delete(l.attempts, ip)
+}
 
 const sessionCookieName = "notas_session"
 const sessionMaxAge = 30 * 24 * 60 * 60 // 30 days in seconds
@@ -64,9 +123,17 @@ func PINMiddleware(pin, secret string, secureCookie bool) func(http.Handler) htt
 }
 
 // PINLogin handles POST /api/auth/login.
-func PINLogin(pin, secret string, secureCookie bool) http.HandlerFunc {
+func PINLogin(pin, secret string, secureCookie bool, trustedProxies []*net.IPNet) http.HandlerFunc {
 	expected := tokenForPIN(pin, secret)
 	return func(w http.ResponseWriter, r *http.Request) {
+		ip := clientIP(r, trustedProxies)
+		if authLimiter.isBlocked(ip) {
+			w.Header().Set("Content-Type", "application/json")
+			w.Header().Set("Retry-After", "900")
+			http.Error(w, `{"error":"too many attempts, try again later"}`, http.StatusTooManyRequests)
+			return
+		}
+
 		var body struct {
 			PIN string `json:"pin"`
 		}
@@ -76,10 +143,12 @@ func PINLogin(pin, secret string, secureCookie bool) http.HandlerFunc {
 			return
 		}
 		if body.PIN != pin {
+			authLimiter.recordFailure(ip)
 			w.Header().Set("Content-Type", "application/json")
 			http.Error(w, `{"error":"invalid pin"}`, http.StatusUnauthorized)
 			return
 		}
+		authLimiter.recordSuccess(ip)
 		http.SetCookie(w, &http.Cookie{
 			Name:     sessionCookieName,
 			Value:    expected,

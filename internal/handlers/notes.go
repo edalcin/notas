@@ -20,13 +20,15 @@ type NoteHandler struct {
 	db       *db.DB
 	pkdURL   string
 	pkdToken string
+	baseURL  string
 }
 
-func NewNoteHandler(database *db.DB, pkdURL, pkdToken string) *NoteHandler {
+func NewNoteHandler(database *db.DB, pkdURL, pkdToken, baseURL string) *NoteHandler {
 	return &NoteHandler{
 		db:       database,
 		pkdURL:   strings.TrimSpace(pkdURL),
 		pkdToken: strings.TrimSpace(pkdToken),
+		baseURL:  strings.TrimRight(strings.TrimSpace(baseURL), "/"),
 	}
 }
 
@@ -305,11 +307,16 @@ func (h *NoteHandler) Share(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	scheme := "http"
-	if fwd := r.Header.Get("X-Forwarded-Proto"); fwd != "" {
-		scheme = fwd
+	var url string
+	if h.baseURL != "" {
+		url = fmt.Sprintf("%s/s/%s", h.baseURL, token)
+	} else {
+		scheme := "http"
+		if r.TLS != nil {
+			scheme = "https"
+		}
+		url = fmt.Sprintf("%s://%s/s/%s", scheme, r.Host, token)
 	}
-	url := fmt.Sprintf("%s://%s/s/%s", scheme, r.Host, token)
 
 	jsonResponse(w, http.StatusOK, map[string]interface{}{
 		"token":  token,

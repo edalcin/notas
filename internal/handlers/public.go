@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
+	"net"
 	"net/http"
 	"strings"
 	"sync"
@@ -13,6 +14,34 @@ import (
 
 	"github.com/edalcin/notes/internal/db"
 )
+
+// ParseTrustedProxies parses a comma-separated list of IPs/CIDRs into []*net.IPNet.
+// Plain IPs are converted to /32 (IPv4) or /128 (IPv6).
+func ParseTrustedProxies(s string) []*net.IPNet {
+	var nets []*net.IPNet
+	for _, part := range strings.Split(s, ",") {
+		part = strings.TrimSpace(part)
+		if part == "" {
+			continue
+		}
+		if !strings.Contains(part, "/") {
+			ip := net.ParseIP(part)
+			if ip == nil {
+				continue
+			}
+			if ip.To4() != nil {
+				part += "/32"
+			} else {
+				part += "/128"
+			}
+		}
+		_, cidr, err := net.ParseCIDR(part)
+		if err == nil {
+			nets = append(nets, cidr)
+		}
+	}
+	return nets
+}
 
 // ─── Rate limiter ─────────────────────────────────────────────────────────────
 
@@ -44,16 +73,28 @@ func (rl *rateLimiter) allow(ip string) bool {
 	return rl.counter[ip] <= rateLimit
 }
 
-// clientIP extracts the real client IP, respecting X-Forwarded-For when set.
-func clientIP(r *http.Request) string {
-	if fwd := r.Header.Get("X-Forwarded-For"); fwd != "" {
-		parts := strings.SplitN(fwd, ",", 2)
-		return strings.TrimSpace(parts[0])
-	}
-	// r.RemoteAddr is "host:port"; strip the port.
+// clientIP returns the real client IP. X-Forwarded-For is only trusted when
+// the TCP-level remote address matches a configured trusted proxy CIDR.
+func clientIP(r *http.Request, trustedProxies []*net.IPNet) string {
+	// Strip port from r.RemoteAddr; handle IPv6 brackets ([::1]:port).
 	host := r.RemoteAddr
 	if i := strings.LastIndex(host, ":"); i >= 0 {
 		host = host[:i]
+	}
+	host = strings.Trim(host, "[]")
+
+	if len(trustedProxies) > 0 {
+		remoteIP := net.ParseIP(host)
+		if remoteIP != nil {
+			for _, cidr := range trustedProxies {
+				if cidr.Contains(remoteIP) {
+					if fwd := r.Header.Get("X-Forwarded-For"); fwd != "" {
+						return strings.TrimSpace(strings.SplitN(fwd, ",", 2)[0])
+					}
+					break
+				}
+			}
+		}
 	}
 	return host
 }
@@ -61,11 +102,12 @@ func clientIP(r *http.Request) string {
 // ─── Public note handler ──────────────────────────────────────────────────────
 
 type PublicHandler struct {
-	db *db.DB
+	db             *db.DB
+	trustedProxies []*net.IPNet
 }
 
-func NewPublicHandler(database *db.DB) *PublicHandler {
-	return &PublicHandler{db: database}
+func NewPublicHandler(database *db.DB, trustedProxies []*net.IPNet) *PublicHandler {
+	return &PublicHandler{db: database, trustedProxies: trustedProxies}
 }
 
 var publicPageTmpl = template.Must(template.New("public").Parse(`<!DOCTYPE html>
@@ -176,7 +218,7 @@ var publicPageTmpl = template.Must(template.New("public").Parse(`<!DOCTYPE html>
 </html>`))
 
 func (h *PublicHandler) ServePublicNote(w http.ResponseWriter, r *http.Request) {
-	ip := clientIP(r)
+	ip := clientIP(r, h.trustedProxies)
 	if !publicRateLimiter.allow(ip) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		w.WriteHeader(http.StatusTooManyRequests)

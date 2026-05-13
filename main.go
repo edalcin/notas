@@ -118,6 +118,9 @@ func main() {
 	baseURL := os.Getenv("BASE_URL")
 	secureCookie := strings.HasPrefix(baseURL, "https://")
 
+	// Parse trusted reverse-proxy CIDRs for safe X-Forwarded-For handling.
+	trustedProxies := handlers.ParseTrustedProxies(os.Getenv("TRUSTED_PROXIES"))
+
 	database, err := db.Open(dbPath)
 	if err != nil {
 		log.Fatalf("open database: %v", err)
@@ -148,10 +151,10 @@ func main() {
 	pkdURL := os.Getenv("PKD_URL")
 	pkdToken := os.Getenv("PKD_TOKEN")
 
-	noteHandler := handlers.NewNoteHandler(database, pkdURL, pkdToken)
+	noteHandler := handlers.NewNoteHandler(database, pkdURL, pkdToken, baseURL)
 	hashtagHandler := handlers.NewHashtagHandler(database)
 	attachmentHandler := handlers.NewAttachmentHandler(database)
-	publicHandler := handlers.NewPublicHandler(database)
+	publicHandler := handlers.NewPublicHandler(database, trustedProxies)
 	backupHandler := handlers.NewBackupHandler(database, dbPath)
 
 	r := chi.NewRouter()
@@ -179,7 +182,7 @@ func main() {
 	r.Use(handlers.PINMiddleware(appPIN, sessionSecret, secureCookie))
 
 	r.Get("/health", handlers.Health(database))
-	r.Post("/api/auth/login", handlers.PINLogin(appPIN, sessionSecret, secureCookie))
+	r.Post("/api/auth/login", handlers.PINLogin(appPIN, sessionSecret, secureCookie, trustedProxies))
 	r.Get("/api/auth/logout", handlers.PINLogout())
 
 	r.Route("/api", func(r chi.Router) {
