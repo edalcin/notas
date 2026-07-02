@@ -1352,6 +1352,31 @@ input, textarea { font-family: inherit; }
   }
 }
 
+/* ─── Responsive: wide desktop — two-column notes feed ──────────────────────── */
+@media (min-width: 1100px) {
+  #content-col {
+    max-width: 1360px;
+  }
+
+  /* Editor stays a readable single column; the feed below spreads out */
+  #editor-box {
+    max-width: 660px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #notes-list {
+    display: block;
+    columns: 2;
+    column-gap: 20px;
+  }
+
+  #notes-list .note-card {
+    break-inside: avoid;
+    margin-bottom: 20px;
+  }
+}
+
 /* ─── Responsive: mobile ────────────────────────────────────────────────────── */
 @media (max-width: 767px) {
   #top-bar {
