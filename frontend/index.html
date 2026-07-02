@@ -38,6 +38,9 @@
         <button class="nav-item" id="btn-trash">
           <span class="nav-icon">🗑️</span><span>Lixeira</span>
         </button>
+        <button class="nav-item" id="btn-archive">
+          <span class="nav-icon">🗄️</span><span>Arquivadas</span>
+        </button>
         <button class="nav-item" id="btn-backup">
           <span class="nav-icon">💾</span><span>Backup & Restore</span>
         </button>
@@ -136,6 +139,15 @@
           <div id="trash-list" role="list"></div>
           <div id="trash-empty" class="empty-state" hidden>
             <p>A lixeira está vazia.</p>
+          </div>
+        </div>
+        <div id="archive-view" hidden>
+          <div class="archive-view-header-row">
+            <h2 class="archive-view-title">Arquivadas</h2>
+          </div>
+          <div id="archive-list" role="list"></div>
+          <div id="archive-empty" class="empty-state" hidden>
+            <p>Nenhuma nota arquivada.</p>
           </div>
         </div>
         <div id="backup-view" hidden>

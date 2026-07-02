@@ -1457,6 +1457,20 @@ input, textarea { font-family: inherit; }
   color: var(--text);
 }
 
+/* ─── Archive view ───────────────────────────────────────────────────────────── */
+.archive-view-header-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.archive-view-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+
 /* ─── Backup view ────────────────────────────────────────────────────────────── */
 .backup-view-header-row {
   display: flex;

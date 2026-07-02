@@ -47,6 +47,18 @@ export async function trashNote(id) {
   });
 }
 
+export async function archiveNote(id) {
+  try {
+    const res = await fetch(`/api/notes/${id}/archive`, { method: 'PUT' });
+    if (!res.ok && res.status !== 404) throw new Error('Archive failed');
+    document.dispatchEvent(new CustomEvent('note:archived'));
+    return true;
+  } catch (err) {
+    console.error('archiveNote error:', err);
+    return false;
+  }
+}
+
 // ─── Pagination ───────────────────────────────────────────────────────────────
 
 async function fetchPage(gen) {
@@ -148,6 +160,11 @@ function bindCardEvents(card) {
     await trashNote(Number(e.currentTarget.dataset.id));
   });
 
+  card.querySelector('.btn-archive')?.addEventListener('click', async e => {
+    e.stopPropagation();
+    await archiveNote(Number(e.currentTarget.dataset.id));
+  });
+
   card.querySelector('.btn-share')?.addEventListener('click', async e => {
     e.stopPropagation();
     await openShareModal(Number(e.currentTarget.dataset.id));
@@ -213,6 +230,7 @@ function noteCardHTML(note) {
         <button class="tb-btn btn-pin" data-id="${note.id}" data-pinned="${note.pinned}" title="${note.pinned ? 'Desafixar' : 'Fixar'}">${note.pinned ? '📌' : '📍'}</button>
         <button class="tb-btn btn-share${note.shared ? ' btn-share--active' : ''}" data-id="${note.id}" data-shared="${note.shared}" title="${note.shared ? 'Link compartilhado' : 'Compartilhar'}">🔗</button>
         <button class="tb-btn btn-pkd" data-id="${note.id}" title="Enviar para PKD">📤</button>
+        <button class="tb-btn btn-archive" data-id="${note.id}" title="Arquivar">🗄️</button>
         <button class="tb-btn btn-trash" data-id="${note.id}" title="Mover para lixeira">🗑️</button>
       </div>
     </div>

@@ -19,7 +19,7 @@ SELECT n.id, n.content, n.pinned, n.created_at, n.updated_at,
 FROM notes n
 LEFT JOIN note_hashtags nh ON n.id = nh.note_id
 LEFT JOIN hashtags h ON nh.hashtag_id = h.id
-WHERE n.deleted_at IS NULL%s
+WHERE n.deleted_at IS NULL AND n.archived_at IS NULL%s
 GROUP BY n.id
 ORDER BY n.pinned DESC, n.created_at DESC
 LIMIT ? OFFSET ?`
@@ -44,7 +44,7 @@ FROM notes n
 LEFT JOIN note_hashtags nh ON n.id = nh.note_id
 LEFT JOIN hashtags h ON nh.hashtag_id = h.id
 WHERE n.id IN (SELECT rowid FROM notes_fts WHERE notes_fts MATCH ?)
-AND n.deleted_at IS NULL
+AND n.deleted_at IS NULL AND n.archived_at IS NULL
 GROUP BY n.id
 ORDER BY n.pinned DESC, n.created_at DESC
 LIMIT ? OFFSET ?`
@@ -256,6 +256,36 @@ func (d *DB) RestoreNote(id int64) error {
 	return nil
 }
 
+func (d *DB) ArchiveNote(id int64) error {
+	result, err := d.Exec(
+		"UPDATE notes SET archived_at = CURRENT_TIMESTAMP WHERE id = ? AND archived_at IS NULL AND deleted_at IS NULL",
+		id,
+	)
+	if err != nil {
+		return err
+	}
+	n, _ := result.RowsAffected()
+	if n == 0 {
+		return sql.ErrNoRows
+	}
+	return nil
+}
+
+func (d *DB) UnarchiveNote(id int64) error {
+	result, err := d.Exec(
+		"UPDATE notes SET archived_at = NULL WHERE id = ? AND archived_at IS NOT NULL",
+		id,
+	)
+	if err != nil {
+		return err
+	}
+	n, _ := result.RowsAffected()
+	if n == 0 {
+		return sql.ErrNoRows
+	}
+	return nil
+}
+
 func (d *DB) ListTrashedNotes(limit, offset int) ([]models.Note, int, error) {
 	q := `
 SELECT n.id, n.content, n.pinned, n.created_at, n.updated_at,
@@ -293,6 +323,52 @@ func scanTrashedNotes(rows *sql.Rows) ([]models.Note, int, error) {
 		if deletedAt.Valid {
 			t := deletedAt.Time
 			n.DeletedAt = &t
+		}
+		notes = append(notes, n)
+	}
+	if notes == nil {
+		notes = []models.Note{}
+	}
+	return notes, len(notes), nil
+}
+
+func (d *DB) ListArchivedNotes(limit, offset int) ([]models.Note, int, error) {
+	q := `
+SELECT n.id, n.content, n.pinned, n.created_at, n.updated_at,
+       GROUP_CONCAT(h.name, ',') as hashtag_names,
+       n.archived_at
+FROM notes n
+LEFT JOIN note_hashtags nh ON n.id = nh.note_id
+LEFT JOIN hashtags h ON nh.hashtag_id = h.id
+WHERE n.archived_at IS NOT NULL AND n.deleted_at IS NULL
+GROUP BY n.id
+ORDER BY n.archived_at DESC
+LIMIT ? OFFSET ?`
+	rows, err := d.Query(q, limit, offset)
+	if err != nil {
+		return nil, 0, err
+	}
+	defer rows.Close()
+	return scanArchivedNotes(rows)
+}
+
+func scanArchivedNotes(rows *sql.Rows) ([]models.Note, int, error) {
+	var notes []models.Note
+	for rows.Next() {
+		var n models.Note
+		var pinnedInt int
+		var hashtagNames sql.NullString
+		var archivedAt sql.NullTime
+		if err := rows.Scan(&n.ID, &n.Content, &pinnedInt, &n.CreatedAt, &n.UpdatedAt, &hashtagNames, &archivedAt); err != nil {
+			return nil, 0, err
+		}
+		n.Pinned = pinnedInt == 1
+		n.Preview = services.GeneratePreview(n.Content, 100)
+		n.Hashtags = parseHashtags(hashtagNames)
+		n.Attachments = []models.Attachment{}
+		if archivedAt.Valid {
+			t := archivedAt.Time
+			n.ArchivedAt = &t
 		}
 		notes = append(notes, n)
 	}

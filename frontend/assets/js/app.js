@@ -5,6 +5,7 @@ import { initEditor, loadNoteForEdit } from './editor.js';
 import { openHashtagManager, closeHashtagManager } from './hashtags.js';
 import { loadAttachmentsView, onAttachmentDeleted } from './attachments-view.js';
 import { loadTrash, initTrash } from './trash.js';
+import { loadArchive } from './archive.js';
 import { loadSharedNotes } from './shared.js';
 import { initBackup } from './backup.js';
 
@@ -40,6 +41,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Cross-module events — safe to register early; they only fire from user actions inside the app
 document.addEventListener('note:saved', () => { loadNotes(); loadHashtags(); });
 document.addEventListener('note:deleted', () => { loadNotes(); loadHashtags(); });
+document.addEventListener('note:archived', () => { loadNotes(); loadHashtags(); });
+document.addEventListener('note:unarchived', () => { loadNotes(); loadHashtags(); });
 document.addEventListener('note:edit', e => loadNoteForEdit(e.detail.id));
 document.addEventListener('note:tag-click', e => {
   import('./hashtags.js').then(m => m.setActiveHashtag(e.detail.tag));
@@ -149,6 +152,11 @@ function bindUI() {
     showTrashView();
   });
 
+  document.getElementById('btn-archive')?.addEventListener('click', () => {
+    setActiveNav(document.getElementById('btn-archive'));
+    showArchiveView();
+  });
+
   document.getElementById('btn-backup')?.addEventListener('click', () => {
     setActiveNav(document.getElementById('btn-backup'));
     showBackupView();
@@ -205,6 +213,7 @@ function showNotesView() {
   document.getElementById('attachments-view').hidden = true;
   document.getElementById('shared-view').hidden = true;
   document.getElementById('trash-view').hidden = true;
+  document.getElementById('archive-view').hidden = true;
   document.getElementById('backup-view').hidden = true;
 }
 
@@ -214,6 +223,7 @@ function showAttachmentsView() {
   document.getElementById('attachments-view').hidden = false;
   document.getElementById('shared-view').hidden = true;
   document.getElementById('trash-view').hidden = true;
+  document.getElementById('archive-view').hidden = true;
   document.getElementById('backup-view').hidden = true;
   loadAttachmentsView();
 }
@@ -224,6 +234,7 @@ function showSharedView() {
   document.getElementById('attachments-view').hidden = true;
   document.getElementById('shared-view').hidden = false;
   document.getElementById('trash-view').hidden = true;
+  document.getElementById('archive-view').hidden = true;
   document.getElementById('backup-view').hidden = true;
   loadSharedNotes();
 }
@@ -234,8 +245,20 @@ function showTrashView() {
   document.getElementById('attachments-view').hidden = true;
   document.getElementById('shared-view').hidden = true;
   document.getElementById('trash-view').hidden = false;
+  document.getElementById('archive-view').hidden = true;
   document.getElementById('backup-view').hidden = true;
   loadTrash();
+}
+
+function showArchiveView() {
+  document.getElementById('editor-box').hidden = true;
+  document.getElementById('notes-feed').hidden = true;
+  document.getElementById('attachments-view').hidden = true;
+  document.getElementById('shared-view').hidden = true;
+  document.getElementById('trash-view').hidden = true;
+  document.getElementById('archive-view').hidden = false;
+  document.getElementById('backup-view').hidden = true;
+  loadArchive();
 }
 
 function showBackupView() {
@@ -244,5 +267,6 @@ function showBackupView() {
   document.getElementById('attachments-view').hidden = true;
   document.getElementById('shared-view').hidden = true;
   document.getElementById('trash-view').hidden = true;
+  document.getElementById('archive-view').hidden = true;
   document.getElementById('backup-view').hidden = false;
 }

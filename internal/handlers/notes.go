@@ -209,6 +209,44 @@ func (h *NoteHandler) Restore(w http.ResponseWriter, r *http.Request) {
 	jsonResponse(w, http.StatusOK, map[string]interface{}{"id": id, "trashed": false})
 }
 
+func (h *NoteHandler) Archive(w http.ResponseWriter, r *http.Request) {
+	id, err := parseID(r)
+	if err != nil {
+		jsonError(w, "invalid id", http.StatusBadRequest)
+		return
+	}
+
+	if err := h.db.ArchiveNote(id); err != nil {
+		if err == sql.ErrNoRows {
+			jsonError(w, "note not found", http.StatusNotFound)
+			return
+		}
+		jsonError(w, "database error", http.StatusInternalServerError)
+		return
+	}
+
+	jsonResponse(w, http.StatusOK, map[string]interface{}{"id": id, "archived": true})
+}
+
+func (h *NoteHandler) Unarchive(w http.ResponseWriter, r *http.Request) {
+	id, err := parseID(r)
+	if err != nil {
+		jsonError(w, "invalid id", http.StatusBadRequest)
+		return
+	}
+
+	if err := h.db.UnarchiveNote(id); err != nil {
+		if err == sql.ErrNoRows {
+			jsonError(w, "note not found", http.StatusNotFound)
+			return
+		}
+		jsonError(w, "database error", http.StatusInternalServerError)
+		return
+	}
+
+	jsonResponse(w, http.StatusOK, map[string]interface{}{"id": id, "archived": false})
+}
+
 func (h *NoteHandler) ListTrash(w http.ResponseWriter, r *http.Request) {
 	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
 	if limit <= 0 || limit > 200 {
@@ -217,6 +255,32 @@ func (h *NoteHandler) ListTrash(w http.ResponseWriter, r *http.Request) {
 	offset, _ := strconv.Atoi(r.URL.Query().Get("offset"))
 
 	notes, total, err := h.db.ListTrashedNotes(limit, offset)
+	if err != nil {
+		jsonError(w, "database error", http.StatusInternalServerError)
+		return
+	}
+
+	for i := range notes {
+		attachments, _ := h.db.GetAttachmentsByNote(notes[i].ID)
+		notes[i].Attachments = attachments
+	}
+
+	jsonResponse(w, http.StatusOK, models.NotesResponse{
+		Notes:  notes,
+		Total:  total,
+		Offset: offset,
+		Limit:  limit,
+	})
+}
+
+func (h *NoteHandler) ListArchive(w http.ResponseWriter, r *http.Request) {
+	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
+	if limit <= 0 || limit > 200 {
+		limit = 50
+	}
+	offset, _ := strconv.Atoi(r.URL.Query().Get("offset"))
+
+	notes, total, err := h.db.ListArchivedNotes(limit, offset)
 	if err != nil {
 		jsonError(w, "database error", http.StatusInternalServerError)
 		return

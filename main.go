@@ -198,6 +198,8 @@ func main() {
 				r.Put("/pin", noteHandler.TogglePin)
 				r.Put("/trash", noteHandler.Trash)
 				r.Put("/restore", noteHandler.Restore)
+				r.Put("/archive", noteHandler.Archive)
+				r.Put("/unarchive", noteHandler.Unarchive)
 				r.Post("/share", noteHandler.Share)
 				r.Delete("/share", noteHandler.Unshare)
 				r.Post("/export-to-pkd", noteHandler.ExportToPKD)
@@ -208,6 +210,7 @@ func main() {
 		r.Get("/attachments", attachmentHandler.ListAll)
 		r.Get("/trash", noteHandler.ListTrash)
 		r.Delete("/trash", noteHandler.EmptyTrash)
+		r.Get("/archive", noteHandler.ListArchive)
 		r.Get("/backup", backupHandler.Download)
 		r.Post("/restore", backupHandler.Restore)
 		r.Route("/hashtags", func(r chi.Router) {
