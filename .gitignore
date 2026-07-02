@@ -34,3 +34,6 @@ Thumbs.db
 
 # Local audit reports — never commit to remote
 audit/
+
+# graphify cache — regenerable, machine-local
+graphify-out/cache/
