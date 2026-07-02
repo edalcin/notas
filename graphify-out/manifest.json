@@ -245,8 +245,8 @@
     "semantic_hash": ""
   },
   "frontend/assets/js/archive.js": {
-    "mtime": 1783015752.1814265,
-    "ast_hash": "05348ed9403b74c908aa3278ceb70c06",
+    "mtime": 1783016336.3618126,
+    "ast_hash": "b60f39c1a3d39a116689f6908bee3086",
     "semantic_hash": ""
   },
   "internal/db/migrations/008_archive.sql": {

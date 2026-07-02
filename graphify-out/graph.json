@@ -79,14 +79,84 @@
   },
   "nodes": [
     {
+      "label": "archive.js",
+      "file_type": "code",
+      "source_file": "frontend/assets/js/archive.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "js_archive",
+      "community": 22,
+      "norm_label": "archive.js"
+    },
+    {
+      "label": "loadArchive()",
+      "file_type": "code",
+      "source_file": "frontend/assets/js/archive.js",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "js_archive_loadarchive",
+      "community": 22,
+      "norm_label": "loadarchive()"
+    },
+    {
+      "label": "bindArchiveCardEvents()",
+      "file_type": "code",
+      "source_file": "frontend/assets/js/archive.js",
+      "source_location": "L36",
+      "_origin": "ast",
+      "id": "js_archive_bindarchivecardevents",
+      "community": 22,
+      "norm_label": "bindarchivecardevents()"
+    },
+    {
+      "label": "archiveCardHTML()",
+      "file_type": "code",
+      "source_file": "frontend/assets/js/archive.js",
+      "source_location": "L51",
+      "_origin": "ast",
+      "id": "js_archive_archivecardhtml",
+      "community": 22,
+      "norm_label": "archivecardhtml()"
+    },
+    {
+      "label": "formatDate()",
+      "file_type": "code",
+      "source_file": "frontend/assets/js/archive.js",
+      "source_location": "L73",
+      "_origin": "ast",
+      "id": "js_archive_formatdate",
+      "community": 22,
+      "norm_label": "formatdate()"
+    },
+    {
+      "label": "formatArchivedAt()",
+      "file_type": "code",
+      "source_file": "frontend/assets/js/archive.js",
+      "source_location": "L79",
+      "_origin": "ast",
+      "id": "js_archive_formatarchivedat",
+      "community": 22,
+      "norm_label": "formatarchivedat()"
+    },
+    {
+      "label": "esc()",
+      "file_type": "code",
+      "source_file": "frontend/assets/js/archive.js",
+      "source_location": "L84",
+      "_origin": "ast",
+      "id": "js_archive_esc",
+      "community": 22,
+      "norm_label": "esc()"
+    },
+    {
       "label": "CLAUDE.md",
       "file_type": "document",
       "source_file": "CLAUDE.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "claude",
       "community": 41,
-      "norm_label": "claude.md"
+      "norm_label": "claude.md",
+      "id": "claude"
     },
     {
       "label": "notas Development Guidelines",
@@ -94,9 +164,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "claude_notas_development_guidelines",
       "community": 41,
-      "norm_label": "notas development guidelines"
+      "norm_label": "notas development guidelines",
+      "id": "claude_notas_development_guidelines"
     },
     {
       "label": "Project Rules",
@@ -104,9 +174,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "claude_project_rules",
       "community": 41,
-      "norm_label": "project rules"
+      "norm_label": "project rules",
+      "id": "claude_project_rules"
     },
     {
       "label": "Inspiration",
@@ -114,9 +184,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L10",
       "_origin": "ast",
-      "id": "claude_inspiration",
       "community": 41,
-      "norm_label": "inspiration"
+      "norm_label": "inspiration",
+      "id": "claude_inspiration"
     },
     {
       "label": "Active Technologies",
@@ -124,9 +194,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L14",
       "_origin": "ast",
-      "id": "claude_active_technologies",
       "community": 41,
-      "norm_label": "active technologies"
+      "norm_label": "active technologies",
+      "id": "claude_active_technologies"
     },
     {
       "label": "Project Structure",
@@ -134,9 +204,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L25",
       "_origin": "ast",
-      "id": "claude_project_structure",
       "community": 41,
-      "norm_label": "project structure"
+      "norm_label": "project structure",
+      "id": "claude_project_structure"
     },
     {
       "label": "Commands",
@@ -144,9 +214,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L33",
       "_origin": "ast",
-      "id": "claude_commands",
       "community": 41,
-      "norm_label": "commands"
+      "norm_label": "commands",
+      "id": "claude_commands"
     },
     {
       "label": "Add commands for Go 1.23 (backend), ES2022 Vanilla JS (frontend)",
@@ -154,9 +224,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L35",
       "_origin": "ast",
-      "id": "claude_add_commands_for_go_1_23_backend_es2022_vanilla_js_frontend",
       "community": 41,
-      "norm_label": "add commands for go 1.23 (backend), es2022 vanilla js (frontend)"
+      "norm_label": "add commands for go 1.23 (backend), es2022 vanilla js (frontend)",
+      "id": "claude_add_commands_for_go_1_23_backend_es2022_vanilla_js_frontend"
     },
     {
       "label": "Code Style",
@@ -164,9 +234,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L37",
       "_origin": "ast",
-      "id": "claude_code_style",
       "community": 41,
-      "norm_label": "code style"
+      "norm_label": "code style",
+      "id": "claude_code_style"
     },
     {
       "label": "Recent Changes",
@@ -174,9 +244,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L41",
       "_origin": "ast",
-      "id": "claude_recent_changes",
       "community": 41,
-      "norm_label": "recent changes"
+      "norm_label": "recent changes",
+      "id": "claude_recent_changes"
     },
     {
       "label": "graphify",
@@ -184,9 +254,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L50",
       "_origin": "ast",
-      "id": "claude_graphify",
       "community": 41,
-      "norm_label": "graphify"
+      "norm_label": "graphify",
+      "id": "claude_graphify"
     },
     {
       "label": "app.js",
@@ -214,7 +284,7 @@
       "source_file": "frontend/assets/js/app.js",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 5,
+      "community": 4,
       "norm_label": "handleincomingshare()",
       "id": "js_app_handleincomingshare"
     },
@@ -294,7 +364,7 @@
       "source_file": "frontend/assets/js/app.js",
       "source_location": "L242",
       "_origin": "ast",
-      "community": 0,
+      "community": 4,
       "norm_label": "showtrashview()",
       "id": "js_app_showtrashview"
     },
@@ -317,66 +387,6 @@
       "community": 4,
       "norm_label": "showbackupview()",
       "id": "js_app_showbackupview"
-    },
-    {
-      "label": "archive.js",
-      "file_type": "code",
-      "source_file": "frontend/assets/js/archive.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 22,
-      "norm_label": "archive.js",
-      "id": "js_archive"
-    },
-    {
-      "label": "loadArchive()",
-      "file_type": "code",
-      "source_file": "frontend/assets/js/archive.js",
-      "source_location": "L5",
-      "_origin": "ast",
-      "community": 22,
-      "norm_label": "loadarchive()",
-      "id": "js_archive_loadarchive"
-    },
-    {
-      "label": "bindArchiveCardEvents()",
-      "file_type": "code",
-      "source_file": "frontend/assets/js/archive.js",
-      "source_location": "L36",
-      "_origin": "ast",
-      "community": 22,
-      "norm_label": "bindarchivecardevents()",
-      "id": "js_archive_bindarchivecardevents"
-    },
-    {
-      "label": "archiveCardHTML()",
-      "file_type": "code",
-      "source_file": "frontend/assets/js/archive.js",
-      "source_location": "L51",
-      "_origin": "ast",
-      "community": 22,
-      "norm_label": "archivecardhtml()",
-      "id": "js_archive_archivecardhtml"
-    },
-    {
-      "label": "formatArchivedAt()",
-      "file_type": "code",
-      "source_file": "frontend/assets/js/archive.js",
-      "source_location": "L72",
-      "_origin": "ast",
-      "community": 22,
-      "norm_label": "formatarchivedat()",
-      "id": "js_archive_formatarchivedat"
-    },
-    {
-      "label": "esc()",
-      "file_type": "code",
-      "source_file": "frontend/assets/js/archive.js",
-      "source_location": "L78",
-      "_origin": "ast",
-      "community": 22,
-      "norm_label": "esc()",
-      "id": "js_archive_esc"
     },
     {
       "label": "notes.js",
@@ -414,7 +424,7 @@
       "source_file": "frontend/assets/js/notes.js",
       "source_location": "L14",
       "_origin": "ast",
-      "community": 4,
+      "community": 0,
       "norm_label": "loadnotes()",
       "id": "js_notes_loadnotes"
     },
@@ -2132,7 +2142,7 @@
       "source_file": "frontend/assets/js/hashtags.js",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 4,
+      "community": 0,
       "norm_label": "hashtags.js",
       "community_name": "Community 0",
       "id": "js_hashtags"
@@ -2143,7 +2153,7 @@
       "source_file": "frontend/assets/js/hashtags.js",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 4,
+      "community": 0,
       "norm_label": "palette",
       "community_name": "Community 0",
       "id": "js_hashtags_palette"
@@ -2154,7 +2164,7 @@
       "source_file": "frontend/assets/js/hashtags.js",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 4,
+      "community": 0,
       "norm_label": "loadhashtags()",
       "community_name": "Community 0",
       "id": "js_hashtags_loadhashtags"
@@ -2165,7 +2175,7 @@
       "source_file": "frontend/assets/js/hashtags.js",
       "source_location": "L34",
       "_origin": "ast",
-      "community": 4,
+      "community": 0,
       "norm_label": "renderhashtaglist()",
       "community_name": "Community 0",
       "id": "js_hashtags_renderhashtaglist"
@@ -2176,7 +2186,7 @@
       "source_file": "frontend/assets/js/hashtags.js",
       "source_location": "L55",
       "_origin": "ast",
-      "community": 4,
+      "community": 0,
       "norm_label": "setactivehashtag()",
       "community_name": "Community 0",
       "id": "js_hashtags_setactivehashtag"
@@ -2187,7 +2197,7 @@
       "source_file": "frontend/assets/js/hashtags.js",
       "source_location": "L63",
       "_origin": "ast",
-      "community": 4,
+      "community": 0,
       "norm_label": "clearfilter()",
       "community_name": "Community 0",
       "id": "js_hashtags_clearfilter"
@@ -2198,7 +2208,7 @@
       "source_file": "frontend/assets/js/hashtags.js",
       "source_location": "L73",
       "_origin": "ast",
-      "community": 4,
+      "community": 0,
       "norm_label": "openhashtagmanager()",
       "community_name": "Community 0",
       "id": "js_hashtags_openhashtagmanager"
@@ -2220,7 +2230,7 @@
       "source_file": "frontend/assets/js/hashtags.js",
       "source_location": "L85",
       "_origin": "ast",
-      "community": 4,
+      "community": 0,
       "norm_label": "renderhashtagmanagercontent()",
       "community_name": "Community 0",
       "id": "js_hashtags_renderhashtagmanagercontent"
@@ -2231,7 +2241,7 @@
       "source_file": "frontend/assets/js/hashtags.js",
       "source_location": "L106",
       "_origin": "ast",
-      "community": 4,
+      "community": 0,
       "norm_label": "tagrowhtml()",
       "community_name": "Community 0",
       "id": "js_hashtags_tagrowhtml"
@@ -2242,7 +2252,7 @@
       "source_file": "frontend/assets/js/hashtags.js",
       "source_location": "L124",
       "_origin": "ast",
-      "community": 4,
+      "community": 0,
       "norm_label": "bindtagmanagerevents()",
       "community_name": "Community 0",
       "id": "js_hashtags_bindtagmanagerevents"
@@ -2253,7 +2263,7 @@
       "source_file": "frontend/assets/js/hashtags.js",
       "source_location": "L136",
       "_origin": "ast",
-      "community": 4,
+      "community": 0,
       "norm_label": "showrenameform()",
       "community_name": "Community 0",
       "id": "js_hashtags_showrenameform"
@@ -2264,7 +2274,7 @@
       "source_file": "frontend/assets/js/hashtags.js",
       "source_location": "L168",
       "_origin": "ast",
-      "community": 4,
+      "community": 0,
       "norm_label": "togglecolorpicker()",
       "community_name": "Community 0",
       "id": "js_hashtags_togglecolorpicker"
@@ -2275,7 +2285,7 @@
       "source_file": "frontend/assets/js/hashtags.js",
       "source_location": "L205",
       "_origin": "ast",
-      "community": 4,
+      "community": 0,
       "norm_label": "closeallpickers()",
       "community_name": "Community 0",
       "id": "js_hashtags_closeallpickers"
@@ -2286,7 +2296,7 @@
       "source_file": "frontend/assets/js/hashtags.js",
       "source_location": "L211",
       "_origin": "ast",
-      "community": 4,
+      "community": 0,
       "norm_label": "renamehashtag()",
       "community_name": "Community 0",
       "id": "js_hashtags_renamehashtag"
@@ -2297,7 +2307,7 @@
       "source_file": "frontend/assets/js/hashtags.js",
       "source_location": "L237",
       "_origin": "ast",
-      "community": 4,
+      "community": 0,
       "norm_label": "updatehashtagcolor()",
       "community_name": "Community 0",
       "id": "js_hashtags_updatehashtagcolor"
@@ -2308,7 +2318,7 @@
       "source_file": "frontend/assets/js/hashtags.js",
       "source_location": "L254",
       "_origin": "ast",
-      "community": 4,
+      "community": 0,
       "norm_label": "deletehashtag()",
       "community_name": "Community 0",
       "id": "js_hashtags_deletehashtag"
@@ -2319,7 +2329,7 @@
       "source_file": "frontend/assets/js/hashtags.js",
       "source_location": "L270",
       "_origin": "ast",
-      "community": 4,
+      "community": 0,
       "norm_label": "esc()",
       "community_name": "Community 0",
       "id": "js_hashtags_esc"
@@ -2330,7 +2340,7 @@
       "source_file": "frontend/assets/js/modal.js",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 0,
+      "community": 4,
       "norm_label": "modal.js",
       "community_name": "Community 0",
       "id": "js_modal"
@@ -2341,7 +2351,7 @@
       "source_file": "frontend/assets/js/modal.js",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 0,
+      "community": 4,
       "norm_label": "showconfirmmodal()",
       "community_name": "Community 0",
       "id": "js_modal_showconfirmmodal"
@@ -2484,7 +2494,7 @@
       "source_file": "frontend/assets/js/tagStore.js",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 4,
+      "community": 0,
       "norm_label": "tagstore.js",
       "community_name": "Community 0",
       "id": "js_tagstore"
@@ -2495,7 +2505,7 @@
       "source_file": "frontend/assets/js/tagStore.js",
       "source_location": "L3",
       "_origin": "ast",
-      "community": 4,
+      "community": 0,
       "norm_label": "_tags",
       "community_name": "Community 0",
       "id": "js_tagstore_tags"
@@ -2506,7 +2516,7 @@
       "source_file": "frontend/assets/js/tagStore.js",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 4,
+      "community": 0,
       "norm_label": "settags()",
       "community_name": "Community 0",
       "id": "js_tagstore_settags"
@@ -2583,7 +2593,7 @@
       "source_file": "frontend/assets/js/trash.js",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 0,
+      "community": 4,
       "norm_label": "trash.js",
       "community_name": "Community 0",
       "id": "js_trash"
@@ -2594,7 +2604,7 @@
       "source_file": "frontend/assets/js/trash.js",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 0,
+      "community": 4,
       "norm_label": "loadtrash()",
       "community_name": "Community 0",
       "id": "js_trash_loadtrash"
@@ -2616,7 +2626,7 @@
       "source_file": "frontend/assets/js/trash.js",
       "source_location": "L45",
       "_origin": "ast",
-      "community": 0,
+      "community": 4,
       "norm_label": "emptytrash()",
       "community_name": "Community 0",
       "id": "js_trash_emptytrash"
@@ -2627,7 +2637,7 @@
       "source_file": "frontend/assets/js/trash.js",
       "source_location": "L57",
       "_origin": "ast",
-      "community": 0,
+      "community": 4,
       "norm_label": "bindtrashcardevents()",
       "community_name": "Community 0",
       "id": "js_trash_bindtrashcardevents"
@@ -2638,7 +2648,7 @@
       "source_file": "frontend/assets/js/trash.js",
       "source_location": "L72",
       "_origin": "ast",
-      "community": 0,
+      "community": 4,
       "norm_label": "trashcardhtml()",
       "community_name": "Community 0",
       "id": "js_trash_trashcardhtml"
@@ -2649,7 +2659,7 @@
       "source_file": "frontend/assets/js/trash.js",
       "source_location": "L93",
       "_origin": "ast",
-      "community": 0,
+      "community": 4,
       "norm_label": "formatdeletedat()",
       "community_name": "Community 0",
       "id": "js_trash_formatdeletedat"
@@ -2660,7 +2670,7 @@
       "source_file": "frontend/assets/js/trash.js",
       "source_location": "L99",
       "_origin": "ast",
-      "community": 0,
+      "community": 4,
       "norm_label": "esc()",
       "community_name": "Community 0",
       "id": "js_trash_esc"
@@ -3311,7 +3321,7 @@
       "source_file": "internal/handlers/attachments.go",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 3,
+      "community": 10,
       "norm_label": "attachments.go",
       "community_name": "Community 3",
       "id": "handlers_attachments"
@@ -3322,7 +3332,7 @@
       "source_file": "internal/handlers/attachments.go",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 3,
+      "community": 10,
       "norm_label": "attachmenthandler",
       "community_name": "Community 3",
       "id": "handlers_attachmenthandler"
@@ -3333,7 +3343,7 @@
       "source_file": "internal/handlers/attachments.go",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 3,
+      "community": 10,
       "norm_label": "db",
       "community_name": "Community 3",
       "id": "internal_handlers_attachments_go_db"
@@ -3344,7 +3354,7 @@
       "source_file": "internal/handlers/attachments.go",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 3,
+      "community": 10,
       "norm_label": "newattachmenthandler()",
       "community_name": "Community 3",
       "id": "handlers_attachments_newattachmenthandler"
@@ -3355,7 +3365,7 @@
       "source_file": "internal/handlers/attachments.go",
       "source_location": "L24",
       "_origin": "ast",
-      "community": 1,
+      "community": 10,
       "norm_label": ".upload()",
       "community_name": "Community 1",
       "id": "handlers_attachmenthandler_upload"
@@ -3366,7 +3376,7 @@
       "source_file": "internal/handlers/attachments.go",
       "source_location": "L24",
       "_origin": "ast",
-      "community": 1,
+      "community": 10,
       "norm_label": "responsewriter",
       "community_name": "Community 1",
       "id": "internal_handlers_attachments_go_responsewriter"
@@ -3377,7 +3387,7 @@
       "source_file": "internal/handlers/attachments.go",
       "source_location": "L24",
       "_origin": "ast",
-      "community": 1,
+      "community": 10,
       "norm_label": "request",
       "community_name": "Community 1",
       "id": "internal_handlers_attachments_go_request"
@@ -3388,7 +3398,7 @@
       "source_file": "internal/handlers/attachments.go",
       "source_location": "L88",
       "_origin": "ast",
-      "community": 1,
+      "community": 10,
       "norm_label": ".listall()",
       "community_name": "Community 1",
       "id": "handlers_attachmenthandler_listall"
@@ -3399,7 +3409,7 @@
       "source_file": "internal/handlers/attachments.go",
       "source_location": "L98",
       "_origin": "ast",
-      "community": 1,
+      "community": 10,
       "norm_label": ".delete()",
       "community_name": "Community 1",
       "id": "handlers_attachmenthandler_delete"
@@ -3410,7 +3420,7 @@
       "source_file": "internal/handlers/attachments.go",
       "source_location": "L122",
       "_origin": "ast",
-      "community": 3,
+      "community": 10,
       "norm_label": "servefile()",
       "community_name": "Community 3",
       "id": "handlers_attachments_servefile"
@@ -3421,7 +3431,7 @@
       "source_file": "internal/handlers/attachments.go",
       "source_location": "L122",
       "_origin": "ast",
-      "community": 3,
+      "community": 10,
       "norm_label": "handlerfunc",
       "community_name": "Community 3",
       "id": "internal_handlers_attachments_go_handlerfunc"
@@ -3817,7 +3827,7 @@
       "source_file": "internal/handlers/helpers.go",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 3,
+      "community": 10,
       "norm_label": "helpers.go",
       "community_name": "Community 1",
       "id": "handlers_helpers"
@@ -3828,7 +3838,7 @@
       "source_file": "internal/handlers/helpers.go",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 3,
+      "community": 10,
       "norm_label": "filespathkey",
       "community_name": "Community 1",
       "id": "handlers_filespathkey"
@@ -3839,7 +3849,7 @@
       "source_file": "internal/handlers/helpers.go",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 3,
+      "community": 10,
       "norm_label": "maxuploadkey",
       "community_name": "Community 1",
       "id": "handlers_maxuploadkey"
@@ -3850,7 +3860,7 @@
       "source_file": "internal/handlers/helpers.go",
       "source_location": "L15",
       "_origin": "ast",
-      "community": 3,
+      "community": 10,
       "norm_label": "filespathmiddleware()",
       "community_name": "Community 3",
       "id": "handlers_helpers_filespathmiddleware"
@@ -3861,7 +3871,7 @@
       "source_file": "internal/handlers/helpers.go",
       "source_location": "L15",
       "_origin": "ast",
-      "community": 3,
+      "community": 10,
       "norm_label": "handler",
       "community_name": "Community 3",
       "id": "internal_handlers_helpers_go_handler"
@@ -3872,7 +3882,7 @@
       "source_file": "internal/handlers/helpers.go",
       "source_location": "L25",
       "_origin": "ast",
-      "community": 3,
+      "community": 10,
       "norm_label": "maxuploadmiddleware()",
       "community_name": "Community 3",
       "id": "handlers_helpers_maxuploadmiddleware"
@@ -3883,7 +3893,7 @@
       "source_file": "internal/handlers/helpers.go",
       "source_location": "L34",
       "_origin": "ast",
-      "community": 1,
+      "community": 10,
       "norm_label": "getfilespath()",
       "community_name": "Community 1",
       "id": "handlers_helpers_getfilespath"
@@ -3894,7 +3904,7 @@
       "source_file": "internal/handlers/helpers.go",
       "source_location": "L34",
       "_origin": "ast",
-      "community": 1,
+      "community": 10,
       "norm_label": "request",
       "community_name": "Community 1",
       "id": "internal_handlers_helpers_go_request"
@@ -3905,7 +3915,7 @@
       "source_file": "internal/handlers/helpers.go",
       "source_location": "L41",
       "_origin": "ast",
-      "community": 1,
+      "community": 10,
       "norm_label": "getmaxupload()",
       "community_name": "Community 1",
       "id": "handlers_helpers_getmaxupload"
@@ -3960,7 +3970,7 @@
       "source_file": "internal/handlers/helpers.go",
       "source_location": "L67",
       "_origin": "ast",
-      "community": 3,
+      "community": 10,
       "norm_label": "health()",
       "community_name": "Community 1",
       "id": "handlers_helpers_health"
@@ -3971,7 +3981,7 @@
       "source_file": "internal/handlers/helpers.go",
       "source_location": "L67",
       "_origin": "ast",
-      "community": 3,
+      "community": 10,
       "norm_label": "handlerfunc",
       "community_name": "Community 3",
       "id": "internal_handlers_helpers_go_handlerfunc"
@@ -3982,7 +3992,7 @@
       "source_file": "internal/handlers/public.go",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 10,
+      "community": 3,
       "norm_label": "public.go",
       "community_name": "Community 10",
       "id": "handlers_public"
@@ -3993,7 +4003,7 @@
       "source_file": "internal/handlers/public.go",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 10,
+      "community": 3,
       "norm_label": "parsetrustedproxies()",
       "community_name": "Community 10",
       "id": "handlers_public_parsetrustedproxies"
@@ -4004,7 +4014,7 @@
       "source_file": "internal/handlers/public.go",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 10,
+      "community": 3,
       "norm_label": "ipnet",
       "community_name": "Community 10",
       "id": "internal_handlers_public_go_ipnet"
@@ -4015,7 +4025,7 @@
       "source_file": "internal/handlers/public.go",
       "source_location": "L50",
       "_origin": "ast",
-      "community": 10,
+      "community": 3,
       "norm_label": "ratelimiter",
       "community_name": "Community 10",
       "id": "handlers_ratelimiter"
@@ -4026,7 +4036,7 @@
       "source_file": "internal/handlers/public.go",
       "source_location": "L51",
       "_origin": "ast",
-      "community": 10,
+      "community": 3,
       "norm_label": "mutex",
       "community_name": "Community 10",
       "id": "internal_handlers_public_go_mutex"
@@ -4037,7 +4047,7 @@
       "source_file": "internal/handlers/public.go",
       "source_location": "L57",
       "_origin": "ast",
-      "community": 10,
+      "community": 3,
       "norm_label": "init()",
       "community_name": "Community 10",
       "id": "handlers_public_init"
@@ -4048,7 +4058,7 @@
       "source_file": "internal/handlers/public.go",
       "source_location": "L69",
       "_origin": "ast",
-      "community": 10,
+      "community": 3,
       "norm_label": ".allow()",
       "community_name": "Community 10",
       "id": "handlers_ratelimiter_allow"
@@ -4059,7 +4069,7 @@
       "source_file": "internal/handlers/public.go",
       "source_location": "L78",
       "_origin": "ast",
-      "community": 10,
+      "community": 3,
       "norm_label": "clientip()",
       "community_name": "Community 10",
       "id": "handlers_public_clientip"
@@ -4070,7 +4080,7 @@
       "source_file": "internal/handlers/public.go",
       "source_location": "L78",
       "_origin": "ast",
-      "community": 10,
+      "community": 3,
       "norm_label": "request",
       "community_name": "Community 10",
       "id": "internal_handlers_public_go_request"
@@ -4081,7 +4091,7 @@
       "source_file": "internal/handlers/public.go",
       "source_location": "L104",
       "_origin": "ast",
-      "community": 10,
+      "community": 3,
       "norm_label": "publichandler",
       "community_name": "Community 10",
       "id": "handlers_publichandler"
@@ -4092,7 +4102,7 @@
       "source_file": "internal/handlers/public.go",
       "source_location": "L105",
       "_origin": "ast",
-      "community": 10,
+      "community": 3,
       "norm_label": "db",
       "community_name": "Community 10",
       "id": "internal_handlers_public_go_db"
@@ -4103,7 +4113,7 @@
       "source_file": "internal/handlers/public.go",
       "source_location": "L109",
       "_origin": "ast",
-      "community": 10,
+      "community": 3,
       "norm_label": "newpublichandler()",
       "community_name": "Community 10",
       "id": "handlers_public_newpublichandler"
@@ -4114,7 +4124,7 @@
       "source_file": "internal/handlers/public.go",
       "source_location": "L220",
       "_origin": "ast",
-      "community": 10,
+      "community": 3,
       "norm_label": ".servepublicnote()",
       "community_name": "Community 10",
       "id": "handlers_publichandler_servepublicnote"
@@ -4125,7 +4135,7 @@
       "source_file": "internal/handlers/public.go",
       "source_location": "L220",
       "_origin": "ast",
-      "community": 10,
+      "community": 3,
       "norm_label": "responsewriter",
       "community_name": "Community 10",
       "id": "internal_handlers_public_go_responsewriter"
@@ -4257,7 +4267,7 @@
       "source_file": "internal/services/files.go",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 1,
+      "community": 10,
       "norm_label": "files.go",
       "community_name": "Community 1",
       "id": "services_files"
@@ -4268,7 +4278,7 @@
       "source_file": "internal/services/files.go",
       "source_location": "L24",
       "_origin": "ast",
-      "community": 1,
+      "community": 10,
       "norm_label": "savefile()",
       "community_name": "Community 1",
       "id": "services_files_savefile"
@@ -4279,7 +4289,7 @@
       "source_file": "internal/services/files.go",
       "source_location": "L24",
       "_origin": "ast",
-      "community": 1,
+      "community": 10,
       "norm_label": "fileheader",
       "community_name": "Community 1",
       "id": "fileheader"
@@ -4290,7 +4300,7 @@
       "source_file": "internal/services/files.go",
       "source_location": "L66",
       "_origin": "ast",
-      "community": 1,
+      "community": 10,
       "norm_label": "deletefile()",
       "community_name": "Community 1",
       "id": "services_files_deletefile"
@@ -4713,14 +4723,184 @@
   ],
   "links": [
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/assets/js/app.js",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "js_app",
+      "target": "js_archive"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/assets/js/archive.js",
+      "source_location": "L51",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "js_archive",
+      "target": "js_archive_archivecardhtml"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/assets/js/archive.js",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "js_archive",
+      "target": "js_archive_bindarchivecardevents"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/assets/js/archive.js",
+      "source_location": "L78",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "js_archive",
+      "target": "js_archive_esc"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/assets/js/archive.js",
+      "source_location": "L72",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "js_archive",
+      "target": "js_archive_formatarchivedat"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/assets/js/archive.js",
+      "source_location": "L73",
+      "weight": 1.0,
+      "source": "js_archive",
+      "target": "js_archive_formatdate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/assets/js/archive.js",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "js_archive",
+      "target": "js_archive_loadarchive"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/assets/js/archive.js",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "js_archive",
+      "target": "js_tagstore_gettagcolor"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/assets/js/app.js",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "js_app",
+      "target": "js_archive_loadarchive"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/assets/js/app.js",
+      "source_location": "L261",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "js_app_showarchiveview",
+      "target": "js_archive_loadarchive"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/assets/js/archive.js",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "js_archive_loadarchive",
+      "target": "js_archive_archivecardhtml"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/assets/js/archive.js",
+      "source_location": "L27",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "js_archive_loadarchive",
+      "target": "js_archive_bindarchivecardevents"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/assets/js/archive.js",
+      "source_location": "L58",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "js_archive_archivecardhtml",
+      "target": "js_archive_esc"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/assets/js/archive.js",
+      "source_location": "L57",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "js_archive_archivecardhtml",
+      "target": "js_archive_formatarchivedat"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/assets/js/archive.js",
+      "source_location": "L57",
+      "weight": 1.0,
+      "source": "js_archive_archivecardhtml",
+      "target": "js_archive_formatdate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/assets/js/archive.js",
+      "source_location": "L81",
+      "weight": 1.0,
+      "source": "js_archive_formatarchivedat",
+      "target": "js_archive_formatdate",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude",
-      "target": "claude_add_commands_for_go_1_23_backend_es2022_vanilla_js_frontend",
-      "confidence_score": 1.0
+      "target": "claude_add_commands_for_go_1_23_backend_es2022_vanilla_js_frontend"
     },
     {
       "relation": "contains",
@@ -4728,9 +4908,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude",
-      "target": "claude_notas_development_guidelines",
-      "confidence_score": 1.0
+      "target": "claude_notas_development_guidelines"
     },
     {
       "relation": "contains",
@@ -4738,9 +4918,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_notas_development_guidelines",
-      "target": "claude_active_technologies",
-      "confidence_score": 1.0
+      "target": "claude_active_technologies"
     },
     {
       "relation": "contains",
@@ -4748,9 +4928,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_notas_development_guidelines",
-      "target": "claude_commands",
-      "confidence_score": 1.0
+      "target": "claude_commands"
     },
     {
       "relation": "contains",
@@ -4758,9 +4938,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_notas_development_guidelines",
-      "target": "claude_inspiration",
-      "confidence_score": 1.0
+      "target": "claude_inspiration"
     },
     {
       "relation": "contains",
@@ -4768,9 +4948,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_notas_development_guidelines",
-      "target": "claude_project_rules",
-      "confidence_score": 1.0
+      "target": "claude_project_rules"
     },
     {
       "relation": "contains",
@@ -4778,9 +4958,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_notas_development_guidelines",
-      "target": "claude_project_structure",
-      "confidence_score": 1.0
+      "target": "claude_project_structure"
     },
     {
       "relation": "contains",
@@ -4788,9 +4968,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_add_commands_for_go_1_23_backend_es2022_vanilla_js_frontend",
-      "target": "claude_code_style",
-      "confidence_score": 1.0
+      "target": "claude_code_style"
     },
     {
       "relation": "contains",
@@ -4798,9 +4978,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L50",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_add_commands_for_go_1_23_backend_es2022_vanilla_js_frontend",
-      "target": "claude_graphify",
-      "confidence_score": 1.0
+      "target": "claude_graphify"
     },
     {
       "relation": "contains",
@@ -4808,9 +4988,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L41",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_add_commands_for_go_1_23_backend_es2022_vanilla_js_frontend",
-      "target": "claude_recent_changes",
-      "confidence_score": 1.0
+      "target": "claude_recent_changes"
     },
     {
       "relation": "contains",
@@ -4931,28 +5111,6 @@
       "confidence_score": 1.0,
       "source": "js_app",
       "target": "js_app_showtrashview"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/assets/js/app.js",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "js_app",
-      "target": "js_archive"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/assets/js/app.js",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "js_app",
-      "target": "js_archive_loadarchive"
     },
     {
       "relation": "imports_from",
@@ -5382,122 +5540,6 @@
       "confidence_score": 1.0,
       "source": "js_app_showtrashview",
       "target": "js_trash_loadtrash"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/assets/js/app.js",
-      "source_location": "L261",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "js_app_showarchiveview",
-      "target": "js_archive_loadarchive"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/assets/js/archive.js",
-      "source_location": "L51",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "js_archive",
-      "target": "js_archive_archivecardhtml"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/assets/js/archive.js",
-      "source_location": "L36",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "js_archive",
-      "target": "js_archive_bindarchivecardevents"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/assets/js/archive.js",
-      "source_location": "L78",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "js_archive",
-      "target": "js_archive_esc"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/assets/js/archive.js",
-      "source_location": "L72",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "js_archive",
-      "target": "js_archive_formatarchivedat"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/assets/js/archive.js",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "js_archive",
-      "target": "js_archive_loadarchive"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/assets/js/archive.js",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "js_archive",
-      "target": "js_tagstore_gettagcolor"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/assets/js/archive.js",
-      "source_location": "L25",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "js_archive_loadarchive",
-      "target": "js_archive_archivecardhtml"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/assets/js/archive.js",
-      "source_location": "L27",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "js_archive_loadarchive",
-      "target": "js_archive_bindarchivecardevents"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/assets/js/archive.js",
-      "source_location": "L58",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "js_archive_archivecardhtml",
-      "target": "js_archive_esc"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/assets/js/archive.js",
-      "source_location": "L57",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "js_archive_archivecardhtml",
-      "target": "js_archive_formatarchivedat"
     },
     {
       "relation": "imports_from",
@@ -13087,5 +13129,5 @@
       "confidence_score": 1.0
     }
   ],
-  "built_at_commit": "23da6b63fea569febc9c72954a21acb5da81bcea"
+  "built_at_commit": "6eb6a827aadd711407be4be42868c33745f4cb94"
 }

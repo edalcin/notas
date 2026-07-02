@@ -1,16 +1,16 @@
 # Graph Report - notas  (2026-07-02)
 
 ## Corpus Check
-- 100 files · ~72,292 words
+- 100 files · ~72,320 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 433 nodes · 790 edges · 42 communities (27 shown, 15 thin omitted)
+- 434 nodes · 793 edges · 42 communities (27 shown, 15 thin omitted)
 - Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 88 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `23da6b63`
+- Built from commit: `6eb6a827`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -72,10 +72,10 @@
   main.go → internal/handlers/notes.go
 - `main()` --calls--> `Open()`  [INFERRED]
   main.go → internal/db/db.go
-- `main()` --calls--> `NewSessionSecret()`  [INFERRED]
-  main.go → internal/handlers/auth.go
-- `main()` --calls--> `NewBackupHandler()`  [INFERRED]
-  main.go → internal/handlers/backup.go
+- `main()` --calls--> `NewAttachmentHandler()`  [INFERRED]
+  main.go → internal/handlers/attachments.go
+- `main()` --calls--> `ServeFile()`  [INFERRED]
+  main.go → internal/handlers/attachments.go
 
 ## Import Cycles
 - None detected.
@@ -91,11 +91,11 @@
 
 ### Community 0 - "Community 0"
 Cohesion: 0.08
-Nodes (30): showSharedView(), showTrashView(), showConfirmModal(), appendCards(), bindCardEvents(), currentFilter, disconnectObserver(), esc() (+22 more)
+Nodes (40): showSharedView(), bindTagManagerEvents(), clearFilter(), closeAllPickers(), deleteHashtag(), esc(), loadHashtags(), openHashtagManager() (+32 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.12
-Nodes (24): FileHeader, HashtagHandler, isValidHexColor(), NewHashtagHandler(), deleteFileFromPath(), getFilesPath(), getMaxUpload(), jsonError() (+16 more)
+Cohesion: 0.17
+Nodes (16): HashtagHandler, isValidHexColor(), NewHashtagHandler(), deleteFileFromPath(), jsonError(), jsonResponse(), NoteHandler, NewNoteHandler() (+8 more)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.09
@@ -103,15 +103,15 @@ Nodes (18): DB, generateShareToken(), parseHashtags(), scanArchivedNotes(), scan
 
 ### Community 3 - "Community 3"
 Cohesion: 0.08
-Nodes (33): FS, AttachmentHandler, NewAttachmentHandler(), ServeFile(), NewSessionSecret(), PINLogin(), PINLogout(), PINMiddleware() (+25 more)
+Nodes (31): FS, NewSessionSecret(), PINLogin(), PINLogout(), PINMiddleware(), tokenForPIN(), loginRateLimiter, loginState (+23 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.08
-Nodes (37): bindUI(), initApp(), showAttachmentsView(), deleteGlobalAttachment(), esc(), itemHTML(), loadAttachmentsView(), mimeIcon() (+29 more)
+Cohesion: 0.09
+Nodes (28): bindUI(), handleIncomingShare(), initApp(), showAttachmentsView(), showTrashView(), deleteGlobalAttachment(), esc(), itemHTML() (+20 more)
 
 ### Community 5 - "Community 5"
-Cohesion: 0.15
-Nodes (21): handleIncomingShare(), attachmentHTML(), deleteAttachment(), escapeHtml(), loadAttachments(), renderAttachments(), uploadAttachment(), acConfirm() (+13 more)
+Cohesion: 0.16
+Nodes (20): attachmentHTML(), deleteAttachment(), escapeHtml(), loadAttachments(), renderAttachments(), uploadAttachment(), acConfirm(), acMove() (+12 more)
 
 ### Community 6 - "Community 6"
 Cohesion: 0.09
@@ -130,8 +130,8 @@ Cohesion: 0.19
 Nodes (6): AttachmentListItem, extractNoteTitle(), parseHashtagList(), Attachment, DB, NullString
 
 ### Community 10 - "Community 10"
-Cohesion: 0.23
-Nodes (10): clientIP(), NewPublicHandler(), ParseTrustedProxies(), PublicHandler, rateLimiter, DB, IPNet, Mutex (+2 more)
+Cohesion: 0.12
+Nodes (20): FileHeader, AttachmentHandler, NewAttachmentHandler(), ServeFile(), filesPathKey, FilesPathMiddleware(), getFilesPath(), getMaxUpload() (+12 more)
 
 ### Community 11 - "Community 11"
 Cohesion: 0.40
@@ -170,8 +170,8 @@ Cohesion: 0.67
 Nodes (3): Tx, DeleteHashtag(), RenameHashtag()
 
 ### Community 22 - "Community 22"
-Cohesion: 0.48
-Nodes (6): showArchiveView(), archiveCardHTML(), bindArchiveCardEvents(), esc(), formatArchivedAt(), loadArchive()
+Cohesion: 0.46
+Nodes (7): showArchiveView(), archiveCardHTML(), bindArchiveCardEvents(), esc(), formatArchivedAt(), formatDate(), loadArchive()
 
 ### Community 41 - "Community 41"
 Cohesion: 0.18
@@ -187,10 +187,8 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `main()` connect `Community 3` to `Community 8`, `Community 1`, `Community 10`?**
   _High betweenness centrality (0.056) - this node is a cross-community bridge._
-- **Why does `jsonError()` connect `Community 1` to `Community 3`?**
+- **Why does `jsonError()` connect `Community 1` to `Community 10`?**
   _High betweenness centrality (0.015) - this node is a cross-community bridge._
-- **Why does `PINLogin()` connect `Community 3` to `Community 10`?**
-  _High betweenness centrality (0.013) - this node is a cross-community bridge._
 - **Are the 22 inferred relationships involving `jsonError()` (e.g. with `.Delete()` and `.ListAll()`) actually correct?**
   _`jsonError()` has 22 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 17 inferred relationships involving `main()` (e.g. with `Open()` and `NewAttachmentHandler()`) actually correct?**
@@ -199,3 +197,5 @@ _Questions this graph is uniquely positioned to answer:_
   _`jsonResponse()` has 16 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `Project Rules`, `Inspiration`, `Active Technologies` to the rest of the system?**
   _77 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `Community 0` be split into smaller, more focused modules?**
+  _Cohesion score 0.07686274509803921 - nodes in this community are weakly interconnected._
