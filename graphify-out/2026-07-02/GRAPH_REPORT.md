@@ -1,15 +1,16 @@
-# Graph Report - D:\git\notas  (2026-06-26)
+# Graph Report - notas  (2026-07-02)
 
 ## Corpus Check
-- cluster-only mode — file stats not available
+- 100 files · ~72,292 words
+- Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 415 nodes · 755 edges · 40 communities (25 shown, 15 thin omitted)
-- Extraction: 88% EXTRACTED · 12% INFERRED · 0% AMBIGUOUS · INFERRED: 89 edges (avg confidence: 0.8)
+- 423 nodes · 781 edges · 41 communities (26 shown, 15 thin omitted)
+- Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 88 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c3e806af`
+- Built from commit: `bf4bcdea`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -49,24 +50,25 @@
 - [[_COMMUNITY_Community 37|Community 37]]
 - [[_COMMUNITY_Community 38|Community 38]]
 - [[_COMMUNITY_Community 39|Community 39]]
+- [[_COMMUNITY_Community 40|Community 40]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `jsonError()` - 25 edges
-2. `jsonResponse()` - 20 edges
-3. `main()` - 20 edges
-4. `DB` - 19 edges
-5. `NoteHandler` - 17 edges
-6. `loadNotes()` - 15 edges
-7. `Request` - 15 edges
-8. `ResponseWriter` - 14 edges
-9. `Note` - 13 edges
-10. `parseID()` - 12 edges
+2. `DB` - 22 edges
+3. `NoteHandler` - 20 edges
+4. `main()` - 20 edges
+5. `jsonResponse()` - 20 edges
+6. `Request` - 18 edges
+7. `ResponseWriter` - 17 edges
+8. `loadNotes()` - 15 edges
+9. `Note` - 15 edges
+10. `parseID()` - 14 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Docker Compose Configuration` --references--> `Backend Entry Point`  [INFERRED]
   docker-compose.yml → backend/cmd/server/main.go
-- `API Contracts: Public Note Share Link` --references--> `internal/handlers/notes.go`  [INFERRED]
-  specs/003-public-share-link/contracts/share-api.md → internal/handlers/notes.go
+- `main()` --calls--> `NewNoteHandler()`  [INFERRED]
+  main.go → internal/handlers/notes.go
 - `main()` --calls--> `Open()`  [INFERRED]
   main.go → internal/db/db.go
 - `main()` --calls--> `NewSessionSecret()`  [INFERRED]
@@ -84,27 +86,27 @@
 - **Feature: Public Note Share Link** — specs_003_public_share_link_data_model, specs_003_public_share_link_plan, specs_003_public_share_link_quickstart, specs_003_public_share_link_research, specs_003_public_share_link_spec, specs_003_public_share_link_tasks, specs_003_public_share_link_requirements, specs_003_public_share_link_share_api [EXTRACTED 1.00]
 - **Feature: Critical Security Vulnerability Fixes** — specs_004_fix_critical_vulns_data_model, specs_004_fix_critical_vulns_plan, specs_004_fix_critical_vulns_quickstart, specs_004_fix_critical_vulns_research, specs_004_fix_critical_vulns_spec, specs_004_fix_critical_vulns_tasks, specs_004_fix_critical_vulns_requirements [EXTRACTED 1.00]
 
-## Communities (40 total, 15 thin omitted)
+## Communities (41 total, 15 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.07
-Nodes (47): showSharedView(), bindTagManagerEvents(), clearFilter(), closeAllPickers(), deleteHashtag(), esc(), loadHashtags(), openHashtagManager() (+39 more)
+Cohesion: 0.08
+Nodes (30): showSharedView(), showTrashView(), showConfirmModal(), appendCards(), bindCardEvents(), currentFilter, disconnectObserver(), esc() (+22 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.11
-Nodes (27): FileHeader, filesPathKey, HashtagHandler, isValidHexColor(), NewHashtagHandler(), deleteFileFromPath(), getFilesPath(), getMaxUpload() (+19 more)
+Cohesion: 0.12
+Nodes (24): FileHeader, HashtagHandler, isValidHexColor(), NewHashtagHandler(), deleteFileFromPath(), getFilesPath(), getMaxUpload(), jsonError() (+16 more)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.09
-Nodes (17): generateShareToken(), parseHashtags(), scanNotes(), scanSharedNotes(), scanTrashedNotes(), syncNoteHashtags(), Hashtag, DB (+9 more)
+Nodes (18): DB, generateShareToken(), parseHashtags(), scanArchivedNotes(), scanNotes(), scanSharedNotes(), scanTrashedNotes(), syncNoteHashtags() (+10 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.09
-Nodes (30): AttachmentHandler, NewAttachmentHandler(), ServeFile(), NewSessionSecret(), PINLogin(), PINLogout(), PINMiddleware(), tokenForPIN() (+22 more)
+Cohesion: 0.08
+Nodes (33): FS, AttachmentHandler, NewAttachmentHandler(), ServeFile(), NewSessionSecret(), PINLogin(), PINLogout(), PINMiddleware() (+25 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.11
-Nodes (21): bindUI(), handleIncomingShare(), initApp(), showAttachmentsView(), showTrashView(), deleteGlobalAttachment(), esc(), itemHTML() (+13 more)
+Cohesion: 0.08
+Nodes (38): bindUI(), handleIncomingShare(), initApp(), showAttachmentsView(), deleteGlobalAttachment(), esc(), itemHTML(), loadAttachmentsView() (+30 more)
 
 ### Community 5 - "Community 5"
 Cohesion: 0.16
@@ -131,8 +133,8 @@ Cohesion: 0.23
 Nodes (10): clientIP(), NewPublicHandler(), ParseTrustedProxies(), PublicHandler, rateLimiter, DB, IPNet, Mutex (+2 more)
 
 ### Community 11 - "Community 11"
-Cohesion: 0.24
-Nodes (11): frontend/assets/js/shared.js, internal/db/notes.go, internal/handlers/notes.go, internal/handlers/public.go, internal/models/note.go, Tasks: Trash and Restore Notes, Data Model: Public Note Share Link, Implementation Plan: Public Note Share Link (+3 more)
+Cohesion: 0.40
+Nodes (5): frontend/assets/js/shared.js, internal/handlers/public.go, Implementation Plan: Public Note Share Link, Feature Specification: Public Note Share Link, Tasks: Public Note Share Link
 
 ### Community 12 - "Community 12"
 Cohesion: 0.33
@@ -160,14 +162,18 @@ Nodes (3): Time, AttachmentListItem, AttachmentsListResponse
 
 ### Community 19 - "Community 19"
 Cohesion: 0.67
-Nodes (3): Attachment, Time, NotesResponse
+Nodes (4): Attachment, Time, Note, NotesResponse
 
 ### Community 20 - "Community 20"
 Cohesion: 0.67
 Nodes (3): Tx, DeleteHashtag(), RenameHashtag()
 
+### Community 22 - "Community 22"
+Cohesion: 0.48
+Nodes (6): showArchiveView(), archiveCardHTML(), bindArchiveCardEvents(), esc(), formatArchivedAt(), loadArchive()
+
 ## Knowledge Gaps
-- **72 isolated node(s):** `PALETTE`, `currentFilter`, `pagination`, `_tags`, `id` (+67 more)
+- **70 isolated node(s):** `currentFilter`, `pagination`, `NullString`, `Attachment`, `Tx` (+65 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **15 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -175,16 +181,16 @@ Nodes (3): Tx, DeleteHashtag(), RenameHashtag()
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `main()` connect `Community 3` to `Community 8`, `Community 1`, `Community 10`?**
-  _High betweenness centrality (0.059) - this node is a cross-community bridge._
+  _High betweenness centrality (0.058) - this node is a cross-community bridge._
 - **Why does `jsonError()` connect `Community 1` to `Community 3`?**
   _High betweenness centrality (0.016) - this node is a cross-community bridge._
 - **Why does `PINLogin()` connect `Community 3` to `Community 10`?**
   _High betweenness centrality (0.013) - this node is a cross-community bridge._
 - **Are the 22 inferred relationships involving `jsonError()` (e.g. with `.Delete()` and `.ListAll()`) actually correct?**
   _`jsonError()` has 22 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 16 inferred relationships involving `jsonResponse()` (e.g. with `.ListAll()` and `.Upload()`) actually correct?**
-  _`jsonResponse()` has 16 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 17 inferred relationships involving `main()` (e.g. with `Open()` and `NewAttachmentHandler()`) actually correct?**
   _`main()` has 17 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `PALETTE`, `currentFilter`, `pagination` to the rest of the system?**
-  _72 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Are the 16 inferred relationships involving `jsonResponse()` (e.g. with `.ListAll()` and `.Upload()`) actually correct?**
+  _`jsonResponse()` has 16 INFERRED edges - model-reasoned connections that need verification._
+- **What connects `currentFilter`, `pagination`, `NullString` to the rest of the system?**
+  _70 weakly-connected nodes found - possible documentation gaps or missing edges._

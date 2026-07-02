@@ -5,12 +5,12 @@
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 423 nodes · 781 edges · 41 communities (26 shown, 15 thin omitted)
+- 433 nodes · 790 edges · 42 communities (27 shown, 15 thin omitted)
 - Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 88 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `bf4bcdea`
+- Built from commit: `23da6b63`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -51,6 +51,7 @@
 - [[_COMMUNITY_Community 38|Community 38]]
 - [[_COMMUNITY_Community 39|Community 39]]
 - [[_COMMUNITY_Community 40|Community 40]]
+- [[_COMMUNITY_Community 41|Community 41]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `jsonError()` - 25 edges
@@ -86,7 +87,7 @@
 - **Feature: Public Note Share Link** — specs_003_public_share_link_data_model, specs_003_public_share_link_plan, specs_003_public_share_link_quickstart, specs_003_public_share_link_research, specs_003_public_share_link_spec, specs_003_public_share_link_tasks, specs_003_public_share_link_requirements, specs_003_public_share_link_share_api [EXTRACTED 1.00]
 - **Feature: Critical Security Vulnerability Fixes** — specs_004_fix_critical_vulns_data_model, specs_004_fix_critical_vulns_plan, specs_004_fix_critical_vulns_quickstart, specs_004_fix_critical_vulns_research, specs_004_fix_critical_vulns_spec, specs_004_fix_critical_vulns_tasks, specs_004_fix_critical_vulns_requirements [EXTRACTED 1.00]
 
-## Communities (41 total, 15 thin omitted)
+## Communities (42 total, 15 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.08
@@ -106,11 +107,11 @@ Nodes (33): FS, AttachmentHandler, NewAttachmentHandler(), ServeFile(), NewSessi
 
 ### Community 4 - "Community 4"
 Cohesion: 0.08
-Nodes (38): bindUI(), handleIncomingShare(), initApp(), showAttachmentsView(), deleteGlobalAttachment(), esc(), itemHTML(), loadAttachmentsView() (+30 more)
+Nodes (37): bindUI(), initApp(), showAttachmentsView(), deleteGlobalAttachment(), esc(), itemHTML(), loadAttachmentsView(), mimeIcon() (+29 more)
 
 ### Community 5 - "Community 5"
-Cohesion: 0.16
-Nodes (20): attachmentHTML(), deleteAttachment(), escapeHtml(), loadAttachments(), renderAttachments(), uploadAttachment(), acConfirm(), acMove() (+12 more)
+Cohesion: 0.15
+Nodes (21): handleIncomingShare(), attachmentHTML(), deleteAttachment(), escapeHtml(), loadAttachments(), renderAttachments(), uploadAttachment(), acConfirm() (+13 more)
 
 ### Community 6 - "Community 6"
 Cohesion: 0.09
@@ -172,8 +173,12 @@ Nodes (3): Tx, DeleteHashtag(), RenameHashtag()
 Cohesion: 0.48
 Nodes (6): showArchiveView(), archiveCardHTML(), bindArchiveCardEvents(), esc(), formatArchivedAt(), loadArchive()
 
+### Community 41 - "Community 41"
+Cohesion: 0.18
+Nodes (10): Active Technologies, Add commands for Go 1.23 (backend), ES2022 Vanilla JS (frontend), Code Style, Commands, graphify, Inspiration, notas Development Guidelines, Project Rules (+2 more)
+
 ## Knowledge Gaps
-- **70 isolated node(s):** `currentFilter`, `pagination`, `NullString`, `Attachment`, `Tx` (+65 more)
+- **77 isolated node(s):** `Project Rules`, `Inspiration`, `Active Technologies`, `Project Structure`, `Commands` (+72 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **15 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -181,9 +186,9 @@ Nodes (6): showArchiveView(), archiveCardHTML(), bindArchiveCardEvents(), esc(),
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `main()` connect `Community 3` to `Community 8`, `Community 1`, `Community 10`?**
-  _High betweenness centrality (0.058) - this node is a cross-community bridge._
+  _High betweenness centrality (0.056) - this node is a cross-community bridge._
 - **Why does `jsonError()` connect `Community 1` to `Community 3`?**
-  _High betweenness centrality (0.016) - this node is a cross-community bridge._
+  _High betweenness centrality (0.015) - this node is a cross-community bridge._
 - **Why does `PINLogin()` connect `Community 3` to `Community 10`?**
   _High betweenness centrality (0.013) - this node is a cross-community bridge._
 - **Are the 22 inferred relationships involving `jsonError()` (e.g. with `.Delete()` and `.ListAll()`) actually correct?**
@@ -192,5 +197,5 @@ _Questions this graph is uniquely positioned to answer:_
   _`main()` has 17 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 16 inferred relationships involving `jsonResponse()` (e.g. with `.ListAll()` and `.Upload()`) actually correct?**
   _`jsonResponse()` has 16 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `currentFilter`, `pagination`, `NullString` to the rest of the system?**
-  _70 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `Project Rules`, `Inspiration`, `Active Technologies` to the rest of the system?**
+  _77 weakly-connected nodes found - possible documentation gaps or missing edges._

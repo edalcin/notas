@@ -79,14 +79,124 @@
   },
   "nodes": [
     {
+      "label": "CLAUDE.md",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "claude",
+      "community": 41,
+      "norm_label": "claude.md"
+    },
+    {
+      "label": "notas Development Guidelines",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "claude_notas_development_guidelines",
+      "community": 41,
+      "norm_label": "notas development guidelines"
+    },
+    {
+      "label": "Project Rules",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "claude_project_rules",
+      "community": 41,
+      "norm_label": "project rules"
+    },
+    {
+      "label": "Inspiration",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "claude_inspiration",
+      "community": 41,
+      "norm_label": "inspiration"
+    },
+    {
+      "label": "Active Technologies",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "claude_active_technologies",
+      "community": 41,
+      "norm_label": "active technologies"
+    },
+    {
+      "label": "Project Structure",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "claude_project_structure",
+      "community": 41,
+      "norm_label": "project structure"
+    },
+    {
+      "label": "Commands",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L33",
+      "_origin": "ast",
+      "id": "claude_commands",
+      "community": 41,
+      "norm_label": "commands"
+    },
+    {
+      "label": "Add commands for Go 1.23 (backend), ES2022 Vanilla JS (frontend)",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L35",
+      "_origin": "ast",
+      "id": "claude_add_commands_for_go_1_23_backend_es2022_vanilla_js_frontend",
+      "community": 41,
+      "norm_label": "add commands for go 1.23 (backend), es2022 vanilla js (frontend)"
+    },
+    {
+      "label": "Code Style",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "claude_code_style",
+      "community": 41,
+      "norm_label": "code style"
+    },
+    {
+      "label": "Recent Changes",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L41",
+      "_origin": "ast",
+      "id": "claude_recent_changes",
+      "community": 41,
+      "norm_label": "recent changes"
+    },
+    {
+      "label": "graphify",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L50",
+      "_origin": "ast",
+      "id": "claude_graphify",
+      "community": 41,
+      "norm_label": "graphify"
+    },
+    {
       "label": "app.js",
       "file_type": "code",
       "source_file": "frontend/assets/js/app.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "js_app",
       "community": 4,
-      "norm_label": "app.js"
+      "norm_label": "app.js",
+      "id": "js_app"
     },
     {
       "label": "initApp()",
@@ -94,9 +204,9 @@
       "source_file": "frontend/assets/js/app.js",
       "source_location": "L51",
       "_origin": "ast",
-      "id": "js_app_initapp",
       "community": 4,
-      "norm_label": "initapp()"
+      "norm_label": "initapp()",
+      "id": "js_app_initapp"
     },
     {
       "label": "handleIncomingShare()",
@@ -104,9 +214,9 @@
       "source_file": "frontend/assets/js/app.js",
       "source_location": "L71",
       "_origin": "ast",
-      "id": "js_app_handleincomingshare",
-      "community": 4,
-      "norm_label": "handleincomingshare()"
+      "community": 5,
+      "norm_label": "handleincomingshare()",
+      "id": "js_app_handleincomingshare"
     },
     {
       "label": "checkAuth()",
@@ -114,9 +224,9 @@
       "source_file": "frontend/assets/js/app.js",
       "source_location": "L81",
       "_origin": "ast",
-      "id": "js_app_checkauth",
       "community": 4,
-      "norm_label": "checkauth()"
+      "norm_label": "checkauth()",
+      "id": "js_app_checkauth"
     },
     {
       "label": "showPINOverlay()",
@@ -124,9 +234,9 @@
       "source_file": "frontend/assets/js/app.js",
       "source_location": "L90",
       "_origin": "ast",
-      "id": "js_app_showpinoverlay",
       "community": 4,
-      "norm_label": "showpinoverlay()"
+      "norm_label": "showpinoverlay()",
+      "id": "js_app_showpinoverlay"
     },
     {
       "label": "bindUI()",
@@ -134,9 +244,9 @@
       "source_file": "frontend/assets/js/app.js",
       "source_location": "L127",
       "_origin": "ast",
-      "id": "js_app_bindui",
       "community": 4,
-      "norm_label": "bindui()"
+      "norm_label": "bindui()",
+      "id": "js_app_bindui"
     },
     {
       "label": "setActiveNav()",
@@ -144,9 +254,9 @@
       "source_file": "frontend/assets/js/app.js",
       "source_location": "L205",
       "_origin": "ast",
-      "id": "js_app_setactivenav",
       "community": 4,
-      "norm_label": "setactivenav()"
+      "norm_label": "setactivenav()",
+      "id": "js_app_setactivenav"
     },
     {
       "label": "showNotesView()",
@@ -154,9 +264,9 @@
       "source_file": "frontend/assets/js/app.js",
       "source_location": "L210",
       "_origin": "ast",
-      "id": "js_app_shownotesview",
       "community": 4,
-      "norm_label": "shownotesview()"
+      "norm_label": "shownotesview()",
+      "id": "js_app_shownotesview"
     },
     {
       "label": "showAttachmentsView()",
@@ -164,9 +274,9 @@
       "source_file": "frontend/assets/js/app.js",
       "source_location": "L220",
       "_origin": "ast",
-      "id": "js_app_showattachmentsview",
       "community": 4,
-      "norm_label": "showattachmentsview()"
+      "norm_label": "showattachmentsview()",
+      "id": "js_app_showattachmentsview"
     },
     {
       "label": "showSharedView()",
@@ -174,9 +284,9 @@
       "source_file": "frontend/assets/js/app.js",
       "source_location": "L231",
       "_origin": "ast",
-      "id": "js_app_showsharedview",
       "community": 0,
-      "norm_label": "showsharedview()"
+      "norm_label": "showsharedview()",
+      "id": "js_app_showsharedview"
     },
     {
       "label": "showTrashView()",
@@ -184,9 +294,9 @@
       "source_file": "frontend/assets/js/app.js",
       "source_location": "L242",
       "_origin": "ast",
-      "id": "js_app_showtrashview",
       "community": 0,
-      "norm_label": "showtrashview()"
+      "norm_label": "showtrashview()",
+      "id": "js_app_showtrashview"
     },
     {
       "label": "showArchiveView()",
@@ -194,9 +304,9 @@
       "source_file": "frontend/assets/js/app.js",
       "source_location": "L253",
       "_origin": "ast",
-      "id": "js_app_showarchiveview",
       "community": 22,
-      "norm_label": "showarchiveview()"
+      "norm_label": "showarchiveview()",
+      "id": "js_app_showarchiveview"
     },
     {
       "label": "showBackupView()",
@@ -204,9 +314,9 @@
       "source_file": "frontend/assets/js/app.js",
       "source_location": "L264",
       "_origin": "ast",
-      "id": "js_app_showbackupview",
       "community": 4,
-      "norm_label": "showbackupview()"
+      "norm_label": "showbackupview()",
+      "id": "js_app_showbackupview"
     },
     {
       "label": "archive.js",
@@ -214,9 +324,9 @@
       "source_file": "frontend/assets/js/archive.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "js_archive",
       "community": 22,
-      "norm_label": "archive.js"
+      "norm_label": "archive.js",
+      "id": "js_archive"
     },
     {
       "label": "loadArchive()",
@@ -224,9 +334,9 @@
       "source_file": "frontend/assets/js/archive.js",
       "source_location": "L5",
       "_origin": "ast",
-      "id": "js_archive_loadarchive",
       "community": 22,
-      "norm_label": "loadarchive()"
+      "norm_label": "loadarchive()",
+      "id": "js_archive_loadarchive"
     },
     {
       "label": "bindArchiveCardEvents()",
@@ -234,9 +344,9 @@
       "source_file": "frontend/assets/js/archive.js",
       "source_location": "L36",
       "_origin": "ast",
-      "id": "js_archive_bindarchivecardevents",
       "community": 22,
-      "norm_label": "bindarchivecardevents()"
+      "norm_label": "bindarchivecardevents()",
+      "id": "js_archive_bindarchivecardevents"
     },
     {
       "label": "archiveCardHTML()",
@@ -244,9 +354,9 @@
       "source_file": "frontend/assets/js/archive.js",
       "source_location": "L51",
       "_origin": "ast",
-      "id": "js_archive_archivecardhtml",
       "community": 22,
-      "norm_label": "archivecardhtml()"
+      "norm_label": "archivecardhtml()",
+      "id": "js_archive_archivecardhtml"
     },
     {
       "label": "formatArchivedAt()",
@@ -254,9 +364,9 @@
       "source_file": "frontend/assets/js/archive.js",
       "source_location": "L72",
       "_origin": "ast",
-      "id": "js_archive_formatarchivedat",
       "community": 22,
-      "norm_label": "formatarchivedat()"
+      "norm_label": "formatarchivedat()",
+      "id": "js_archive_formatarchivedat"
     },
     {
       "label": "esc()",
@@ -264,9 +374,9 @@
       "source_file": "frontend/assets/js/archive.js",
       "source_location": "L78",
       "_origin": "ast",
-      "id": "js_archive_esc",
       "community": 22,
-      "norm_label": "esc()"
+      "norm_label": "esc()",
+      "id": "js_archive_esc"
     },
     {
       "label": "notes.js",
@@ -274,9 +384,9 @@
       "source_file": "frontend/assets/js/notes.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "js_notes",
       "community": 0,
-      "norm_label": "notes.js"
+      "norm_label": "notes.js",
+      "id": "js_notes"
     },
     {
       "label": "currentFilter",
@@ -284,9 +394,9 @@
       "source_file": "frontend/assets/js/notes.js",
       "source_location": "L7",
       "_origin": "ast",
-      "id": "js_notes_currentfilter",
       "community": 0,
-      "norm_label": "currentfilter"
+      "norm_label": "currentfilter",
+      "id": "js_notes_currentfilter"
     },
     {
       "label": "pagination",
@@ -294,9 +404,9 @@
       "source_file": "frontend/assets/js/notes.js",
       "source_location": "L8",
       "_origin": "ast",
-      "id": "js_notes_pagination",
       "community": 0,
-      "norm_label": "pagination"
+      "norm_label": "pagination",
+      "id": "js_notes_pagination"
     },
     {
       "label": "loadNotes()",
@@ -304,9 +414,9 @@
       "source_file": "frontend/assets/js/notes.js",
       "source_location": "L14",
       "_origin": "ast",
-      "id": "js_notes_loadnotes",
       "community": 4,
-      "norm_label": "loadnotes()"
+      "norm_label": "loadnotes()",
+      "id": "js_notes_loadnotes"
     },
     {
       "label": "trashNote()",
@@ -314,9 +424,9 @@
       "source_file": "frontend/assets/js/notes.js",
       "source_location": "L34",
       "_origin": "ast",
-      "id": "js_notes_trashnote",
       "community": 0,
-      "norm_label": "trashnote()"
+      "norm_label": "trashnote()",
+      "id": "js_notes_trashnote"
     },
     {
       "label": "archiveNote()",
@@ -324,9 +434,9 @@
       "source_file": "frontend/assets/js/notes.js",
       "source_location": "L50",
       "_origin": "ast",
-      "id": "js_notes_archivenote",
       "community": 0,
-      "norm_label": "archivenote()"
+      "norm_label": "archivenote()",
+      "id": "js_notes_archivenote"
     },
     {
       "label": "fetchPage()",
@@ -334,9 +444,9 @@
       "source_file": "frontend/assets/js/notes.js",
       "source_location": "L64",
       "_origin": "ast",
-      "id": "js_notes_fetchpage",
       "community": 0,
-      "norm_label": "fetchpage()"
+      "norm_label": "fetchpage()",
+      "id": "js_notes_fetchpage"
     },
     {
       "label": "setupObserver()",
@@ -344,9 +454,9 @@
       "source_file": "frontend/assets/js/notes.js",
       "source_location": "L97",
       "_origin": "ast",
-      "id": "js_notes_setupobserver",
       "community": 0,
-      "norm_label": "setupobserver()"
+      "norm_label": "setupobserver()",
+      "id": "js_notes_setupobserver"
     },
     {
       "label": "disconnectObserver()",
@@ -354,9 +464,9 @@
       "source_file": "frontend/assets/js/notes.js",
       "source_location": "L112",
       "_origin": "ast",
-      "id": "js_notes_disconnectobserver",
       "community": 0,
-      "norm_label": "disconnectobserver()"
+      "norm_label": "disconnectobserver()",
+      "id": "js_notes_disconnectobserver"
     },
     {
       "label": "appendCards()",
@@ -364,9 +474,9 @@
       "source_file": "frontend/assets/js/notes.js",
       "source_location": "L118",
       "_origin": "ast",
-      "id": "js_notes_appendcards",
       "community": 0,
-      "norm_label": "appendcards()"
+      "norm_label": "appendcards()",
+      "id": "js_notes_appendcards"
     },
     {
       "label": "bindCardEvents()",
@@ -374,9 +484,9 @@
       "source_file": "frontend/assets/js/notes.js",
       "source_location": "L139",
       "_origin": "ast",
-      "id": "js_notes_bindcardevents",
       "community": 0,
-      "norm_label": "bindcardevents()"
+      "norm_label": "bindcardevents()",
+      "id": "js_notes_bindcardevents"
     },
     {
       "label": "updateHeader()",
@@ -384,9 +494,9 @@
       "source_file": "frontend/assets/js/notes.js",
       "source_location": "L187",
       "_origin": "ast",
-      "id": "js_notes_updateheader",
       "community": 0,
-      "norm_label": "updateheader()"
+      "norm_label": "updateheader()",
+      "id": "js_notes_updateheader"
     },
     {
       "label": "setSentinel()",
@@ -394,9 +504,9 @@
       "source_file": "frontend/assets/js/notes.js",
       "source_location": "L197",
       "_origin": "ast",
-      "id": "js_notes_setsentinel",
       "community": 0,
-      "norm_label": "setsentinel()"
+      "norm_label": "setsentinel()",
+      "id": "js_notes_setsentinel"
     },
     {
       "label": "noteCardHTML()",
@@ -404,9 +514,9 @@
       "source_file": "frontend/assets/js/notes.js",
       "source_location": "L202",
       "_origin": "ast",
-      "id": "js_notes_notecardhtml",
       "community": 0,
-      "norm_label": "notecardhtml()"
+      "norm_label": "notecardhtml()",
+      "id": "js_notes_notecardhtml"
     },
     {
       "label": "exportToPKD()",
@@ -414,9 +524,9 @@
       "source_file": "frontend/assets/js/notes.js",
       "source_location": "L246",
       "_origin": "ast",
-      "id": "js_notes_exporttopkd",
       "community": 0,
-      "norm_label": "exporttopkd()"
+      "norm_label": "exporttopkd()",
+      "id": "js_notes_exporttopkd"
     },
     {
       "label": "togglePin()",
@@ -424,9 +534,9 @@
       "source_file": "frontend/assets/js/notes.js",
       "source_location": "L269",
       "_origin": "ast",
-      "id": "js_notes_togglepin",
       "community": 0,
-      "norm_label": "togglepin()"
+      "norm_label": "togglepin()",
+      "id": "js_notes_togglepin"
     },
     {
       "label": "relativeTime()",
@@ -434,9 +544,9 @@
       "source_file": "frontend/assets/js/notes.js",
       "source_location": "L282",
       "_origin": "ast",
-      "id": "js_notes_relativetime",
       "community": 0,
-      "norm_label": "relativetime()"
+      "norm_label": "relativetime()",
+      "id": "js_notes_relativetime"
     },
     {
       "label": "esc()",
@@ -444,9 +554,9 @@
       "source_file": "frontend/assets/js/notes.js",
       "source_location": "L293",
       "_origin": "ast",
-      "id": "js_notes_esc",
       "community": 0,
-      "norm_label": "esc()"
+      "norm_label": "esc()",
+      "id": "js_notes_esc"
     },
     {
       "label": "notes.go",
@@ -454,9 +564,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "db_notes",
       "community": 2,
-      "norm_label": "notes.go"
+      "norm_label": "notes.go",
+      "id": "db_notes"
     },
     {
       "label": "DB",
@@ -464,9 +574,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L27",
       "_origin": "ast",
-      "id": "db_db",
       "community": 2,
-      "norm_label": "db"
+      "norm_label": "db",
+      "id": "db_db"
     },
     {
       "label": ".ListNotes()",
@@ -474,9 +584,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L27",
       "_origin": "ast",
-      "id": "db_db_listnotes",
       "community": 2,
-      "norm_label": ".listnotes()"
+      "norm_label": ".listnotes()",
+      "id": "db_db_listnotes"
     },
     {
       "label": "Note",
@@ -484,9 +594,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L27",
       "_origin": "ast",
-      "id": "note",
       "community": 2,
-      "norm_label": "note"
+      "norm_label": "note",
+      "id": "note"
     },
     {
       "label": ".FilterByHashtag()",
@@ -494,9 +604,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L32",
       "_origin": "ast",
-      "id": "db_db_filterbyhashtag",
       "community": 2,
-      "norm_label": ".filterbyhashtag()"
+      "norm_label": ".filterbyhashtag()",
+      "id": "db_db_filterbyhashtag"
     },
     {
       "label": ".SearchNotes()",
@@ -504,9 +614,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L38",
       "_origin": "ast",
-      "id": "db_db_searchnotes",
       "community": 2,
-      "norm_label": ".searchnotes()"
+      "norm_label": ".searchnotes()",
+      "id": "db_db_searchnotes"
     },
     {
       "label": ".queryNotes()",
@@ -514,9 +624,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L54",
       "_origin": "ast",
-      "id": "db_db_querynotes",
       "community": 2,
-      "norm_label": ".querynotes()"
+      "norm_label": ".querynotes()",
+      "id": "db_db_querynotes"
     },
     {
       "label": "scanNotes()",
@@ -524,9 +634,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L69",
       "_origin": "ast",
-      "id": "db_notes_scannotes",
       "community": 2,
-      "norm_label": "scannotes()"
+      "norm_label": "scannotes()",
+      "id": "db_notes_scannotes"
     },
     {
       "label": "Rows",
@@ -534,9 +644,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L69",
       "_origin": "ast",
-      "id": "rows",
       "community": 2,
-      "norm_label": "rows"
+      "norm_label": "rows",
+      "id": "rows"
     },
     {
       "label": "parseHashtags()",
@@ -544,9 +654,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L92",
       "_origin": "ast",
-      "id": "db_notes_parsehashtags",
       "community": 2,
-      "norm_label": "parsehashtags()"
+      "norm_label": "parsehashtags()",
+      "id": "db_notes_parsehashtags"
     },
     {
       "label": "NullString",
@@ -554,9 +664,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L92",
       "_origin": "ast",
-      "id": "nullstring",
       "community": 2,
-      "norm_label": "nullstring"
+      "norm_label": "nullstring",
+      "id": "nullstring"
     },
     {
       "label": ".GetNote()",
@@ -564,9 +674,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L111",
       "_origin": "ast",
-      "id": "db_db_getnote",
       "community": 2,
-      "norm_label": ".getnote()"
+      "norm_label": ".getnote()",
+      "id": "db_db_getnote"
     },
     {
       "label": ".CreateNote()",
@@ -574,9 +684,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L140",
       "_origin": "ast",
-      "id": "db_db_createnote",
       "community": 2,
-      "norm_label": ".createnote()"
+      "norm_label": ".createnote()",
+      "id": "db_db_createnote"
     },
     {
       "label": ".UpdateNote()",
@@ -584,9 +694,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L168",
       "_origin": "ast",
-      "id": "db_db_updatenote",
       "community": 2,
-      "norm_label": ".updatenote()"
+      "norm_label": ".updatenote()",
+      "id": "db_db_updatenote"
     },
     {
       "label": ".DeleteNote()",
@@ -594,9 +704,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L199",
       "_origin": "ast",
-      "id": "db_db_deletenote",
       "community": 2,
-      "norm_label": ".deletenote()"
+      "norm_label": ".deletenote()",
+      "id": "db_db_deletenote"
     },
     {
       "label": ".TrashNote()",
@@ -604,9 +714,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L229",
       "_origin": "ast",
-      "id": "db_db_trashnote",
       "community": 2,
-      "norm_label": ".trashnote()"
+      "norm_label": ".trashnote()",
+      "id": "db_db_trashnote"
     },
     {
       "label": ".RestoreNote()",
@@ -614,9 +724,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L244",
       "_origin": "ast",
-      "id": "db_db_restorenote",
       "community": 2,
-      "norm_label": ".restorenote()"
+      "norm_label": ".restorenote()",
+      "id": "db_db_restorenote"
     },
     {
       "label": ".ArchiveNote()",
@@ -624,9 +734,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L259",
       "_origin": "ast",
-      "id": "db_db_archivenote",
       "community": 2,
-      "norm_label": ".archivenote()"
+      "norm_label": ".archivenote()",
+      "id": "db_db_archivenote"
     },
     {
       "label": ".UnarchiveNote()",
@@ -634,9 +744,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L274",
       "_origin": "ast",
-      "id": "db_db_unarchivenote",
       "community": 2,
-      "norm_label": ".unarchivenote()"
+      "norm_label": ".unarchivenote()",
+      "id": "db_db_unarchivenote"
     },
     {
       "label": ".ListTrashedNotes()",
@@ -644,9 +754,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L289",
       "_origin": "ast",
-      "id": "db_db_listtrashednotes",
       "community": 2,
-      "norm_label": ".listtrashednotes()"
+      "norm_label": ".listtrashednotes()",
+      "id": "db_db_listtrashednotes"
     },
     {
       "label": "scanTrashedNotes()",
@@ -654,9 +764,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L309",
       "_origin": "ast",
-      "id": "db_notes_scantrashednotes",
       "community": 2,
-      "norm_label": "scantrashednotes()"
+      "norm_label": "scantrashednotes()",
+      "id": "db_notes_scantrashednotes"
     },
     {
       "label": ".ListArchivedNotes()",
@@ -664,9 +774,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L335",
       "_origin": "ast",
-      "id": "db_db_listarchivednotes",
       "community": 2,
-      "norm_label": ".listarchivednotes()"
+      "norm_label": ".listarchivednotes()",
+      "id": "db_db_listarchivednotes"
     },
     {
       "label": "scanArchivedNotes()",
@@ -674,9 +784,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L355",
       "_origin": "ast",
-      "id": "db_notes_scanarchivednotes",
       "community": 2,
-      "norm_label": "scanarchivednotes()"
+      "norm_label": "scanarchivednotes()",
+      "id": "db_notes_scanarchivednotes"
     },
     {
       "label": ".EmptyTrash()",
@@ -684,9 +794,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L383",
       "_origin": "ast",
-      "id": "db_db_emptytrash",
       "community": 2,
-      "norm_label": ".emptytrash()"
+      "norm_label": ".emptytrash()",
+      "id": "db_db_emptytrash"
     },
     {
       "label": "Attachment",
@@ -694,9 +804,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L383",
       "_origin": "ast",
-      "id": "internal_db_notes_go_attachment",
       "community": 2,
-      "norm_label": "attachment"
+      "norm_label": "attachment",
+      "id": "internal_db_notes_go_attachment"
     },
     {
       "label": ".TogglePin()",
@@ -704,9 +814,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L431",
       "_origin": "ast",
-      "id": "db_db_togglepin",
       "community": 2,
-      "norm_label": ".togglepin()"
+      "norm_label": ".togglepin()",
+      "id": "db_db_togglepin"
     },
     {
       "label": "syncNoteHashtags()",
@@ -714,9 +824,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L447",
       "_origin": "ast",
-      "id": "db_notes_syncnotehashtags",
       "community": 2,
-      "norm_label": "syncnotehashtags()"
+      "norm_label": "syncnotehashtags()",
+      "id": "db_notes_syncnotehashtags"
     },
     {
       "label": "Tx",
@@ -724,9 +834,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L447",
       "_origin": "ast",
-      "id": "tx",
       "community": 2,
-      "norm_label": "tx"
+      "norm_label": "tx",
+      "id": "tx"
     },
     {
       "label": ".RepairHashtagsFromNotes()",
@@ -734,9 +844,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L475",
       "_origin": "ast",
-      "id": "db_db_repairhashtagsfromnotes",
       "community": 2,
-      "norm_label": ".repairhashtagsfromnotes()"
+      "norm_label": ".repairhashtagsfromnotes()",
+      "id": "db_db_repairhashtagsfromnotes"
     },
     {
       "label": ".GetNoteUpdatedAt()",
@@ -744,9 +854,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L528",
       "_origin": "ast",
-      "id": "db_db_getnoteupdatedat",
       "community": 2,
-      "norm_label": ".getnoteupdatedat()"
+      "norm_label": ".getnoteupdatedat()",
+      "id": "db_db_getnoteupdatedat"
     },
     {
       "label": "Time",
@@ -754,9 +864,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L528",
       "_origin": "ast",
-      "id": "internal_db_notes_go_time",
       "community": 2,
-      "norm_label": "time"
+      "norm_label": "time",
+      "id": "internal_db_notes_go_time"
     },
     {
       "label": "generateShareToken()",
@@ -764,9 +874,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L535",
       "_origin": "ast",
-      "id": "db_notes_generatesharetoken",
       "community": 2,
-      "norm_label": "generatesharetoken()"
+      "norm_label": "generatesharetoken()",
+      "id": "db_notes_generatesharetoken"
     },
     {
       "label": ".SetShareToken()",
@@ -774,9 +884,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L545",
       "_origin": "ast",
-      "id": "db_db_setsharetoken",
       "community": 2,
-      "norm_label": ".setsharetoken()"
+      "norm_label": ".setsharetoken()",
+      "id": "db_db_setsharetoken"
     },
     {
       "label": ".ClearShareToken()",
@@ -784,9 +894,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L567",
       "_origin": "ast",
-      "id": "db_db_clearsharetoken",
       "community": 2,
-      "norm_label": ".clearsharetoken()"
+      "norm_label": ".clearsharetoken()",
+      "id": "db_db_clearsharetoken"
     },
     {
       "label": ".GetNoteByShareToken()",
@@ -794,9 +904,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L573",
       "_origin": "ast",
-      "id": "db_db_getnotebysharetoken",
       "community": 2,
-      "norm_label": ".getnotebysharetoken()"
+      "norm_label": ".getnotebysharetoken()",
+      "id": "db_db_getnotebysharetoken"
     },
     {
       "label": ".ListSharedNotes()",
@@ -804,9 +914,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L603",
       "_origin": "ast",
-      "id": "db_db_listsharednotes",
       "community": 2,
-      "norm_label": ".listsharednotes()"
+      "norm_label": ".listsharednotes()",
+      "id": "db_db_listsharednotes"
     },
     {
       "label": "scanSharedNotes()",
@@ -814,9 +924,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L623",
       "_origin": "ast",
-      "id": "db_notes_scansharednotes",
       "community": 2,
-      "norm_label": "scansharednotes()"
+      "norm_label": "scansharednotes()",
+      "id": "db_notes_scansharednotes"
     },
     {
       "label": "notes.go",
@@ -824,9 +934,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "handlers_notes",
       "community": 1,
-      "norm_label": "notes.go"
+      "norm_label": "notes.go",
+      "id": "handlers_notes"
     },
     {
       "label": "NoteHandler",
@@ -834,9 +944,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L19",
       "_origin": "ast",
-      "id": "handlers_notehandler",
       "community": 1,
-      "norm_label": "notehandler"
+      "norm_label": "notehandler",
+      "id": "handlers_notehandler"
     },
     {
       "label": "DB",
@@ -844,9 +954,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L20",
       "_origin": "ast",
-      "id": "internal_handlers_notes_go_db",
       "community": 1,
-      "norm_label": "db"
+      "norm_label": "db",
+      "id": "internal_handlers_notes_go_db"
     },
     {
       "label": "NewNoteHandler()",
@@ -854,9 +964,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L26",
       "_origin": "ast",
-      "id": "handlers_notes_newnotehandler",
       "community": 1,
-      "norm_label": "newnotehandler()"
+      "norm_label": "newnotehandler()",
+      "id": "handlers_notes_newnotehandler"
     },
     {
       "label": ".List()",
@@ -864,9 +974,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L35",
       "_origin": "ast",
-      "id": "handlers_notehandler_list",
       "community": 1,
-      "norm_label": ".list()"
+      "norm_label": ".list()",
+      "id": "handlers_notehandler_list"
     },
     {
       "label": "ResponseWriter",
@@ -874,9 +984,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L35",
       "_origin": "ast",
-      "id": "responsewriter",
       "community": 1,
-      "norm_label": "responsewriter"
+      "norm_label": "responsewriter",
+      "id": "responsewriter"
     },
     {
       "label": "Request",
@@ -884,9 +994,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L35",
       "_origin": "ast",
-      "id": "request",
       "community": 1,
-      "norm_label": "request"
+      "norm_label": "request",
+      "id": "request"
     },
     {
       "label": ".Get()",
@@ -894,9 +1004,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L76",
       "_origin": "ast",
-      "id": "handlers_notehandler_get",
       "community": 1,
-      "norm_label": ".get()"
+      "norm_label": ".get()",
+      "id": "handlers_notehandler_get"
     },
     {
       "label": ".Create()",
@@ -904,9 +1014,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L99",
       "_origin": "ast",
-      "id": "handlers_notehandler_create",
       "community": 1,
-      "norm_label": ".create()"
+      "norm_label": ".create()",
+      "id": "handlers_notehandler_create"
     },
     {
       "label": ".Update()",
@@ -914,9 +1024,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L117",
       "_origin": "ast",
-      "id": "handlers_notehandler_update",
       "community": 1,
-      "norm_label": ".update()"
+      "norm_label": ".update()",
+      "id": "handlers_notehandler_update"
     },
     {
       "label": ".Delete()",
@@ -924,9 +1034,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L148",
       "_origin": "ast",
-      "id": "handlers_notehandler_delete",
       "community": 1,
-      "norm_label": ".delete()"
+      "norm_label": ".delete()",
+      "id": "handlers_notehandler_delete"
     },
     {
       "label": ".Trash()",
@@ -934,9 +1044,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L174",
       "_origin": "ast",
-      "id": "handlers_notehandler_trash",
       "community": 1,
-      "norm_label": ".trash()"
+      "norm_label": ".trash()",
+      "id": "handlers_notehandler_trash"
     },
     {
       "label": ".Restore()",
@@ -944,9 +1054,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L193",
       "_origin": "ast",
-      "id": "handlers_notehandler_restore",
       "community": 1,
-      "norm_label": ".restore()"
+      "norm_label": ".restore()",
+      "id": "handlers_notehandler_restore"
     },
     {
       "label": ".Archive()",
@@ -954,9 +1064,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L212",
       "_origin": "ast",
-      "id": "handlers_notehandler_archive",
       "community": 1,
-      "norm_label": ".archive()"
+      "norm_label": ".archive()",
+      "id": "handlers_notehandler_archive"
     },
     {
       "label": ".Unarchive()",
@@ -964,9 +1074,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L231",
       "_origin": "ast",
-      "id": "handlers_notehandler_unarchive",
       "community": 1,
-      "norm_label": ".unarchive()"
+      "norm_label": ".unarchive()",
+      "id": "handlers_notehandler_unarchive"
     },
     {
       "label": ".ListTrash()",
@@ -974,9 +1084,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L250",
       "_origin": "ast",
-      "id": "handlers_notehandler_listtrash",
       "community": 1,
-      "norm_label": ".listtrash()"
+      "norm_label": ".listtrash()",
+      "id": "handlers_notehandler_listtrash"
     },
     {
       "label": ".ListArchive()",
@@ -984,9 +1094,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L276",
       "_origin": "ast",
-      "id": "handlers_notehandler_listarchive",
       "community": 1,
-      "norm_label": ".listarchive()"
+      "norm_label": ".listarchive()",
+      "id": "handlers_notehandler_listarchive"
     },
     {
       "label": ".EmptyTrash()",
@@ -994,9 +1104,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L302",
       "_origin": "ast",
-      "id": "handlers_notehandler_emptytrash",
       "community": 1,
-      "norm_label": ".emptytrash()"
+      "norm_label": ".emptytrash()",
+      "id": "handlers_notehandler_emptytrash"
     },
     {
       "label": ".TogglePin()",
@@ -1004,9 +1114,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L318",
       "_origin": "ast",
-      "id": "handlers_notehandler_togglepin",
       "community": 1,
-      "norm_label": ".togglepin()"
+      "norm_label": ".togglepin()",
+      "id": "handlers_notehandler_togglepin"
     },
     {
       "label": "parseID()",
@@ -1014,9 +1124,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L345",
       "_origin": "ast",
-      "id": "handlers_notes_parseid",
       "community": 1,
-      "norm_label": "parseid()"
+      "norm_label": "parseid()",
+      "id": "handlers_notes_parseid"
     },
     {
       "label": ".Share()",
@@ -1024,9 +1134,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L351",
       "_origin": "ast",
-      "id": "handlers_notehandler_share",
       "community": 1,
-      "norm_label": ".share()"
+      "norm_label": ".share()",
+      "id": "handlers_notehandler_share"
     },
     {
       "label": ".Unshare()",
@@ -1034,9 +1144,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L393",
       "_origin": "ast",
-      "id": "handlers_notehandler_unshare",
       "community": 1,
-      "norm_label": ".unshare()"
+      "norm_label": ".unshare()",
+      "id": "handlers_notehandler_unshare"
     },
     {
       "label": ".ExportToPKD()",
@@ -1044,9 +1154,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L419",
       "_origin": "ast",
-      "id": "handlers_notehandler_exporttopkd",
       "community": 1,
-      "norm_label": ".exporttopkd()"
+      "norm_label": ".exporttopkd()",
+      "id": "handlers_notehandler_exporttopkd"
     },
     {
       "label": ".ListShared()",
@@ -1054,9 +1164,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L490",
       "_origin": "ast",
-      "id": "handlers_notehandler_listshared",
       "community": 1,
-      "norm_label": ".listshared()"
+      "norm_label": ".listshared()",
+      "id": "handlers_notehandler_listshared"
     },
     {
       "label": "Note",
@@ -1064,9 +1174,9 @@
       "source_file": "internal/models/note.go",
       "source_location": "L5",
       "_origin": "ast",
-      "id": "models_note",
       "community": 19,
-      "norm_label": "note"
+      "norm_label": "note",
+      "id": "models_note"
     },
     {
       "label": "Attachment",
@@ -1074,9 +1184,9 @@
       "source_file": "internal/models/note.go",
       "source_location": "L12",
       "_origin": "ast",
-      "id": "internal_models_note_go_attachment",
       "community": 19,
-      "norm_label": "attachment"
+      "norm_label": "attachment",
+      "id": "internal_models_note_go_attachment"
     },
     {
       "label": "Time",
@@ -1084,9 +1194,9 @@
       "source_file": "internal/models/note.go",
       "source_location": "L13",
       "_origin": "ast",
-      "id": "internal_models_note_go_time",
       "community": 19,
-      "norm_label": "time"
+      "norm_label": "time",
+      "id": "internal_models_note_go_time"
     },
     {
       "label": "NotesResponse",
@@ -1094,9 +1204,9 @@
       "source_file": "internal/models/note.go",
       "source_location": "L19",
       "_origin": "ast",
-      "id": "models_notesresponse",
       "community": 19,
-      "norm_label": "notesresponse"
+      "norm_label": "notesresponse",
+      "id": "models_notesresponse"
     },
     {
       "label": "main.go",
@@ -1104,9 +1214,9 @@
       "source_file": "main.go",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "main",
       "community": 3,
-      "norm_label": "main.go"
+      "norm_label": "main.go",
+      "id": "main"
     },
     {
       "label": "frontendHash()",
@@ -1114,9 +1224,9 @@
       "source_file": "main.go",
       "source_location": "L26",
       "_origin": "ast",
-      "id": "main_frontendhash",
       "community": 3,
-      "norm_label": "frontendhash()"
+      "norm_label": "frontendhash()",
+      "id": "main_frontendhash"
     },
     {
       "label": "FS",
@@ -1124,9 +1234,9 @@
       "source_file": "main.go",
       "source_location": "L26",
       "_origin": "ast",
-      "id": "fs",
       "community": 3,
-      "norm_label": "fs"
+      "norm_label": "fs",
+      "id": "fs"
     },
     {
       "label": "cleanOrphanFiles()",
@@ -1134,9 +1244,9 @@
       "source_file": "main.go",
       "source_location": "L46",
       "_origin": "ast",
-      "id": "main_cleanorphanfiles",
       "community": 3,
-      "norm_label": "cleanorphanfiles()"
+      "norm_label": "cleanorphanfiles()",
+      "id": "main_cleanorphanfiles"
     },
     {
       "label": "DB",
@@ -1144,9 +1254,9 @@
       "source_file": "main.go",
       "source_location": "L46",
       "_origin": "ast",
-      "id": "main_go_db",
       "community": 3,
-      "norm_label": "db"
+      "norm_label": "db",
+      "id": "main_go_db"
     },
     {
       "label": "main()",
@@ -1154,9 +1264,9 @@
       "source_file": "main.go",
       "source_location": "L76",
       "_origin": "ast",
-      "id": "main_main",
       "community": 3,
-      "norm_label": "main()"
+      "norm_label": "main()",
+      "id": "main_main"
     },
     {
       "label": "check-prerequisites.ps1",
@@ -4263,20 +4373,6 @@
       "id": "services_notes_generatepreview"
     },
     {
-      "label": "Development Guidelines",
-      "file_type": "document",
-      "source_file": "CLAUDE.md",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "community": 21,
-      "norm_label": "development guidelines",
-      "community_name": "Community 21",
-      "id": "claudemd_development_guidelines"
-    },
-    {
       "label": "Notas README",
       "file_type": "document",
       "source_file": "README.md",
@@ -4619,6 +4715,106 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "claude",
+      "target": "claude_add_commands_for_go_1_23_backend_es2022_vanilla_js_frontend",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "claude",
+      "target": "claude_notas_development_guidelines",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "claude_notas_development_guidelines",
+      "target": "claude_active_technologies",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "claude_notas_development_guidelines",
+      "target": "claude_commands",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "claude_notas_development_guidelines",
+      "target": "claude_inspiration",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "claude_notas_development_guidelines",
+      "target": "claude_project_rules",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "claude_notas_development_guidelines",
+      "target": "claude_project_structure",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "claude_add_commands_for_go_1_23_backend_es2022_vanilla_js_frontend",
+      "target": "claude_code_style",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "claude_add_commands_for_go_1_23_backend_es2022_vanilla_js_frontend",
+      "target": "claude_graphify",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "claude_add_commands_for_go_1_23_backend_es2022_vanilla_js_frontend",
+      "target": "claude_recent_changes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "frontend/assets/js/app.js",
       "source_location": "L124",
       "weight": 1.0,
@@ -4672,9 +4868,9 @@
       "source_file": "frontend/assets/js/app.js",
       "source_location": "L253",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "js_app",
-      "target": "js_app_showarchiveview",
-      "confidence_score": 1.0
+      "target": "js_app_showarchiveview"
     },
     {
       "relation": "contains",
@@ -4743,9 +4939,9 @@
       "source_file": "frontend/assets/js/app.js",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "js_app",
-      "target": "js_archive",
-      "confidence_score": 1.0
+      "target": "js_archive"
     },
     {
       "relation": "imports",
@@ -4754,9 +4950,9 @@
       "source_file": "frontend/assets/js/app.js",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "js_app",
-      "target": "js_archive_loadarchive",
-      "confidence_score": 1.0
+      "target": "js_archive_loadarchive"
     },
     {
       "relation": "imports_from",
@@ -5194,9 +5390,9 @@
       "source_file": "frontend/assets/js/app.js",
       "source_location": "L261",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "js_app_showarchiveview",
-      "target": "js_archive_loadarchive",
-      "confidence_score": 1.0
+      "target": "js_archive_loadarchive"
     },
     {
       "relation": "contains",
@@ -5204,9 +5400,9 @@
       "source_file": "frontend/assets/js/archive.js",
       "source_location": "L51",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "js_archive",
-      "target": "js_archive_archivecardhtml",
-      "confidence_score": 1.0
+      "target": "js_archive_archivecardhtml"
     },
     {
       "relation": "contains",
@@ -5214,9 +5410,9 @@
       "source_file": "frontend/assets/js/archive.js",
       "source_location": "L36",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "js_archive",
-      "target": "js_archive_bindarchivecardevents",
-      "confidence_score": 1.0
+      "target": "js_archive_bindarchivecardevents"
     },
     {
       "relation": "contains",
@@ -5224,9 +5420,9 @@
       "source_file": "frontend/assets/js/archive.js",
       "source_location": "L78",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "js_archive",
-      "target": "js_archive_esc",
-      "confidence_score": 1.0
+      "target": "js_archive_esc"
     },
     {
       "relation": "contains",
@@ -5234,9 +5430,9 @@
       "source_file": "frontend/assets/js/archive.js",
       "source_location": "L72",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "js_archive",
-      "target": "js_archive_formatarchivedat",
-      "confidence_score": 1.0
+      "target": "js_archive_formatarchivedat"
     },
     {
       "relation": "contains",
@@ -5244,9 +5440,9 @@
       "source_file": "frontend/assets/js/archive.js",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "js_archive",
-      "target": "js_archive_loadarchive",
-      "confidence_score": 1.0
+      "target": "js_archive_loadarchive"
     },
     {
       "relation": "imports",
@@ -5255,9 +5451,9 @@
       "source_file": "frontend/assets/js/archive.js",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "js_archive",
-      "target": "js_tagstore_gettagcolor",
-      "confidence_score": 1.0
+      "target": "js_tagstore_gettagcolor"
     },
     {
       "relation": "calls",
@@ -5266,9 +5462,9 @@
       "source_file": "frontend/assets/js/archive.js",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "js_archive_loadarchive",
-      "target": "js_archive_archivecardhtml",
-      "confidence_score": 1.0
+      "target": "js_archive_archivecardhtml"
     },
     {
       "relation": "calls",
@@ -5277,9 +5473,9 @@
       "source_file": "frontend/assets/js/archive.js",
       "source_location": "L27",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "js_archive_loadarchive",
-      "target": "js_archive_bindarchivecardevents",
-      "confidence_score": 1.0
+      "target": "js_archive_bindarchivecardevents"
     },
     {
       "relation": "calls",
@@ -5288,9 +5484,9 @@
       "source_file": "frontend/assets/js/archive.js",
       "source_location": "L58",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "js_archive_archivecardhtml",
-      "target": "js_archive_esc",
-      "confidence_score": 1.0
+      "target": "js_archive_esc"
     },
     {
       "relation": "calls",
@@ -5299,9 +5495,9 @@
       "source_file": "frontend/assets/js/archive.js",
       "source_location": "L57",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "js_archive_archivecardhtml",
-      "target": "js_archive_formatarchivedat",
-      "confidence_score": 1.0
+      "target": "js_archive_formatarchivedat"
     },
     {
       "relation": "imports_from",
@@ -5352,9 +5548,9 @@
       "source_file": "frontend/assets/js/notes.js",
       "source_location": "L50",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "js_notes",
-      "target": "js_notes_archivenote",
-      "confidence_score": 1.0
+      "target": "js_notes_archivenote"
     },
     {
       "relation": "contains",
@@ -5796,9 +5992,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L355",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_notes",
-      "target": "db_notes_scanarchivednotes",
-      "confidence_score": 1.0
+      "target": "db_notes_scanarchivednotes"
     },
     {
       "relation": "contains",
@@ -5846,9 +6042,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L259",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_db",
-      "target": "db_db_archivenote",
-      "confidence_score": 1.0
+      "target": "db_db_archivenote"
     },
     {
       "relation": "method",
@@ -5856,9 +6052,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L567",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_db",
-      "target": "db_db_clearsharetoken",
-      "confidence_score": 1.0
+      "target": "db_db_clearsharetoken"
     },
     {
       "relation": "method",
@@ -5866,9 +6062,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L140",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_db",
-      "target": "db_db_createnote",
-      "confidence_score": 1.0
+      "target": "db_db_createnote"
     },
     {
       "relation": "method",
@@ -5876,9 +6072,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L199",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_db",
-      "target": "db_db_deletenote",
-      "confidence_score": 1.0
+      "target": "db_db_deletenote"
     },
     {
       "relation": "method",
@@ -5886,9 +6082,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L383",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_db",
-      "target": "db_db_emptytrash",
-      "confidence_score": 1.0
+      "target": "db_db_emptytrash"
     },
     {
       "relation": "method",
@@ -5896,9 +6092,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_db",
-      "target": "db_db_filterbyhashtag",
-      "confidence_score": 1.0
+      "target": "db_db_filterbyhashtag"
     },
     {
       "relation": "method",
@@ -5906,9 +6102,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L111",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_db",
-      "target": "db_db_getnote",
-      "confidence_score": 1.0
+      "target": "db_db_getnote"
     },
     {
       "relation": "method",
@@ -5916,9 +6112,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L573",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_db",
-      "target": "db_db_getnotebysharetoken",
-      "confidence_score": 1.0
+      "target": "db_db_getnotebysharetoken"
     },
     {
       "relation": "method",
@@ -5926,9 +6122,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L528",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_db",
-      "target": "db_db_getnoteupdatedat",
-      "confidence_score": 1.0
+      "target": "db_db_getnoteupdatedat"
     },
     {
       "relation": "method",
@@ -5936,9 +6132,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L335",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_db",
-      "target": "db_db_listarchivednotes",
-      "confidence_score": 1.0
+      "target": "db_db_listarchivednotes"
     },
     {
       "relation": "method",
@@ -5946,9 +6142,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L27",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_db",
-      "target": "db_db_listnotes",
-      "confidence_score": 1.0
+      "target": "db_db_listnotes"
     },
     {
       "relation": "method",
@@ -5956,9 +6152,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L603",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_db",
-      "target": "db_db_listsharednotes",
-      "confidence_score": 1.0
+      "target": "db_db_listsharednotes"
     },
     {
       "relation": "method",
@@ -5966,9 +6162,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L289",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_db",
-      "target": "db_db_listtrashednotes",
-      "confidence_score": 1.0
+      "target": "db_db_listtrashednotes"
     },
     {
       "relation": "method",
@@ -5976,9 +6172,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L54",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_db",
-      "target": "db_db_querynotes",
-      "confidence_score": 1.0
+      "target": "db_db_querynotes"
     },
     {
       "relation": "method",
@@ -5986,9 +6182,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L475",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_db",
-      "target": "db_db_repairhashtagsfromnotes",
-      "confidence_score": 1.0
+      "target": "db_db_repairhashtagsfromnotes"
     },
     {
       "relation": "method",
@@ -5996,9 +6192,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L244",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_db",
-      "target": "db_db_restorenote",
-      "confidence_score": 1.0
+      "target": "db_db_restorenote"
     },
     {
       "relation": "method",
@@ -6006,9 +6202,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L38",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_db",
-      "target": "db_db_searchnotes",
-      "confidence_score": 1.0
+      "target": "db_db_searchnotes"
     },
     {
       "relation": "method",
@@ -6016,9 +6212,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L545",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_db",
-      "target": "db_db_setsharetoken",
-      "confidence_score": 1.0
+      "target": "db_db_setsharetoken"
     },
     {
       "relation": "method",
@@ -6026,9 +6222,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L431",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_db",
-      "target": "db_db_togglepin",
-      "confidence_score": 1.0
+      "target": "db_db_togglepin"
     },
     {
       "relation": "method",
@@ -6036,9 +6232,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L229",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_db",
-      "target": "db_db_trashnote",
-      "confidence_score": 1.0
+      "target": "db_db_trashnote"
     },
     {
       "relation": "method",
@@ -6046,9 +6242,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L274",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_db",
-      "target": "db_db_unarchivenote",
-      "confidence_score": 1.0
+      "target": "db_db_unarchivenote"
     },
     {
       "relation": "method",
@@ -6056,9 +6252,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L168",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_db",
-      "target": "db_db_updatenote",
-      "confidence_score": 1.0
+      "target": "db_db_updatenote"
     },
     {
       "relation": "calls",
@@ -6133,9 +6329,9 @@
       "source_location": "L335",
       "weight": 1.0,
       "context": "return_type",
+      "confidence_score": 1.0,
       "source": "db_db_listarchivednotes",
-      "target": "note",
-      "confidence_score": 1.0
+      "target": "note"
     },
     {
       "relation": "references",
@@ -6199,9 +6395,9 @@
       "source_location": "L355",
       "weight": 1.0,
       "context": "return_type",
+      "confidence_score": 1.0,
       "source": "db_notes_scanarchivednotes",
-      "target": "note",
-      "confidence_score": 1.0
+      "target": "note"
     },
     {
       "relation": "references",
@@ -6309,9 +6505,9 @@
       "source_location": "L355",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "db_notes_scanarchivednotes",
-      "target": "rows",
-      "confidence_score": 1.0
+      "target": "rows"
     },
     {
       "relation": "references",
@@ -6364,9 +6560,9 @@
       "source_location": "L92",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "db_notes_parsehashtags",
-      "target": "nullstring",
-      "confidence_score": 1.0
+      "target": "nullstring"
     },
     {
       "relation": "calls",
@@ -6375,9 +6571,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L367",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_notes_scanarchivednotes",
-      "target": "db_notes_parsehashtags",
-      "confidence_score": 1.0
+      "target": "db_notes_parsehashtags"
     },
     {
       "relation": "calls",
@@ -6507,9 +6703,9 @@
       "source_file": "internal/db/notes.go",
       "source_location": "L352",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_db_listarchivednotes",
-      "target": "db_notes_scanarchivednotes",
-      "confidence_score": 1.0
+      "target": "db_notes_scanarchivednotes"
     },
     {
       "relation": "references",
@@ -6551,9 +6747,9 @@
       "source_location": "L447",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "db_notes_syncnotehashtags",
-      "target": "tx",
-      "confidence_score": 1.0
+      "target": "tx"
     },
     {
       "relation": "calls",
@@ -6657,9 +6853,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L212",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "handlers_notehandler",
-      "target": "handlers_notehandler_archive",
-      "confidence_score": 1.0
+      "target": "handlers_notehandler_archive"
     },
     {
       "relation": "method",
@@ -6727,9 +6923,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L276",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "handlers_notehandler",
-      "target": "handlers_notehandler_listarchive",
-      "confidence_score": 1.0
+      "target": "handlers_notehandler_listarchive"
     },
     {
       "relation": "method",
@@ -6797,9 +6993,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L231",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "handlers_notehandler",
-      "target": "handlers_notehandler_unarchive",
-      "confidence_score": 1.0
+      "target": "handlers_notehandler_unarchive"
     },
     {
       "relation": "method",
@@ -6905,9 +7101,9 @@
       "source_location": "L35",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_list",
-      "target": "request",
-      "confidence_score": 1.0
+      "target": "request"
     },
     {
       "relation": "references",
@@ -6916,9 +7112,9 @@
       "source_location": "L35",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_list",
-      "target": "responsewriter",
-      "confidence_score": 1.0
+      "target": "responsewriter"
     },
     {
       "relation": "references",
@@ -6927,9 +7123,9 @@
       "source_location": "L212",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_archive",
-      "target": "responsewriter",
-      "confidence_score": 1.0
+      "target": "responsewriter"
     },
     {
       "relation": "references",
@@ -6938,9 +7134,9 @@
       "source_location": "L99",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_create",
-      "target": "responsewriter",
-      "confidence_score": 1.0
+      "target": "responsewriter"
     },
     {
       "relation": "references",
@@ -6949,9 +7145,9 @@
       "source_location": "L148",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_delete",
-      "target": "responsewriter",
-      "confidence_score": 1.0
+      "target": "responsewriter"
     },
     {
       "relation": "references",
@@ -6960,9 +7156,9 @@
       "source_location": "L302",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_emptytrash",
-      "target": "responsewriter",
-      "confidence_score": 1.0
+      "target": "responsewriter"
     },
     {
       "relation": "references",
@@ -6971,9 +7167,9 @@
       "source_location": "L419",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_exporttopkd",
-      "target": "responsewriter",
-      "confidence_score": 1.0
+      "target": "responsewriter"
     },
     {
       "relation": "references",
@@ -6982,9 +7178,9 @@
       "source_location": "L76",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_get",
-      "target": "responsewriter",
-      "confidence_score": 1.0
+      "target": "responsewriter"
     },
     {
       "relation": "references",
@@ -6993,9 +7189,9 @@
       "source_location": "L276",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_listarchive",
-      "target": "responsewriter",
-      "confidence_score": 1.0
+      "target": "responsewriter"
     },
     {
       "relation": "references",
@@ -7004,9 +7200,9 @@
       "source_location": "L490",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_listshared",
-      "target": "responsewriter",
-      "confidence_score": 1.0
+      "target": "responsewriter"
     },
     {
       "relation": "references",
@@ -7015,9 +7211,9 @@
       "source_location": "L250",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_listtrash",
-      "target": "responsewriter",
-      "confidence_score": 1.0
+      "target": "responsewriter"
     },
     {
       "relation": "references",
@@ -7026,9 +7222,9 @@
       "source_location": "L193",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_restore",
-      "target": "responsewriter",
-      "confidence_score": 1.0
+      "target": "responsewriter"
     },
     {
       "relation": "references",
@@ -7037,9 +7233,9 @@
       "source_location": "L351",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_share",
-      "target": "responsewriter",
-      "confidence_score": 1.0
+      "target": "responsewriter"
     },
     {
       "relation": "references",
@@ -7048,9 +7244,9 @@
       "source_location": "L318",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_togglepin",
-      "target": "responsewriter",
-      "confidence_score": 1.0
+      "target": "responsewriter"
     },
     {
       "relation": "references",
@@ -7059,9 +7255,9 @@
       "source_location": "L174",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_trash",
-      "target": "responsewriter",
-      "confidence_score": 1.0
+      "target": "responsewriter"
     },
     {
       "relation": "references",
@@ -7070,9 +7266,9 @@
       "source_location": "L231",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_unarchive",
-      "target": "responsewriter",
-      "confidence_score": 1.0
+      "target": "responsewriter"
     },
     {
       "relation": "references",
@@ -7081,9 +7277,9 @@
       "source_location": "L393",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_unshare",
-      "target": "responsewriter",
-      "confidence_score": 1.0
+      "target": "responsewriter"
     },
     {
       "relation": "references",
@@ -7092,9 +7288,9 @@
       "source_location": "L117",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_update",
-      "target": "responsewriter",
-      "confidence_score": 1.0
+      "target": "responsewriter"
     },
     {
       "relation": "references",
@@ -7103,9 +7299,9 @@
       "source_location": "L212",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_archive",
-      "target": "request",
-      "confidence_score": 1.0
+      "target": "request"
     },
     {
       "relation": "references",
@@ -7114,9 +7310,9 @@
       "source_location": "L99",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_create",
-      "target": "request",
-      "confidence_score": 1.0
+      "target": "request"
     },
     {
       "relation": "references",
@@ -7125,9 +7321,9 @@
       "source_location": "L148",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_delete",
-      "target": "request",
-      "confidence_score": 1.0
+      "target": "request"
     },
     {
       "relation": "references",
@@ -7136,9 +7332,9 @@
       "source_location": "L302",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_emptytrash",
-      "target": "request",
-      "confidence_score": 1.0
+      "target": "request"
     },
     {
       "relation": "references",
@@ -7147,9 +7343,9 @@
       "source_location": "L419",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_exporttopkd",
-      "target": "request",
-      "confidence_score": 1.0
+      "target": "request"
     },
     {
       "relation": "references",
@@ -7158,9 +7354,9 @@
       "source_location": "L76",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_get",
-      "target": "request",
-      "confidence_score": 1.0
+      "target": "request"
     },
     {
       "relation": "references",
@@ -7169,9 +7365,9 @@
       "source_location": "L276",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_listarchive",
-      "target": "request",
-      "confidence_score": 1.0
+      "target": "request"
     },
     {
       "relation": "references",
@@ -7180,9 +7376,9 @@
       "source_location": "L490",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_listshared",
-      "target": "request",
-      "confidence_score": 1.0
+      "target": "request"
     },
     {
       "relation": "references",
@@ -7191,9 +7387,9 @@
       "source_location": "L250",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_listtrash",
-      "target": "request",
-      "confidence_score": 1.0
+      "target": "request"
     },
     {
       "relation": "references",
@@ -7202,9 +7398,9 @@
       "source_location": "L193",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_restore",
-      "target": "request",
-      "confidence_score": 1.0
+      "target": "request"
     },
     {
       "relation": "references",
@@ -7213,9 +7409,9 @@
       "source_location": "L351",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_share",
-      "target": "request",
-      "confidence_score": 1.0
+      "target": "request"
     },
     {
       "relation": "references",
@@ -7224,9 +7420,9 @@
       "source_location": "L318",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_togglepin",
-      "target": "request",
-      "confidence_score": 1.0
+      "target": "request"
     },
     {
       "relation": "references",
@@ -7235,9 +7431,9 @@
       "source_location": "L174",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_trash",
-      "target": "request",
-      "confidence_score": 1.0
+      "target": "request"
     },
     {
       "relation": "references",
@@ -7246,9 +7442,9 @@
       "source_location": "L231",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_unarchive",
-      "target": "request",
-      "confidence_score": 1.0
+      "target": "request"
     },
     {
       "relation": "references",
@@ -7257,9 +7453,9 @@
       "source_location": "L393",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_unshare",
-      "target": "request",
-      "confidence_score": 1.0
+      "target": "request"
     },
     {
       "relation": "references",
@@ -7268,9 +7464,9 @@
       "source_location": "L117",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_update",
-      "target": "request",
-      "confidence_score": 1.0
+      "target": "request"
     },
     {
       "relation": "references",
@@ -7279,9 +7475,9 @@
       "source_location": "L345",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "handlers_notes_parseid",
-      "target": "request",
-      "confidence_score": 1.0
+      "target": "request"
     },
     {
       "relation": "calls",
@@ -7323,9 +7519,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L277",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_listarchive",
-      "target": "handlers_notehandler_get",
-      "confidence_score": 1.0
+      "target": "handlers_notehandler_get"
     },
     {
       "relation": "calls",
@@ -7543,9 +7739,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L213",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_archive",
-      "target": "handlers_notes_parseid",
-      "confidence_score": 1.0
+      "target": "handlers_notes_parseid"
     },
     {
       "relation": "calls",
@@ -7554,9 +7750,9 @@
       "source_file": "internal/handlers/notes.go",
       "source_location": "L232",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "handlers_notehandler_unarchive",
-      "target": "handlers_notes_parseid",
-      "confidence_score": 1.0
+      "target": "handlers_notes_parseid"
     },
     {
       "relation": "calls",
@@ -7795,9 +7991,9 @@
       "source_file": "internal/models/note.go",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "models_note",
-      "target": "models_note",
-      "confidence_score": 1.0
+      "target": "models_note"
     },
     {
       "relation": "references",
@@ -7855,9 +8051,9 @@
       "source_location": "L26",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "main_frontendhash",
-      "target": "fs",
-      "confidence_score": 1.0
+      "target": "fs"
     },
     {
       "relation": "calls",
@@ -12667,16 +12863,6 @@
       "target": "services_notes_generatepreview"
     },
     {
-      "relation": "conceptually_related_to",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "CLAUDE.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "claudemd_development_guidelines",
-      "target": "readmemd_notas"
-    },
-    {
       "relation": "references",
       "confidence": "INFERRED",
       "confidence_score": 0.8,
@@ -12901,5 +13087,5 @@
       "confidence_score": 1.0
     }
   ],
-  "built_at_commit": "bf4bcdea6da6fe35a8a170ec5b3ace7d7a955559"
+  "built_at_commit": "23da6b63fea569febc9c72954a21acb5da81bcea"
 }
