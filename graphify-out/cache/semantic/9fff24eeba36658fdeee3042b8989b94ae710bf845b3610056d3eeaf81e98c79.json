@@ -1,0 +1,1 @@
+{"nodes": [], "edges": [{"source": "spec_002_trash_restore", "target": "spec_001_web_notes_app", "relation": "inherits", "confidence": "INFERRED", "confidence_score": 0.9, "source_file": "specs/002-trash-restore-notes/plan.md", "source_location": null, "weight": 1.0}], "hyperedges": []}

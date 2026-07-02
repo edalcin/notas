@@ -1,0 +1,654 @@
+{
+  "communities": {
+    "0": [
+      "js_app_showsharedview",
+      "js_hashtags",
+      "js_hashtags_bindtagmanagerevents",
+      "js_hashtags_clearfilter",
+      "js_hashtags_closeallpickers",
+      "js_hashtags_deletehashtag",
+      "js_hashtags_esc",
+      "js_hashtags_loadhashtags",
+      "js_hashtags_openhashtagmanager",
+      "js_hashtags_palette",
+      "js_hashtags_renamehashtag",
+      "js_hashtags_renderhashtaglist",
+      "js_hashtags_renderhashtagmanagercontent",
+      "js_hashtags_setactivehashtag",
+      "js_hashtags_showrenameform",
+      "js_hashtags_tagrowhtml",
+      "js_hashtags_togglecolorpicker",
+      "js_hashtags_updatehashtagcolor",
+      "js_modal",
+      "js_modal_showconfirmmodal",
+      "js_notes",
+      "js_notes_appendcards",
+      "js_notes_bindcardevents",
+      "js_notes_currentfilter",
+      "js_notes_disconnectobserver",
+      "js_notes_esc",
+      "js_notes_exporttopkd",
+      "js_notes_fetchpage",
+      "js_notes_loadnotes",
+      "js_notes_notecardhtml",
+      "js_notes_pagination",
+      "js_notes_relativetime",
+      "js_notes_setsentinel",
+      "js_notes_setupobserver",
+      "js_notes_togglepin",
+      "js_notes_trashnote",
+      "js_notes_updateheader",
+      "js_shared",
+      "js_shared_bindsharedcardevents",
+      "js_shared_esc",
+      "js_shared_loadsharednotes",
+      "js_shared_opensharemodal",
+      "js_shared_relativetime",
+      "js_shared_removefromsharedlist",
+      "js_shared_setrevokedstate",
+      "js_shared_setsharedstate",
+      "js_shared_sharednotecardhtml",
+      "js_shared_updatenotecardsharestate",
+      "js_tagstore",
+      "js_tagstore_gettagcolor",
+      "js_tagstore_settags",
+      "js_tagstore_tags",
+      "js_trash",
+      "js_trash_bindtrashcardevents",
+      "js_trash_emptytrash",
+      "js_trash_esc",
+      "js_trash_formatdeletedat",
+      "js_trash_loadtrash",
+      "js_trash_trashcardhtml"
+    ],
+    "1": [
+      "fileheader",
+      "handlers_attachmenthandler_delete",
+      "handlers_attachmenthandler_listall",
+      "handlers_attachmenthandler_upload",
+      "handlers_filespathkey",
+      "handlers_hashtaghandler",
+      "handlers_hashtaghandler_delete",
+      "handlers_hashtaghandler_list",
+      "handlers_hashtaghandler_rename",
+      "handlers_hashtaghandler_updatecolor",
+      "handlers_hashtags",
+      "handlers_hashtags_isvalidhexcolor",
+      "handlers_hashtags_newhashtaghandler",
+      "handlers_helpers",
+      "handlers_helpers_deletefilefrompath",
+      "handlers_helpers_getfilespath",
+      "handlers_helpers_getmaxupload",
+      "handlers_helpers_health",
+      "handlers_helpers_jsonerror",
+      "handlers_helpers_jsonresponse",
+      "handlers_maxuploadkey",
+      "handlers_notehandler",
+      "handlers_notehandler_create",
+      "handlers_notehandler_delete",
+      "handlers_notehandler_emptytrash",
+      "handlers_notehandler_exporttopkd",
+      "handlers_notehandler_get",
+      "handlers_notehandler_list",
+      "handlers_notehandler_listshared",
+      "handlers_notehandler_listtrash",
+      "handlers_notehandler_restore",
+      "handlers_notehandler_share",
+      "handlers_notehandler_togglepin",
+      "handlers_notehandler_trash",
+      "handlers_notehandler_unshare",
+      "handlers_notehandler_update",
+      "handlers_notes",
+      "handlers_notes_newnotehandler",
+      "handlers_notes_parseid",
+      "internal_handlers_attachments_go_request",
+      "internal_handlers_attachments_go_responsewriter",
+      "internal_handlers_hashtags_go_db",
+      "internal_handlers_hashtags_go_request",
+      "internal_handlers_hashtags_go_responsewriter",
+      "internal_handlers_helpers_go_request",
+      "internal_handlers_helpers_go_responsewriter",
+      "internal_handlers_notes_go_db",
+      "internal_handlers_notes_go_request",
+      "internal_handlers_notes_go_responsewriter",
+      "services_files",
+      "services_files_deletefile",
+      "services_files_savefile"
+    ],
+    "2": [
+      "db_db_clearsharetoken",
+      "db_db_createnote",
+      "db_db_deletehashtag",
+      "db_db_deletenote",
+      "db_db_emptytrash",
+      "db_db_filterbyhashtag",
+      "db_db_getnote",
+      "db_db_getnotebysharetoken",
+      "db_db_getnoteupdatedat",
+      "db_db_listhashtags",
+      "db_db_listnotes",
+      "db_db_listsharednotes",
+      "db_db_listtrashednotes",
+      "db_db_querynotes",
+      "db_db_renamehashtag",
+      "db_db_repairhashtagsfromnotes",
+      "db_db_restorenote",
+      "db_db_searchnotes",
+      "db_db_setsharetoken",
+      "db_db_togglepin",
+      "db_db_trashnote",
+      "db_db_updatehashtagcolor",
+      "db_db_updatenote",
+      "db_notes",
+      "db_notes_generatesharetoken",
+      "db_notes_parsehashtags",
+      "db_notes_scannotes",
+      "db_notes_scansharednotes",
+      "db_notes_scantrashednotes",
+      "db_notes_syncnotehashtags",
+      "hashtag",
+      "internal_db_hashtags_go_db_db",
+      "internal_db_notes_go_attachment",
+      "internal_db_notes_go_db_db",
+      "internal_db_notes_go_nullstring",
+      "internal_db_notes_go_time",
+      "internal_db_notes_go_tx",
+      "note",
+      "rows",
+      "services_notes",
+      "services_notes_extracthashtags",
+      "services_notes_generatepreview"
+    ],
+    "3": [
+      "handlers_attachmenthandler",
+      "handlers_attachments",
+      "handlers_attachments_newattachmenthandler",
+      "handlers_attachments_servefile",
+      "handlers_auth",
+      "handlers_auth_newsessionsecret",
+      "handlers_auth_pinlogin",
+      "handlers_auth_pinlogout",
+      "handlers_auth_pinmiddleware",
+      "handlers_auth_tokenforpin",
+      "handlers_helpers_filespathmiddleware",
+      "handlers_helpers_maxuploadmiddleware",
+      "handlers_loginratelimiter",
+      "handlers_loginratelimiter_isblocked",
+      "handlers_loginratelimiter_recordfailure",
+      "handlers_loginratelimiter_recordsuccess",
+      "handlers_loginstate",
+      "handlers_static",
+      "handlers_static_servesw",
+      "handlers_static_spahandler",
+      "internal_handlers_attachments_go_db",
+      "internal_handlers_attachments_go_handlerfunc",
+      "internal_handlers_auth_go_handler",
+      "internal_handlers_auth_go_handlerfunc",
+      "internal_handlers_auth_go_ipnet",
+      "internal_handlers_auth_go_mutex",
+      "internal_handlers_auth_go_time",
+      "internal_handlers_helpers_go_handler",
+      "internal_handlers_helpers_go_handlerfunc",
+      "internal_handlers_static_go_fs",
+      "internal_handlers_static_go_handlerfunc",
+      "main",
+      "main_cleanorphanfiles",
+      "main_frontendhash",
+      "main_go_db",
+      "main_go_fs",
+      "main_main"
+    ],
+    "4": [
+      "js_app",
+      "js_app_bindui",
+      "js_app_checkauth",
+      "js_app_handleincomingshare",
+      "js_app_initapp",
+      "js_app_setactivenav",
+      "js_app_showattachmentsview",
+      "js_app_showbackupview",
+      "js_app_shownotesview",
+      "js_app_showpinoverlay",
+      "js_app_showtrashview",
+      "js_attachments_view",
+      "js_attachments_view_deleteglobalattachment",
+      "js_attachments_view_esc",
+      "js_attachments_view_itemhtml",
+      "js_attachments_view_loadattachmentsview",
+      "js_attachments_view_mimeicon",
+      "js_attachments_view_onattachmentdeleted",
+      "js_attachments_view_renderattachmentsview",
+      "js_attachments_view_renderpdfthumbs",
+      "js_attachments_view_showdeleteconfirm",
+      "js_backup",
+      "js_backup_downloadbackup",
+      "js_backup_initbackup",
+      "js_backup_restorebackup",
+      "js_editor_initeditor",
+      "js_hashtags_closehashtagmanager",
+      "js_theme",
+      "js_theme_applytheme",
+      "js_theme_inittheme",
+      "js_theme_toggletheme",
+      "js_trash_inittrash"
+    ],
+    "5": [
+      "js_attachments",
+      "js_attachments_attachmenthtml",
+      "js_attachments_deleteattachment",
+      "js_attachments_escapehtml",
+      "js_attachments_loadattachments",
+      "js_attachments_renderattachments",
+      "js_attachments_uploadattachment",
+      "js_editor",
+      "js_editor_acconfirm",
+      "js_editor_acmove",
+      "js_editor_acupdateselection",
+      "js_editor_autoresize",
+      "js_editor_ensurenote",
+      "js_editor_eschtml",
+      "js_editor_handleautocomplete",
+      "js_editor_handlesmartlist",
+      "js_editor_hideautocomplete",
+      "js_editor_insertatcursor",
+      "js_editor_insertmarkdown",
+      "js_editor_loadnoteforedit",
+      "js_editor_reseteditor",
+      "js_editor_savenote",
+      "js_editor_showautocomplete",
+      "js_editor_updatetagspreview",
+      "js_tagstore_gettags"
+    ],
+    "6": [
+      "frontend_manifest",
+      "frontend_manifest_background_color",
+      "frontend_manifest_categories",
+      "frontend_manifest_description",
+      "frontend_manifest_display",
+      "frontend_manifest_icons",
+      "frontend_manifest_id",
+      "frontend_manifest_name",
+      "frontend_manifest_orientation",
+      "frontend_manifest_params_files",
+      "frontend_manifest_params_text",
+      "frontend_manifest_params_title",
+      "frontend_manifest_params_url",
+      "frontend_manifest_scope",
+      "frontend_manifest_share_target",
+      "frontend_manifest_share_target_action",
+      "frontend_manifest_share_target_enctype",
+      "frontend_manifest_share_target_method",
+      "frontend_manifest_share_target_params",
+      "frontend_manifest_short_name",
+      "frontend_manifest_start_url",
+      "frontend_manifest_theme_color"
+    ],
+    "7": [
+      "powershell_update_agent_context",
+      "powershell_update_agent_context_extract_planfield",
+      "powershell_update_agent_context_format_technologystack",
+      "powershell_update_agent_context_get_commandsforlanguage",
+      "powershell_update_agent_context_get_languageconventions",
+      "powershell_update_agent_context_get_projectstructure",
+      "powershell_update_agent_context_main",
+      "powershell_update_agent_context_new_agentfile",
+      "powershell_update_agent_context_parse_plandata",
+      "powershell_update_agent_context_print_summary",
+      "powershell_update_agent_context_update_agentfile",
+      "powershell_update_agent_context_update_allexistingagents",
+      "powershell_update_agent_context_update_existingagentfile",
+      "powershell_update_agent_context_update_specificagent",
+      "powershell_update_agent_context_validate_environment",
+      "powershell_update_agent_context_write_err",
+      "powershell_update_agent_context_write_info",
+      "powershell_update_agent_context_write_success",
+      "powershell_update_agent_context_write_warningmsg"
+    ],
+    "8": [
+      "db_backup",
+      "db_backup_copyfile",
+      "db_backup_validatesqlitefile",
+      "db_db_backup",
+      "db_db_open",
+      "db_db_restore",
+      "db_db_runmigrations",
+      "handlers_backup",
+      "handlers_backup_newbackuphandler",
+      "handlers_backuphandler",
+      "handlers_backuphandler_download",
+      "handlers_backuphandler_restore",
+      "internal_db_backup_go_db_db",
+      "internal_db_db_go_db_db",
+      "internal_handlers_backup_go_db",
+      "internal_handlers_backup_go_request",
+      "internal_handlers_backup_go_responsewriter"
+    ],
+    "9": [
+      "attachmentlistitem",
+      "db_attachments",
+      "db_attachments_extractnotetitle",
+      "db_attachments_parsehashtaglist",
+      "db_db_allstoredfilenames",
+      "db_db_createattachment",
+      "db_db_deleteattachment",
+      "db_db_deleteorphanattachments",
+      "db_db_getattachment",
+      "db_db_getattachmentsbynote",
+      "db_db_listallattachments",
+      "internal_db_attachments_go_attachment",
+      "internal_db_attachments_go_db_db",
+      "internal_db_attachments_go_nullstring"
+    ],
+    "10": [
+      "handlers_public",
+      "handlers_public_clientip",
+      "handlers_public_init",
+      "handlers_public_newpublichandler",
+      "handlers_public_parsetrustedproxies",
+      "handlers_publichandler",
+      "handlers_publichandler_servepublicnote",
+      "handlers_ratelimiter",
+      "handlers_ratelimiter_allow",
+      "internal_handlers_public_go_db",
+      "internal_handlers_public_go_ipnet",
+      "internal_handlers_public_go_mutex",
+      "internal_handlers_public_go_request",
+      "internal_handlers_public_go_responsewriter"
+    ],
+    "11": [
+      "frontend_assets_js_shared",
+      "internal_db_notes",
+      "internal_handlers_notes",
+      "internal_handlers_public",
+      "internal_models_note",
+      "specs_002_trash_restore_notes_tasks",
+      "specs_003_public_share_link_data_model",
+      "specs_003_public_share_link_plan",
+      "specs_003_public_share_link_share_api",
+      "specs_003_public_share_link_spec",
+      "specs_003_public_share_link_tasks"
+    ],
+    "12": [
+      "powershell_common",
+      "powershell_common_find_specifyroot",
+      "powershell_common_get_currentbranch",
+      "powershell_common_get_featuredir",
+      "powershell_common_get_featurepathsenv",
+      "powershell_common_get_reporoot",
+      "powershell_common_resolve_template",
+      "powershell_common_test_dirhasfiles",
+      "powershell_common_test_featurebranch",
+      "powershell_common_test_fileexists",
+      "powershell_common_test_hasgit"
+    ],
+    "13": [
+      "frontend_assets_js_public",
+      "internal_services_files",
+      "specs_004_fix_critical_vulns_data_model",
+      "specs_004_fix_critical_vulns_plan",
+      "specs_004_fix_critical_vulns_spec",
+      "specs_004_fix_critical_vulns_tasks"
+    ],
+    "14": [
+      "powershell_create_new_feature",
+      "powershell_create_new_feature_convertto_cleanbranchname",
+      "powershell_create_new_feature_get_branchname",
+      "powershell_create_new_feature_get_highestnumberfrombranches",
+      "powershell_create_new_feature_get_highestnumberfromspecs",
+      "powershell_create_new_feature_get_nextbranchnumber"
+    ],
+    "15": [
+      "backend_db",
+      "backend_handlers_notes",
+      "backend_main",
+      "docker_compose_yml",
+      "reportmd_corrections"
+    ],
+    "16": [
+      "frontend_sw",
+      "frontend_sw_app_shell",
+      "frontend_sw_cachefirst",
+      "frontend_sw_handlesharetarget",
+      "frontend_sw_networkfirst"
+    ],
+    "17": [
+      "api_contract_001",
+      "data_model_001",
+      "spec_001_web_notes_app",
+      "spec_002_trash_restore"
+    ],
+    "18": [
+      "internal_models_attachment_go_time",
+      "models_attachment",
+      "models_attachmentlistitem",
+      "models_attachmentslistresponse"
+    ],
+    "19": [
+      "internal_models_note_go_attachment",
+      "internal_models_note_go_time",
+      "models_note",
+      "models_notesresponse"
+    ],
+    "20": [
+      "internal_services_hashtags_go_tx",
+      "services_hashtags",
+      "services_hashtags_deletehashtag",
+      "services_hashtags_renamehashtag"
+    ],
+    "21": [
+      "claudemd_development_guidelines",
+      "readmemd_notas"
+    ],
+    "22": [
+      "frontend_app_js",
+      "frontend_index"
+    ],
+    "23": [
+      "models_hashtag",
+      "models_hashtagsresponse"
+    ],
+    "24": [
+      "db_hashtags"
+    ],
+    "25": [
+      "embed_frontend"
+    ],
+    "26": [
+      "frontend_assets_js_notes"
+    ],
+    "27": [
+      "frontend_index_html"
+    ],
+    "28": [
+      "js_public"
+    ],
+    "29": [
+      "pkg_github_com_edalcin_notes"
+    ],
+    "30": [
+      "powershell_check_prerequisites"
+    ],
+    "31": [
+      "powershell_setup_plan"
+    ],
+    "32": [
+      "specs_002_trash_restore_notes_api"
+    ],
+    "33": [
+      "specs_002_trash_restore_notes_requirements"
+    ],
+    "34": [
+      "specs_003_public_share_link_quickstart"
+    ],
+    "35": [
+      "specs_003_public_share_link_requirements"
+    ],
+    "36": [
+      "specs_003_public_share_link_research"
+    ],
+    "37": [
+      "specs_004_fix_critical_vulns_quickstart"
+    ],
+    "38": [
+      "specs_004_fix_critical_vulns_requirements"
+    ],
+    "39": [
+      "specs_004_fix_critical_vulns_research"
+    ]
+  },
+  "cohesion": {
+    "0": 0.06779661016949153,
+    "1": 0.11463046757164404,
+    "2": 0.09291521486643438,
+    "3": 0.08558558558558559,
+    "4": 0.10685483870967742,
+    "5": 0.16,
+    "6": 0.09090909090909091,
+    "7": 0.28654970760233917,
+    "8": 0.18382352941176472,
+    "9": 0.18681318681318682,
+    "10": 0.23076923076923078,
+    "11": 0.23636363636363636,
+    "12": 0.32727272727272727,
+    "13": 0.4,
+    "14": 0.5333333333333333,
+    "15": 0.4,
+    "16": 0.4,
+    "17": 0.5,
+    "18": 1.0,
+    "19": 0.6666666666666666,
+    "20": 0.6666666666666666,
+    "21": 1.0,
+    "22": 1.0,
+    "23": 2.0,
+    "24": 1.0,
+    "25": 1.0,
+    "26": 1.0,
+    "27": 1.0,
+    "28": 1.0,
+    "29": 1.0,
+    "30": 1.0,
+    "31": 1.0,
+    "32": 1.0,
+    "33": 1.0,
+    "34": 1.0,
+    "35": 1.0,
+    "36": 1.0,
+    "37": 1.0,
+    "38": 1.0,
+    "39": 1.0
+  },
+  "gods": [
+    {
+      "id": "handlers_helpers_jsonerror",
+      "label": "jsonError()",
+      "degree": 25
+    },
+    {
+      "id": "handlers_helpers_jsonresponse",
+      "label": "jsonResponse()",
+      "degree": 20
+    },
+    {
+      "id": "main_main",
+      "label": "main()",
+      "degree": 20
+    },
+    {
+      "id": "internal_db_notes_go_db_db",
+      "label": "DB",
+      "degree": 19
+    },
+    {
+      "id": "handlers_notehandler",
+      "label": "NoteHandler",
+      "degree": 17
+    },
+    {
+      "id": "js_notes_loadnotes",
+      "label": "loadNotes()",
+      "degree": 15
+    },
+    {
+      "id": "internal_handlers_notes_go_request",
+      "label": "Request",
+      "degree": 15
+    },
+    {
+      "id": "internal_handlers_notes_go_responsewriter",
+      "label": "ResponseWriter",
+      "degree": 14
+    },
+    {
+      "id": "note",
+      "label": "Note",
+      "degree": 13
+    },
+    {
+      "id": "handlers_notes_parseid",
+      "label": "parseID()",
+      "degree": 12
+    }
+  ],
+  "surprises": [
+    {
+      "source": "Docker Compose Configuration",
+      "target": "Backend Entry Point",
+      "source_files": [
+        "docker-compose.yml",
+        "backend/cmd/server/main.go"
+      ],
+      "confidence": "INFERRED",
+      "relation": "references",
+      "why": "inferred connection - not explicitly stated in source; crosses file types (doc \u2194 code); connects across different repos/directories"
+    },
+    {
+      "source": "API Contracts: Public Note Share Link",
+      "target": "internal/handlers/notes.go",
+      "source_files": [
+        "specs/003-public-share-link/contracts/share-api.md",
+        "internal/handlers/notes.go"
+      ],
+      "confidence": "INFERRED",
+      "relation": "references",
+      "why": "inferred connection - not explicitly stated in source; crosses file types (doc \u2194 code); connects across different repos/directories"
+    },
+    {
+      "source": "main()",
+      "target": "Open()",
+      "source_files": [
+        "main.go",
+        "internal/db/db.go"
+      ],
+      "confidence": "INFERRED",
+      "relation": "calls",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "main()",
+      "target": "NewSessionSecret()",
+      "source_files": [
+        "main.go",
+        "internal/handlers/auth.go"
+      ],
+      "confidence": "INFERRED",
+      "relation": "calls",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; peripheral node `NewSessionSecret()` unexpectedly reaches hub `main()`"
+    },
+    {
+      "source": "main()",
+      "target": "NewBackupHandler()",
+      "source_files": [
+        "main.go",
+        "internal/handlers/backup.go"
+      ],
+      "confidence": "INFERRED",
+      "relation": "calls",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; bridges separate communities"
+    }
+  ],
+  "tokens": {
+    "input": 97076,
+    "output": 4235
+  }
+}
