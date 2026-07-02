@@ -54,12 +54,13 @@ function archiveCardHTML(note) {
     const style = color ? `style="color:${color};background:${color}1a"` : '';
     return `<span class="note-tag" data-tag="${esc(t)}" ${style}>#${esc(t)}</span>`;
   }).join('');
+  const createdTime = note.created_at ? formatDate(note.created_at) : '';
   const archivedTime = note.archived_at ? formatArchivedAt(note.archived_at) : '';
   const rendered = typeof marked !== 'undefined' ? DOMPurify.sanitize(marked.parse(note.content || '', { breaks: true })) : `<p>${esc(note.content || '')}</p>`;
 
   return `<div class="note-card" data-id="${note.id}" role="listitem">
     <div class="note-card-header">
-      <span class="note-card-time">${archivedTime}</span>
+      <span class="note-card-time">Criada em ${createdTime}${archivedTime ? ' · ' + archivedTime : ''}</span>
       <div class="note-card-actions">
         <button class="tb-btn btn-unarchive" data-id="${note.id}" title="Desarquivar nota">📤 Desarquivar</button>
       </div>
@@ -69,10 +70,15 @@ function archiveCardHTML(note) {
   </div>`;
 }
 
-function formatArchivedAt(d) {
+function formatDate(d) {
   if (!d) return '';
   const date = new Date(d);
-  return `Arquivada em ${date.toLocaleDateString('pt-BR')} às ${date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+  return `${date.toLocaleDateString('pt-BR')} às ${date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+}
+
+function formatArchivedAt(d) {
+  if (!d) return '';
+  return `arquivada em ${formatDate(d)}`;
 }
 
 function esc(str) {
