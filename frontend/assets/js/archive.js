@@ -78,7 +78,7 @@ function formatDate(d) {
 
 function formatArchivedAt(d) {
   if (!d) return '';
-  return `arquivada em ${formatDate(d)}`;
+  return `Arquivada em ${formatDate(d)}`;
 }
 
 function esc(str) {
