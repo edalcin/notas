@@ -1366,14 +1366,9 @@ input, textarea { font-family: inherit; }
   }
 
   #notes-list {
-    display: block;
-    columns: 2;
-    column-gap: 20px;
-  }
-
-  #notes-list .note-card {
-    break-inside: avoid;
-    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
   }
 }
 
