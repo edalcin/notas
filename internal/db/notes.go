@@ -39,16 +39,50 @@ func (d *DB) SearchNotes(query string, limit, offset int) ([]models.Note, int, e
 	q := `
 SELECT n.id, n.content, n.pinned, n.created_at, n.updated_at,
        GROUP_CONCAT(h.name, ',') as hashtag_names,
-       (n.share_token IS NOT NULL) AS shared
+       (n.share_token IS NOT NULL) AS shared,
+       n.archived_at
 FROM notes n
 LEFT JOIN note_hashtags nh ON n.id = nh.note_id
 LEFT JOIN hashtags h ON nh.hashtag_id = h.id
 WHERE n.id IN (SELECT rowid FROM notes_fts WHERE notes_fts MATCH ?)
-AND n.deleted_at IS NULL AND n.archived_at IS NULL
+AND n.deleted_at IS NULL
 GROUP BY n.id
 ORDER BY n.pinned DESC, n.created_at DESC
 LIMIT ? OFFSET ?`
-	return d.queryNotes(q, query+"*", limit, offset)
+	rows, err := d.Query(q, query+"*", limit, offset)
+	if err != nil {
+		return nil, 0, err
+	}
+	defer rows.Close()
+	return scanSearchNotes(rows)
+}
+
+func scanSearchNotes(rows *sql.Rows) ([]models.Note, int, error) {
+	var notes []models.Note
+	for rows.Next() {
+		var n models.Note
+		var pinnedInt int
+		var sharedInt int
+		var hashtagNames sql.NullString
+		var archivedAt sql.NullTime
+		if err := rows.Scan(&n.ID, &n.Content, &pinnedInt, &n.CreatedAt, &n.UpdatedAt, &hashtagNames, &sharedInt, &archivedAt); err != nil {
+			return nil, 0, err
+		}
+		n.Pinned = pinnedInt == 1
+		n.Shared = sharedInt == 1
+		n.Preview = services.GeneratePreview(n.Content, 100)
+		n.Hashtags = parseHashtags(hashtagNames)
+		n.Attachments = []models.Attachment{}
+		if archivedAt.Valid {
+			t := archivedAt.Time
+			n.ArchivedAt = &t
+		}
+		notes = append(notes, n)
+	}
+	if notes == nil {
+		notes = []models.Note{}
+	}
+	return notes, len(notes), nil
 }
 
 func (d *DB) queryNotes(q string, arg interface{}, limit, offset int) ([]models.Note, int, error) {

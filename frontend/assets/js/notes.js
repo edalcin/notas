@@ -59,6 +59,18 @@ export async function archiveNote(id) {
   }
 }
 
+export async function unarchiveNote(id) {
+  try {
+    const res = await fetch(`/api/notes/${id}/unarchive`, { method: 'PUT' });
+    if (!res.ok && res.status !== 404) throw new Error('Unarchive failed');
+    document.dispatchEvent(new CustomEvent('note:unarchived'));
+    return true;
+  } catch (err) {
+    console.error('unarchiveNote error:', err);
+    return false;
+  }
+}
+
 // ─── Pagination ───────────────────────────────────────────────────────────────
 
 async function fetchPage(gen) {
@@ -165,6 +177,11 @@ function bindCardEvents(card) {
     await archiveNote(Number(e.currentTarget.dataset.id));
   });
 
+  card.querySelector('.btn-unarchive')?.addEventListener('click', async e => {
+    e.stopPropagation();
+    await unarchiveNote(Number(e.currentTarget.dataset.id));
+  });
+
   card.querySelector('.btn-share')?.addEventListener('click', async e => {
     e.stopPropagation();
     await openShareModal(Number(e.currentTarget.dataset.id));
@@ -225,12 +242,14 @@ function noteCardHTML(note) {
 
   return `<div class="note-card ${pinClass}" data-id="${note.id}" role="listitem">
     <div class="note-card-header">
-      <span class="note-card-time">${note.pinned ? '<span class="pin-badge">📌</span>' : ''}${time}</span>
+      <span class="note-card-time">${note.pinned ? '<span class="pin-badge">📌</span>' : ''}${note.archived_at ? '<span class="pin-badge" title="Nota arquivada">🗄️</span>' : ''}${time}</span>
       <div class="note-card-actions">
         <button class="tb-btn btn-pin" data-id="${note.id}" data-pinned="${note.pinned}" title="${note.pinned ? 'Desafixar' : 'Fixar'}">${note.pinned ? '📌' : '📍'}</button>
         <button class="tb-btn btn-share${note.shared ? ' btn-share--active' : ''}" data-id="${note.id}" data-shared="${note.shared}" title="${note.shared ? 'Link compartilhado' : 'Compartilhar'}">🔗</button>
         <button class="tb-btn btn-pkd" data-id="${note.id}" title="Enviar para PKD">📤</button>
-        <button class="tb-btn btn-archive" data-id="${note.id}" title="Arquivar">🗄️</button>
+        ${note.archived_at
+          ? `<button class="tb-btn btn-unarchive" data-id="${note.id}" title="Desarquivar">📤</button>`
+          : `<button class="tb-btn btn-archive" data-id="${note.id}" title="Arquivar">🗄️</button>`}
         <button class="tb-btn btn-trash" data-id="${note.id}" title="Mover para lixeira">🗑️</button>
       </div>
     </div>
