@@ -245,8 +245,8 @@ func (d *DB) DeleteNote(id int64) error {
 	if _, err := tx.Exec("DELETE FROM attachments WHERE note_id = ?", id); err != nil {
 		return fmt.Errorf("delete note attachments: %w", err)
 	}
-	if _, err := tx.Exec("DELETE FROM hashtags WHERE id NOT IN (SELECT hashtag_id FROM note_hashtags)"); err != nil {
-		return fmt.Errorf("cleanup orphan hashtags: %w", err)
+	if err := cleanupOrphanHashtags(tx); err != nil {
+		return err
 	}
 
 	result, err := tx.Exec("DELETE FROM notes WHERE id = ?", id)
@@ -261,7 +261,13 @@ func (d *DB) DeleteNote(id int64) error {
 }
 
 func (d *DB) TrashNote(id int64) error {
-	result, err := d.Exec(
+	tx, err := d.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	result, err := tx.Exec(
 		"UPDATE notes SET deleted_at = CURRENT_TIMESTAMP WHERE id = ? AND deleted_at IS NULL",
 		id,
 	)
@@ -272,11 +278,24 @@ func (d *DB) TrashNote(id int64) error {
 	if n == 0 {
 		return sql.ErrNoRows
 	}
-	return nil
+
+	// Trashing may leave a hashtag with no remaining active/archived note —
+	// purge it immediately instead of waiting for EmptyTrash.
+	if err := cleanupOrphanHashtags(tx); err != nil {
+		return err
+	}
+
+	return tx.Commit()
 }
 
 func (d *DB) RestoreNote(id int64) error {
-	result, err := d.Exec(
+	tx, err := d.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	result, err := tx.Exec(
 		"UPDATE notes SET deleted_at = NULL WHERE id = ? AND deleted_at IS NOT NULL",
 		id,
 	)
@@ -287,7 +306,18 @@ func (d *DB) RestoreNote(id int64) error {
 	if n == 0 {
 		return sql.ErrNoRows
 	}
-	return nil
+
+	// Trashing may have purged hashtags orphaned by this note; re-derive them
+	// from content so restoring brings the tags back.
+	var content string
+	if err := tx.QueryRow("SELECT content FROM notes WHERE id = ?", id).Scan(&content); err != nil {
+		return fmt.Errorf("restore note: read content: %w", err)
+	}
+	if err := syncNoteHashtags(tx, id, services.ExtractHashtags(content)); err != nil {
+		return err
+	}
+
+	return tx.Commit()
 }
 
 func (d *DB) ArchiveNote(id int64) error {
@@ -452,8 +482,8 @@ func (d *DB) EmptyTrash() ([]models.Attachment, error) {
 	if _, err := tx.Exec("DELETE FROM notes WHERE deleted_at IS NOT NULL"); err != nil {
 		return nil, fmt.Errorf("empty trash: delete notes: %w", err)
 	}
-	if _, err := tx.Exec("DELETE FROM hashtags WHERE id NOT IN (SELECT hashtag_id FROM note_hashtags)"); err != nil {
-		return nil, fmt.Errorf("empty trash: cleanup hashtags: %w", err)
+	if err := cleanupOrphanHashtags(tx); err != nil {
+		return nil, err
 	}
 
 	if err := tx.Commit(); err != nil {
@@ -478,6 +508,30 @@ func (d *DB) TogglePin(id int64, pinned bool) error {
 	return nil
 }
 
+// execer abstracts *sql.DB and *sql.Tx so orphan-hashtag cleanup can run
+// standalone or inside a larger transaction.
+type execer interface {
+	Exec(query string, args ...interface{}) (sql.Result, error)
+}
+
+// cleanupOrphanHashtags deletes any hashtag with no link to a note that is
+// neither trashed nor permanently removed — i.e. a tag with no valid or
+// archived note left. FK cascade drops the matching note_hashtags rows too.
+func cleanupOrphanHashtags(ex execer) error {
+	_, err := ex.Exec(`
+DELETE FROM hashtags
+WHERE id NOT IN (
+	SELECT DISTINCT nh.hashtag_id
+	FROM note_hashtags nh
+	JOIN notes n ON nh.note_id = n.id
+	WHERE n.deleted_at IS NULL
+)`)
+	if err != nil {
+		return fmt.Errorf("cleanup orphan hashtags: %w", err)
+	}
+	return nil
+}
+
 func syncNoteHashtags(tx *sql.Tx, noteID int64, hashtags []string) error {
 	if _, err := tx.Exec("DELETE FROM note_hashtags WHERE note_id = ?", noteID); err != nil {
 		return fmt.Errorf("clear note hashtags: %w", err)
@@ -496,8 +550,8 @@ func syncNoteHashtags(tx *sql.Tx, noteID int64, hashtags []string) error {
 		}
 	}
 
-	if _, err := tx.Exec(`DELETE FROM hashtags WHERE id NOT IN (SELECT hashtag_id FROM note_hashtags)`); err != nil {
-		return fmt.Errorf("cleanup orphan hashtags: %w", err)
+	if err := cleanupOrphanHashtags(tx); err != nil {
+		return err
 	}
 
 	return nil
