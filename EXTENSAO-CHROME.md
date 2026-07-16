@@ -22,10 +22,10 @@ A extensão aparece na lista e um ícone é adicionado à barra de ferramentas d
 
 | Instância | URL do servidor | Token |
 |---|---|---|
-| Homologação (UNRAID, `notas2`) | `https://notas2.dalc.in` | `b6f21c9c87b6fb3dbd6787bf16f0731ff5abe148055c4f0d6abeda79baf1bbd1` |
-| Produção (EC2, `notas`) | `https://notas.dalc.in` | `fddf4558347b49b46565c7b178b2f1a2c84485131eba57d866251f0a0cf711c6` |
+| Homologação | `https://notas-homolog.exemplo.com` | *(valor de `EXTENSION_TOKEN` da instância — ver `.env`/secrets do servidor)* |
+| Produção | `https://notas.exemplo.com` | *(valor de `EXTENSION_TOKEN` da instância — ver `.env`/secrets do servidor)* |
 
-> A extensão só guarda uma URL + token por vez (`chrome.storage.local`). Para alternar entre homologação e produção, reabra as Opções e troque os dois campos.
+> A extensão só guarda uma URL + token por vez (`chrome.storage.local`). Para alternar entre homologação e produção, reabra as Opções e troque os dois campos. Gere o token com `openssl rand -hex 32`; nunca cole o valor real neste arquivo (ele é versionado no repositório público).
 
 ## 3. Usar
 
