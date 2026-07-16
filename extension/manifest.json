@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Notas — Enviar link",
+  "version": "1.0.0",
+  "description": "Envia a página ou link atual para o Notas como nova nota.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Enviar para Notas",
+    "default_icon": { "192": "icons/icon-192.png", "512": "icons/icon-512.png" }
+  },
+  "background": { "service_worker": "background.js" },
+  "options_page": "options.html",
+  "permissions": ["activeTab", "contextMenus", "storage", "scripting"],
+  "optional_host_permissions": ["http://*/*", "https://*/*"],
+  "icons": { "192": "icons/icon-192.png", "512": "icons/icon-512.png" }
+}

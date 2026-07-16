@@ -58,6 +58,7 @@ Acesse em `http://localhost:8080`.
 | `BASE_URL` | — | *(host da request)* | URL pública base (ex: `https://notas.exemplo.com/`); necessária para cookies seguros com HTTPS |
 | `PKD_URL` | — | *(desativado)* | URL base da instância PKD para integração (ex: `http://pkd:8080`). Deixe vazio para desativar o botão de exportação |
 | `PKD_TOKEN` | — | *(desativado)* | Token secreto compartilhado com `PKD_IMPORT_TOKEN` no container PKD |
+| `EXTENSION_TOKEN` | — | *(desativado)* | Token secreto para a extensão do Chrome autenticar via header `Authorization: Bearer`. Necessário apenas se `APP_PIN` estiver configurado |
 
 ## Integração com PKD
 
@@ -88,6 +89,27 @@ services:
 PKD_TOKEN=seu-token-secreto
 PKD_IMPORT_TOKEN=seu-token-secreto   # mesmo valor
 ```
+
+## Extensão do Chrome
+
+A pasta `extension/` contém uma extensão Chrome (Manifest V3) para enviar a página ou link atual como nova nota, via popup ou menu de contexto.
+
+**Instalação:**
+
+1. Abra `chrome://extensions`, ative o **Modo do desenvolvedor**
+2. Clique em **Carregar sem compactação** e selecione a pasta `extension/`
+3. Clique no ícone da extensão → **Configurar** (ou abra as Opções pelo menu da extensão)
+4. Preencha a **URL do servidor** (ex: `https://notas.exemplo.com`) e, se o servidor usa PIN, o **token** (ver `EXTENSION_TOKEN` abaixo)
+5. Clique em **Testar conexão** e depois em **Salvar**
+
+**Uso:**
+
+- Clique no ícone da extensão para abrir o popup com título/URL da aba atual, adicione um comentário opcional e clique em **Salvar no Notas**
+- Ou clique com o botão direito numa página, link ou texto selecionado e escolha **Enviar para Notas**
+
+As notas criadas pela extensão recebem a tag `#chrome`.
+
+**Autenticação:** se o servidor tem `APP_PIN` configurado, defina também `EXTENSION_TOKEN` (um valor secreto aleatório) no container Notas e informe o mesmo valor no campo **Token** das opções da extensão. Sem `APP_PIN`, a extensão funciona sem token.
 
 ## Instalação no UNRAID
 
@@ -141,6 +163,10 @@ Todo push para o branch `main` dispara o workflow do GitHub Actions que:
 Nenhuma credencial é armazenada no repositório — o workflow usa o `GITHUB_TOKEN` automático do GitHub Actions.
 
 ## Changelog
+
+### 2026-07-16
+
+- **Extensão do Chrome** — extensão Manifest V3 (`extension/`) para enviar a página/link atual como nova nota via popup ou menu de contexto; nova env var `EXTENSION_TOKEN` permite autenticação por bearer token quando `APP_PIN` está ativo
 
 ### 2026-04-21
 

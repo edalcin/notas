@@ -106,6 +106,7 @@ func main() {
 	}
 
 	appPIN := os.Getenv("APP_PIN")
+	extensionToken := os.Getenv("EXTENSION_TOKEN")
 
 	// Session secret: use env var for persistence across restarts, or generate a random one
 	sessionSecret := os.Getenv("SESSION_SECRET")
@@ -179,7 +180,7 @@ func main() {
 	})
 	r.Use(handlers.FilesPathMiddleware(filesPath))
 	r.Use(handlers.MaxUploadMiddleware(maxUploadBytes))
-	r.Use(handlers.PINMiddleware(appPIN, sessionSecret, secureCookie))
+	r.Use(handlers.PINMiddleware(appPIN, sessionSecret, extensionToken, secureCookie))
 
 	r.Get("/health", handlers.Health(database))
 	r.Post("/api/auth/login", handlers.PINLogin(appPIN, sessionSecret, secureCookie, trustedProxies))
@@ -249,6 +250,9 @@ func main() {
 	}
 	if appPIN != "" {
 		log.Printf("PIN protection: enabled")
+	}
+	if extensionToken != "" {
+		log.Printf("Extension token: enabled")
 	}
 	if pkdURL != "" {
 		log.Printf("PKD integration: enabled (url=%s)", pkdURL)

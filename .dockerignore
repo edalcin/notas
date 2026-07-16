@@ -9,3 +9,4 @@ specs/
 server
 .DS_Store
 Thumbs.db
+extension/

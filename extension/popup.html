@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Enviar para Notas</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div id="configWarning" class="hidden">
+    <p>Configure o servidor primeiro.</p>
+    <button id="openOptions">Abrir configurações</button>
+  </div>
+
+  <form id="form" class="hidden">
+    <label>Título</label>
+    <input type="text" id="title" readonly />
+
+    <label>URL</label>
+    <input type="text" id="url" readonly />
+
+    <label for="comment">Comentário</label>
+    <textarea id="comment" rows="4" placeholder="Comentário opcional…"></textarea>
+
+    <button type="submit" id="save">Salvar no Notas</button>
+    <div id="status"></div>
+    <a href="#" id="configLink">Configurar</a>
+  </form>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -91,7 +91,10 @@ func tokenForPIN(pin, secret string) string {
 // PINMiddleware enforces PIN authentication when pin is non-empty.
 // Exempts /api/auth/login and /health so they are always reachable.
 // API/files paths return 401 JSON; HTML/static routes serve the SPA (which shows PIN overlay).
-func PINMiddleware(pin, secret string, secureCookie bool) func(http.Handler) http.Handler {
+// extensionToken, when set, is also accepted via "Authorization: Bearer <token>"
+// for clients (e.g. the Chrome extension) that cannot rely on the SameSite=Lax
+// session cookie.
+func PINMiddleware(pin, secret, extensionToken string, secureCookie bool) func(http.Handler) http.Handler {
 	if pin == "" {
 		return func(next http.Handler) http.Handler { return next }
 	}
@@ -109,6 +112,15 @@ func PINMiddleware(pin, secret string, secureCookie bool) func(http.Handler) htt
 				hmac.Equal([]byte(c.Value), []byte(expected)) {
 				next.ServeHTTP(w, r)
 				return
+			}
+			// Chrome extension: bearer token (não usa o cookie SameSite=Lax)
+			if extensionToken != "" {
+				const p = "Bearer "
+				if a := r.Header.Get("Authorization"); strings.HasPrefix(a, p) &&
+					hmac.Equal([]byte(a[len(p):]), []byte(extensionToken)) {
+					next.ServeHTTP(w, r)
+					return
+				}
 			}
 			// Protected API/files → 401 JSON so frontend can detect unauthenticated state
 			if strings.HasPrefix(r.URL.Path, "/api/") || strings.HasPrefix(r.URL.Path, "/files/") {
