@@ -69,7 +69,7 @@ O Notas pode exportar notas diretamente para o [PKD — Personal Knowledge Datab
 1. Configure `PKD_URL` e `PKD_TOKEN` no container Notas
 2. Configure `PKD_IMPORT_TOKEN` (mesmo valor de `PKD_TOKEN`) no container PKD
 3. Um botão 📤 aparece em cada nota
-4. Ao clicar: a nota é convertida de Markdown para HTML, enviada ao PKD como novo documento com todas as hashtags da nota **mais a tag `notas`** como identificador de origem, e automaticamente movida para a lixeira do Notas
+4. Ao clicar: a nota é convertida de Markdown para HTML, enviada ao PKD como novo documento com todas as hashtags da nota **mais a tag `notas`** como identificador de origem, junto com todos os arquivos anexados à nota (imagens ficam embutidas no corpo do documento, outros tipos viram links); a nota só é movida para a lixeira do Notas se o PKD confirmar a criação completa do documento com todos os anexos — se qualquer anexo falhar, nada é criado no PKD e a nota permanece intacta para nova tentativa
 
 **Recomendação de configuração (docker compose, mesma rede):**
 

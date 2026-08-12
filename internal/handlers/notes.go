@@ -3,9 +3,13 @@ package handlers
 import (
 	"bytes"
 	"database/sql"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -415,7 +419,8 @@ func (h *NoteHandler) Unshare(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-// ExportToPKD sends a note to the configured PKD instance via /api/import.
+// ExportToPKD sends a note to the configured PKD instance via /api/import,
+// including any attached files (base64-encoded per ADR-0001 / pkd ADR-003).
 func (h *NoteHandler) ExportToPKD(w http.ResponseWriter, r *http.Request) {
 	if h.pkdURL == "" {
 		jsonError(w, "PKD integration not configured (PKD_URL not set)", http.StatusServiceUnavailable)
@@ -438,6 +443,32 @@ func (h *NoteHandler) ExportToPKD(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	attachments, err := h.db.GetAttachmentsByNote(id)
+	if err != nil {
+		jsonError(w, "database error", http.StatusInternalServerError)
+		return
+	}
+
+	filesPath := getFilesPath(r)
+	type pkdAttachment struct {
+		Filename   string `json:"filename"`
+		MimeType   string `json:"mime_type"`
+		DataBase64 string `json:"data_base64"`
+	}
+	pkdAttachments := make([]pkdAttachment, 0, len(attachments))
+	for _, a := range attachments {
+		data, err := os.ReadFile(filepath.Join(filesPath, a.StoredFilename))
+		if err != nil {
+			jsonError(w, "could not read attachment file: "+a.OriginalName, http.StatusInternalServerError)
+			return
+		}
+		pkdAttachments = append(pkdAttachments, pkdAttachment{
+			Filename:   a.OriginalName,
+			MimeType:   a.MimeType,
+			DataBase64: base64.StdEncoding.EncodeToString(data),
+		})
+	}
+
 	// Convert markdown to HTML for PKD's rich-text body
 	var htmlBuf bytes.Buffer
 	if err := goldmark.Convert([]byte(note.Content), &htmlBuf); err != nil {
@@ -457,9 +488,10 @@ func (h *NoteHandler) ExportToPKD(w http.ResponseWriter, r *http.Request) {
 	}
 
 	payload := map[string]interface{}{
-		"title":   title,
-		"content": htmlBuf.String(),
-		"tags":    note.Hashtags,
+		"title":       title,
+		"content":     htmlBuf.String(),
+		"tags":        note.Hashtags,
+		"attachments": pkdAttachments,
 	}
 	body, _ := json.Marshal(payload)
 
@@ -479,7 +511,12 @@ func (h *NoteHandler) ExportToPKD(w http.ResponseWriter, r *http.Request) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusCreated {
-		jsonError(w, fmt.Sprintf("PKD returned %d", resp.StatusCode), http.StatusBadGateway)
+		respBody, _ := io.ReadAll(io.LimitReader(resp.Body, 4096))
+		msg := strings.TrimSpace(string(respBody))
+		if msg == "" {
+			msg = fmt.Sprintf("PKD returned %d", resp.StatusCode)
+		}
+		jsonError(w, "PKD export failed: "+msg, http.StatusBadGateway)
 		return
 	}
 
